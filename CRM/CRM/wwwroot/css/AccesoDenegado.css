@@ -1,0 +1,27 @@
+﻿.error-code {
+    font-size: 6rem;
+    font-weight: 900;
+    color: #dc3545;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0;
+}
+
+.error-message {
+    color: #6c757d;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+body {
+    background: linear-gradient(to bottom, #000000, #4f4f4f); 
+    color: white;
+    min-height: 100vh;
+}
+
+.khabib-gif {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}

@@ -1,0 +1,122 @@
+﻿@page
+@model Web.Pages.Cuenta.RegistroModel
+@{
+}
+
+<head>
+    <link href="~/css/login.css" rel="stylesheet" />
+</head>
+
+<body class="d-flex flex-column min-vh-100" style="background-image: url('/img/fondo.png'); background-size: cover; background-position: center; border-radius:40px">
+    <div class="container my-auto p-5">
+        <div class="row justify-content-center align-items-center mt-4">
+            
+            
+            <div class="col-8 p-3" style="background-color:white; border-radius:20px">
+                <form method="post" class="mx-auto" style="max-width: 700px;">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nombreUsuario" class="form-label">Nombre de usuario</label>
+                            <div class="input-group">
+                                <input type="text" id="nombreUsuario" class="form-control input-squarespace" placeholder="Nombre de usuario" />
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+                            </div>
+                            <span class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <div class="input-group">
+                                <input type="text" id="apellido" class="form-control input-squarespace" placeholder="Apellido" />
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+                            </div>
+                            <span class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <div class="input-group">
+                                <input type="text" id="telefono" class="form-control input-squarespace" placeholder="7225-7088" />
+                            </div>
+                            <span class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <div class="input-group">
+                                <input type="text" id="direccion" class="form-control input-squarespace" placeholder="Dirección" />
+                            </div>
+                            <span class="text-danger small"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3"> 
+                            
+                                <label for="email" class="form-label">Correo electrónico</label>
+                                <div class="input-group">
+                                    <input type="email" id="email" class="form-control input-squarespace" placeholder="name@example.com" />
+                                    <span class="input-group-text">
+                                        <i class="bi bi-envelope-at-fill"></i>
+                                    </span>
+                                </div>
+                                <span class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <input type="password" id="password" class="form-control input-squarespace" placeholder="Contraseña" />
+                                <span class="input-group-text bg-white border-0">
+                                    <i class="bi bi-eye"></i>
+                                </span>
+                            </div>
+                            <span class="text-danger small"></span>
+
+                        </div>
+                        
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Confirmarpassword" class="form-label">Confirmar contraseña</label>
+                        <div class="input-group">
+                            <input type="password" id="Confirmarpassword" class="form-control input-squarespace" placeholder="Confirmar contraseña" />
+                            <span class="input-group-text bg-white border-0">
+                                <i class="bi bi-eye"></i>
+                            </span>
+                        </div>
+                        <span class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="aceptar" />
+                        <label class="form-check-label" for="aceptar">
+                            He leído y acepto los <a href="#" class="text-decoration-none">términos y condiciones de uso</a>
+                        </label>
+                    </div>
+
+                    <button class="btn-creative w-100 mb-3" type="submit">Crear cuenta</button>
+
+                </form>
+
+            </div>
+
+          
+            <div class="col-4">
+                <h1 class="text-center text-white">Si ya tienes una cuenta puedes iniciar sesión aquí</h1>
+                <div class="text-center">
+                    <a asp-page="./Login" class="btn-creative">Iniciar sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+    <script src="~/js/ValidacionesRegistro.js"></script>
+  
+}

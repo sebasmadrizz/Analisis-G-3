@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
+    
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    @await RenderSectionAsync("CSS", required: false)
+
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg category-navbar shadow-sm sticky-top">
+            <div class="container-fluid">
+
+                <div class="collapse navbar-collapse" id="categoryNav">
+                    <a class="navbar-brand" asp-page="../Productos/Index">Ecomerce</a>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="catTecnologia" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-laptop me-1 text-white"></i> Tecnología
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="catTecnologia">
+                                <li><a class="dropdown-item " href="#">Laptops</a></li>
+                                <li><a class="dropdown-item " href="#">Smartphones</a></li>
+                                <li><a class="dropdown-item " href="#">Accesorios</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="catRopa" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-tshirt me-1 text-white"></i> Ropa
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="catRopa">
+                                <li><a class="dropdown-item" href="#">Hombre</a></li>
+                                <li><a class="dropdown-item" href="#">Mujer</a></li>
+                                <li><a class="dropdown-item" href="#">Niños</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="catHogar" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-couch me-1 text-white"></i> Hogar
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="catHogar">
+                                <li><a class="dropdown-item" href="#">Muebles</a></li>
+                                <li><a class="dropdown-item" href="#">Decoración</a></li>
+                                <li><a class="dropdown-item" href="#">Electrodomésticos</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="catDeportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-basketball-ball me-1 text-white"></i> Deportes
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="catDeportes">
+                                <li><a class="dropdown-item" href="#">Fitness</a></li>
+                                <li><a class="dropdown-item" href="#">Ciclismo</a></li>
+                                <li><a class="dropdown-item" href="#">Natación</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="d-flex me-3 search-form" role="search">
+
+                        <input class="form-control  search-input" type="search" placeholder="Buscar productos..." aria-label="Buscar productos" />
+
+                        <button class="btn btn-outline-light search-btn" type="submit"><i class="fas fa-search"></i></button>
+
+                    </form>
+                    <a asp-page="../Carrito/Carrito" class="btn btn-primary rounded-circle"><i class="fas fa-shopping-cart text-white" style="height:26px; width:26px;"></i></a>
+                    <a asp-page="../Cuenta/verCuenta">
+                        <img src="https://imagenes.heraldo.es/files/image_1920_1080/uploads/imagenes/2025/02/18/ibai-llanos-sin-barba-en-su-ultima-publicacion-en-redes-sociales.png" class="perfil" alt="" style=" width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,.6);">
+                    </a>
+                    <a asp-page="../Cuenta/Login" class="btn-creative">Login</a>
+                    <a asp-page="../Administracion/Administracion" class="nav-link  text-white" role="button" aria-expanded="false">
+                        <i class="bi bi-gear-fill text-white"></i>
+                        Administracion
+                    </a>
+                    
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="app-layout">
+        <main role="main" class="pb-5">
+            @RenderBody()
+        </main>
+    </div>
+
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - CRM - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <a asp-area="" asp-page="/Privacy" class="text-decoration-none me-4">
+                <i class="bi bi-instagram" style="font-size: 1.2rem;"></i> Instagram
+            </a>
+            <a asp-area="" asp-page="/Privacy" class="text-decoration-none me-4">
+                <i class="bi bi-facebook" style="font-size: 1.2rem;"></i> Facebook
+            </a>
+        </div>
+    </footer>
+</body>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgery
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
+
+
+@await RenderSectionAsync("Scripts", required: false)
+
+</html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+

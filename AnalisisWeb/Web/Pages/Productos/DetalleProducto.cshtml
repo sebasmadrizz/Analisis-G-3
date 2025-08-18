@@ -1,0 +1,53 @@
+﻿@page
+@model Web.Pages.Productos.DetalleProductoModel
+@{
+}
+<section class="py-5" style="margin-top: 120px;">
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-lg-6">
+                <div class="card p-4 mb-4">
+                    <div class="text-center mb-3">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZQ5ZIIveHfwjsHQ1q68xfgUZDg-WK-0VHHw&s" alt="Producto" class="img-fluid w-100 rounded">
+                    </div>
+                   
+                </div>
+            </div>
+
+            
+            <div class="col-lg-6">
+                <h2 class="mb-3">Laptop</h2>
+                
+                <p class="mb-4 text-secondary">
+                    descripcion de la laptop
+                </p>
+                <h4 class="text-primary fw-bold mb-4">$45</h4>
+                
+
+                <form>
+
+
+                 
+                    <div class="mb-4">
+                        <h6>Quantity</h6>
+                        <div class="input-group" style="max-width: 120px;">
+                            <input type="text" class="form-control text-center" value="1">
+                            <div class="input-group-append d-flex flex-column">
+                                <button class="btn btn-outline-primary py-0" type="button">+</button>
+                                <button class="btn btn-outline-primary py-0" type="button">-</button>
+                            </div>
+                        </div>
+                    </div>
+
+                  
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn btn-outline-primary w-100">Add to Cart</button>
+                    </div>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+

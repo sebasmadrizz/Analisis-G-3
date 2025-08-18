@@ -1,0 +1,387 @@
+﻿@page
+@model Web.Pages.Clientes.ClientesModel
+@{
+}
+<head>
+    <link href="~/css/modales.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/css/tablas.css" rel="stylesheet" />
+    <link href="~/css/vercuenta.css" rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9;
+            padding: 0;
+        }
+
+        .page-container {
+            display: flex;
+            min-height: 100vh; 
+            width: 100%;
+        }
+
+        .account-sidebar {
+            width: 250px;
+            min-width: 250px;
+            flex-shrink: 0; 
+        }
+
+        .main-content-container {
+            flex-grow: 1; 
+            overflow-y: auto; 
+            padding: 2rem;
+        }
+        .account-sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: #495057;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.2s ease;
+        }
+
+            .account-sidebar .nav-link:hover {
+                background-color: #e9ecef;
+            }
+
+            .account-sidebar .nav-link.active {
+                background-color: #0d6efd;
+                color: white;
+            }
+
+            .account-sidebar .nav-link i {
+                margin-right: 0.75rem;
+                font-size: 1.25rem;
+            }
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #212529;
+        }
+
+        .main-content-container .table-responsive {
+            max-width: 1400px; 
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-container">
+
+          <aside class="account-sidebar">
+            <div class="card-soft">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#table-clientes">
+                        <i class="bi bi-people-fill"></i>
+                        Clientes
+                    </a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#table-cuentas">
+                        <i class="bi bi-cash-stack"></i>
+                        Cuentas por cobrar
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+
+        <div class="main-content-container">
+            <div class="container-fluid">
+                <div class="tab-content">
+                    <div class="table-responsive tab-pane fade show active" id="table-clientes">
+                        <h1 class="page-title">Gestión de Clientes</h1>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarClienteModal">
+                                <i class="bi bi-plus-lg"></i> Agregar cliente
+                            </button>
+
+                        </div>
+                        <table id="clientesTable" class="table table-striped table-bordered rounded-table text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Nombre / Razón Social</th>
+                                    <th>Identificación</th>
+                                    <th>Teléfono</th>
+                                    <th>Correo</th>
+                                    <th>Dirección</th>
+                                    <th>Representante Legal</th>
+                                    <th>Fecha Registro</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Persona Física</td>
+                                    <td>Juan Pérez</td>
+                                    <td>1-1234-5678</td>
+                                    <td>8888-1234</td>
+                                    <td>juanperez@email.com</td>
+                                    <td>San José, Costa Rica</td>
+                                    <td>-</td>
+                                    <td>01/08/2025</td>
+                                    <td>Activo</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button class="btn btn-primary btn-rounded" title="Editar">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Persona Jurídica</td>
+                                    <td>Comercial XYZ S.A.</td>
+                                    <td>3-101-456789</td>
+                                    <td>2299-4455</td>
+                                    <td>info@xyz.com</td>
+                                    <td>Heredia, Costa Rica</td>
+                                    <td>Ana Gómez</td>
+                                    <td>10/07/2025</td>
+                                    <td>Activo</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button class="btn btn-primary btn-rounded" title="Editar">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Persona Física</td>
+                                    <td>María Rodríguez</td>
+                                    <td>1-5678-1234</td>
+                                    <td>8700-0000</td>
+                                    <td>maria.rod@email.com</td>
+                                    <td>Cartago, Costa Rica</td>
+                                    <td>-</td>
+                                    <td>05/07/2025</td>
+                                    <td>Inactivo</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button class="btn btn-primary btn-rounded" title="Editar">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                    <div class="table-responsive tab-pane fade" id="table-cuentas">
+                        <h1 class="page-title">Gestión de cuentas por cobrar</h1>
+                        <table id="cuentasTable" class="table table-striped table-bordered rounded-table text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Cuenta ID</th>
+                                    <th>Nombre Cliente</th>
+                                    <th>Fecha Registro</th>
+                                    <th>Monto Total</th>
+                                    <th>Saldo Actual</th>
+                                    <th>Fecha Vencimiento</th>
+                                    <th>Descripción</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Juan Pérez</td>
+                                    <td>2025-08-01</td>
+                                    <td>₡150,000</td>
+                                    <td>₡50,000</td>
+                                    <td>2025-09-15</td>
+                                    <td>Factura 00123 - Venta de productos</td>
+                                    <td>Pendiente</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button class="btn btn-primary btn-rounded" title="Editar">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Comercial XYZ S.A.</td>
+                                    <td>2025-07-10</td>
+                                    <td>₡250,000</td>
+                                    <td>₡100,000</td>
+                                    <td>2025-09-20</td>
+                                    <td>Factura 00456 - Servicios prestados</td>
+                                    <td>Pendiente</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button class="btn btn-primary btn-rounded" title="Editar">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>María Rodríguez</td>
+                                    <td>2025-07-05</td>
+                                    <td>₡90,000</td>
+                                    <td>₡0</td>
+                                    <td>2025-08-05</td>
+                                    <td>Factura 00789 - Cancelada</td>
+                                    <td>Cancelada</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <button class="btn btn-primary btn-rounded" title="Editar">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+           
+            
+
+        </div>
+
+
+
+    <div class="modal fade" id="agregarClienteModal" tabindex="-1" aria-labelledby="agregarClienteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <form id="formAgregarCliente">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="agregarClienteModalLabel">Agregar Cliente</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="tipo">Tipo</label>
+                            <select class="form-select" id="tipo" name="tipo" required>
+                                <option value="" disabled selected>Seleccione un tipo</option>
+                                <option value="Persona Física">Persona Física</option>
+                                <option value="Persona Jurídica">Persona Jurídica</option>
+                            </select>
+                            <div class="invalid-feedback">Seleccione un tipo válido.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="nombre">Nombre / Razón Social</label>
+                            <input type="text" class="form-control input-squarespace" id="nombre" name="nombre" placeholder="nombre">
+                            <div class="invalid-feedback">Este campo es obligatorio.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="identificacion">Identificación</label>
+                            <input type="text" class="form-control input-squarespace" id="identificacion" name="identificacion" placeholder="identificacion">
+                            <div class="invalid-feedback">Este campo es obligatorio.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="telefono">Teléfono</label>
+                            <input type="tel" class="form-control input-squarespace" id="telefono" name="telefono" placeholder="telefono">
+                            <div class="invalid-feedback">Ingrese un teléfono válido.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="correo">Correo</label>
+                            <input type="email" class="form-control input-squarespace" id="correo" name="correo" placeholder="email">
+                            <div class="invalid-feedback">Ingrese un correo válido.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="direccion">Dirección</label>
+                            <input type="text" class="form-control input-squarespace" id="direccion" name="direccion" placeholder="direccion">
+                            <div class="invalid-feedback">Este campo es obligatorio.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="representante">Representante Legal</label>
+                            <input type="text" class="form-control input-squarespace" id="representante" name="representante" placeholder="Opcional">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="fecha">Fecha de Registro</label>
+                            <input type="date" class="form-control input-squarespace" id="fecha" name="fecha" required>
+                            <div class="invalid-feedback">Seleccione una fecha válida.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="estado">Estado</label>
+                            <select class="form-select" id="estado" name="estado" required>
+                                <option value="" disabled selected>Seleccione estado</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
+                            </select>
+                            <div class="invalid-feedback">Seleccione un estado válido.</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-lg"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    @section Scripts {
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#clientesTable').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    }
+                });
+
+                
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#cuentasTable').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    }
+                });
+
+
+            });
+        </script>
+    }
+</body>

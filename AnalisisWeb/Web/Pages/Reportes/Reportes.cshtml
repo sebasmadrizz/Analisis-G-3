@@ -1,0 +1,448 @@
+﻿@page
+@model Web.Pages.Reportes.ReportesModel
+@{
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand: #0d6efd;
+            --brand-600: #0b5ed7;
+            --brand-100: #e7f0ff;
+            --ink: #212529;
+            --muted: #6c757d;
+            --border: #e9ecef;
+            --bg: #f8f9fa;
+            --shadow: 0 6px 16px rgba(0,0,0,.06);
+        }
+
+        body {
+            font-family: 'Inter',sans-serif;
+        }
+
+        h1.page-title {
+            font-weight: 700;
+            letter-spacing: .2px;
+            color: var(--ink);
+            margin: 8px 0 24px;
+            text-align: center
+        }
+
+        .card-soft {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden
+        }
+
+            .card-soft .card-header {
+                background: linear-gradient(90deg,var(--brand),#5a8dee);
+                color: #fff;
+                border-bottom: none;
+                text-align: center;
+            }
+
+        .btn-rounded {
+            border-radius: 999px;
+            padding: 8px 14px
+        }
+
+        .btn-primary {
+            background: var(--brand);
+            border-color: var(--brand);
+            box-shadow: 0 4px 8px rgba(13,110,253,.25);
+            font-weight: 600
+        }
+
+            .btn-primary:hover {
+                background: var(--brand-600);
+                border-color: var(--brand-600)
+            }
+
+        .btn-outline-primary {
+            border-color: var(--brand);
+            color: var(--brand)
+        }
+
+            .btn-outline-primary:hover {
+                background: var(--brand);
+                color: #fff
+            }
+
+        .btn-soft {
+            background: var(--brand-100);
+            color: var(--brand);
+            border: 1px solid #d6e5ff
+        }
+
+            .btn-soft:hover {
+                filter: brightness(.97)
+            }
+
+
+        .chart-sm {
+            height: 220px
+        }
+
+        .kpi {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 12px 16px;
+            text-align: center;
+        }
+
+        .kpi-label {
+            font-size: .85rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .kpi-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: .2px;
+        }
+
+
+        .actions-bar .btn {
+            --bs-btn-padding-y: .35rem;
+            --bs-btn-padding-x: .8rem;
+            --bs-btn-border-radius: 999px;
+            font-weight: 600;
+        }
+
+
+        .btn-pill-outline {
+            border: 1.5px solid var(--brand);
+            color: var(--brand);
+            background: #fff;
+        }
+
+            .btn-pill-outline:hover {
+                background: var(--brand);
+                color: #fff;
+            }
+
+        .btn-pill-soft {
+            background: var(--brand-100);
+            color: var(--brand);
+            border: 1px solid #d6e5ff;
+        }
+
+            .btn-pill-soft:hover {
+                filter: brightness(.97);
+            }
+    </style>
+</head>
+
+<body>
+    <h1 class="page-title">Reportes</h1>
+    <div class="container-xxl py-4">
+        <ul class="nav nav-pills mb-3" id="reportTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-stock" type="button" role="tab">
+                    <i class="bi bi-box-seam me-1"></i> Stock
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-logistica" type="button" role="tab">
+                    <i class="bi bi-truck me-1"></i> Logística
+                </button>
+            </li>
+        </ul>
+
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-stock" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="m-0">Reporte de Stock</h5>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary btn-rounded btn-sm"><i class="bi bi-file-earmark-excel me-1"></i>Excel</button>
+                        <button class="btn btn-soft btn-rounded btn-sm"><i class="bi bi-filetype-pdf me-1"></i>PDF</button>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card-soft">
+                            <div class="card-header py-2"><strong>Stock por categoría</strong></div>
+                            <div class="card-body">
+                                <canvas id="stockBar" class="w-100 chart-sm"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-soft">
+                            <div class="card-header py-2"><strong>Distribución</strong></div>
+                            <div class="card-body">
+                                <canvas id="stockDonut" class="w-100 chart-sm"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card-soft">
+                            <div class="card-header py-2 text-center">
+                                <strong>Detalle de stock</strong>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="d-flex align-items-center gap-2 justify-content-end mb-3">
+                                    <span class="small text-muted">Filtrar:</span>
+                                    <select id="filtroCatStock" class="form-select form-select-sm w-auto">
+                                        <option value="">Todas</option>
+                                        <option>Tecnología</option>
+                                        <option>Deporte</option>
+                                        <option>Hogar</option>
+                                    </select>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-sm align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Producto</th>
+                                                <th>Categoría</th>
+                                                <th class="text-end">Stock</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyStock">
+                                            <tr>
+                                                <td>Teclado Mecánico</td>
+                                                <td><span class="badge bg-secondary">Tecnología</span></td>
+                                                <td class="text-end"><strong>120</strong></td>
+                                                <td><span class="badge bg-success">OK</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mouse Inalámbrico</td>
+                                                <td><span class="badge bg-secondary">Tecnología</span></td>
+                                                <td class="text-end"><strong>60</strong></td>
+                                                <td><span class="badge bg-success">OK</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Headset Gamer</td>
+                                                <td><span class="badge bg-secondary">Tecnología</span></td>
+                                                <td class="text-end"><strong>40</strong></td>
+                                                <td><span class="badge bg-success">OK</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Balón de Fútbol</td>
+                                                <td><span class="badge bg-secondary">Deporte</span></td>
+                                                <td class="text-end"><strong>55</strong></td>
+                                                <td><span class="badge bg-success">OK</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tenis Adidas</td>
+                                                <td><span class="badge bg-secondary">Deporte</span></td>
+                                                <td class="text-end"><strong>40</strong></td>
+                                                <td><span class="badge bg-success">OK</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Cafetera Nespresso</td>
+                                                <td><span class="badge bg-secondary">Hogar</span></td>
+                                                <td class="text-end"><strong>25</strong></td>
+                                                <td><span class="badge bg-success">OK</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tostadora Compacta</td>
+                                                <td><span class="badge bg-secondary">Hogar</span></td>
+                                                <td class="text-end"><strong>15</strong></td>
+                                                <td><span class="badge bg-warning text-dark">Bajo</span></td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="tab-logistica" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="m-0">Reporte de Logística</h5>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary btn-rounded btn-sm"><i class="bi bi-file-earmark-excel me-1"></i>Excel</button>
+                        <button class="btn btn-soft btn-rounded btn-sm"><i class="bi bi-filetype-pdf me-1"></i>PDF</button>
+                    </div>
+                </div>
+
+
+                <div class="row g-3 mb-2">
+                    <div class="col-md-4">
+                        <div class="card-soft">
+                            <div class="kpi text-center">
+                                <div class="small text-muted">Ingresos del mes</div>
+                                <div class="h5 m-0" id="kpiIngresos">₡ 15000000</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-soft">
+                            <div class="kpi text-center">
+                                <div class="small text-muted">Producto más vendido</div>
+                                <div class="h6 m-0" id="kpiTopProd">Camisa</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-soft">
+                            <div class="kpi text-center">
+                                <div class="small text-muted">Movimientos</div>
+                                <div class="h5 m-0" id="kpiMov">1000</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <div class="card-soft">
+                            <div class="card-header py-2"><strong>Top productos (unidades)</strong></div>
+                            <div class="card-body">
+                                <canvas id="logTopBar" class="w-100 chart-sm"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-soft">
+                            <div class="card-header py-2"><strong>Ingresos por día</strong></div>
+                            <div class="card-body">
+                                <canvas id="logIngresosLine" class="w-100 chart-sm"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card-soft">
+                            <div class="card-header py-2"><strong>Historial de movimientos</strong></div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center gap-2 justify-content-end mb-3">
+                                    <span class="small text-muted">Rango:</span>
+                                    <input type="date" id="filtroIni" class="form-control form-control-sm w-auto">
+                                    <input type="date" id="filtroFin" class="form-control form-control-sm w-auto">
+                                    <button class="btn btn-primary btn-sm btn-rounded" id="btnFiltrar">
+                                        <i class="bi bi-funnel"></i> Filtrar
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm btn-rounded" id="btnLimpiar">
+                                        Limpiar
+                                    </button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm align-middle">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Producto</th>
+                                                <th class="text-end">Cantidad</th>
+                                                <th class="text-end">Ingreso</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="logTbody">
+                                            <tr>
+                                                <td>02/12/2024</td>
+                                                <td>Camiseta Nike</td>
+                                                <td class="text-end"><strong>150</strong></td>
+                                                <td class="text-end">₡10,000.00</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>03/12/2024</td>
+                                                <td>Smartphone Samsung</td>
+                                                <td class="text-end"><strong>10</strong></td>
+                                                <td class="text-end">₡5,999.00</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>05/12/2024</td>
+                                                <td>Microondas</td>
+                                                <td class="text-end"><strong>25</strong></td>
+                                                <td class="text-end">₡399.80</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>10/12/2024</td>
+                                                <td>Laptop HP Pavilion</td>
+                                                <td class="text-end"><strong>6</strong></td>
+                                                <td class="text-end">₡5,399.00</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>12/12/2024</td>
+                                                <td>Cafetera Nespresso</td>
+                                                <td class="text-end"><strong>4</strong></td>
+                                                <td class="text-end">₡1,040.00</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+        <script>
+            
+            const stockLabels = ['Tecnología','Deporte','Hogar'];
+            const stockTotals = [220, 95, 40];
+
+            
+            new Chart(document.getElementById('stockBar').getContext('2d'), {
+              type: 'bar',
+              data: { labels: stockLabels, datasets: [{ label: 'Unidades', data: stockTotals, borderWidth: 1 }] },
+              options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+            });
+
+            
+            new Chart(document.getElementById('stockDonut').getContext('2d'), {
+              type: 'doughnut',
+              data: { labels: stockLabels, datasets: [{ data: stockTotals }] },
+              options: { responsive: true, plugins: { legend: { position: 'bottom' } }, cutout: '58%' }
+            });
+
+            
+
+            new Chart(document.getElementById('logTopBar').getContext('2d'), {
+              type: 'bar',
+              data: {
+                labels: ['Camiseta Nike','Smartphone Samsung','Laptop HP Pavilion'],
+                datasets: [{ label: 'Unidades', data: [210,125,62], borderWidth: 1 }]
+              },
+              options: { responsive: true, plugins: { legend: { display: true } }, scales: { y: { beginAtZero: true } } }
+            });
+
+
+            new Chart(document.getElementById('logIngresosLine').getContext('2d'), {
+              type: 'line',
+              data: {
+                labels: ['01','05','10','15','20','25'],
+                datasets: [{ label: 'Ingresos (₡)', data: [1200,3400,3800,5100,4600,5900], fill: true, tension: .35, borderWidth: 2 }]
+              },
+              options: { responsive: true, plugins: { legend: { display: true } }, interaction: { mode: 'index', intersect: false } }
+            });
+
+
+        </script>
+    }
+</body>

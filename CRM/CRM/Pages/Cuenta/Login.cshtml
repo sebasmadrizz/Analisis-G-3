@@ -1,0 +1,66 @@
+﻿@page
+@model Web.Pages.Cuenta.LoginModel
+@{
+}
+<head>
+    <link href="~/css/login.css" rel="stylesheet" />
+</head>
+<body class="d-flex flex-column min-vh-100" style="background-image: url('/img/fondo.png'); background-size: cover; background-position: center; border-radius:40px">
+    <div class="container my-auto" style="margin-top:70px;">
+        <div class="row justify-content-center align-items-center mt-4">
+            <div class="col-lg-8 col-md-10">
+                <div class="row">
+                    <div class="col-md-8 border-end" style="background-color:white; border-radius:20px">
+                        <div class="text-center mb-4">
+                            <img src="~/img/loginlogo.png" alt="Logo" width="100">
+                            
+                        </div>
+                        <form method="post">
+                            <div class="mb-3 w-75 mx-auto">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" id="email" class="form-control input-squarespace" placeholder="name@example.com" >
+                                <div class="input-group mb-3">
+                                    <span  class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="mb-3 w-75 mx-auto">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="password" class="form-control input-squarespace " placeholder="Password">
+                                    <span class="input-group-text bg-white border-0">
+                                        <i class="bi bi-eye"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mb-3 mx-auto" style="width: 75%;">
+                                <button class="btn-creative w-100" type="submit">Iniciar sesión</button>
+                            </div>
+                            
+                            
+                        </form>
+                        <div class="mb-3 w-75 mx-auto">
+                            <div class="text-center small">
+                                <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+
+                            </div>
+
+                        </div>
+
+                        
+                    </div>
+
+
+                    <div class="col-md-4 d-flex flex-column justify-content-center gap-3 mt-4 mt-md-0">
+                        <h2 class="text-white">Si no tienes cuenta puedes crearla aqui</h2>
+                        <a asp-page="./Registro" class="btn-creative">Crea tu cuenta</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
