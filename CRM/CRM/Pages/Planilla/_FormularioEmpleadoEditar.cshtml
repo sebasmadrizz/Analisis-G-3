@@ -1,0 +1,117 @@
+﻿@model Abstracciones.Modelos.Empleados.Empleado
+@{
+    ViewData.TemplateInfo.HtmlFieldPrefix = "empleadoRequest";
+}
+<form id="formEditarEmpleado" method="post" asp-page-handler="EditarEmpleado">
+    <div class="modal-header  text-white">
+        <h5 class="modal-title">Agregar Nuevo Empleado</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body row g-3 p-4">
+        @Html.AntiForgeryToken()
+
+        <div class="col-md-12"><h6 class="text-primary">Datos Personales</h6></div>
+
+        <div class="col-md-6">
+            <label asp-for="Cedula" class="form-label">Cédula</label>
+            <input asp-for="Cedula" type="text" class="form-control input-squarespace" placeholder="cedula">
+            <span asp-validation-for="Cedula" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="NombreCompleto" class="form-label">Nombre Completo</label>
+            <input asp-for="NombreCompleto" type="text" class="form-control input-squarespace" placeholder="nombre">
+            <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="CorreoElectronico" class="form-label">Correo Electrónico</label>
+            <input asp-for="CorreoElectronico" type="email" class="form-control input-squarespace" placeholder="correo">
+            <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Puesto" class="form-label">Puesto</label>
+            <input asp-for="Puesto" type="text" class="form-control input-squarespace" placeholder="puesto">
+            <span asp-validation-for="Puesto" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Padecimientos" class="form-label">Padecimientos</label>
+            <input asp-for="Padecimientos" type="text" class="form-control input-squarespace" placeholder="padecimientos">
+            <span asp-validation-for="Padecimientos" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="CuentaBancaria" class="form-label">Cuenta Bancaria</label>
+            <input asp-for="CuentaBancaria" type="text" class="form-control input-squarespace" placeholder="cuenta bancaria">
+            <span asp-validation-for="CuentaBancaria" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="TipoContrato" class="form-label">Tipo de Contrato</label>
+            <select asp-for="TipoContrato" class="form-select">
+                <option value="">Seleccione</option>
+                <option value="Indefinido">Indefinido</option>
+                <option value="Plazo fijo">Plazo fijo</option>
+            </select>
+            <span asp-validation-for="TipoContrato" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Jornada" class="form-label">Jornada</label>
+            <select asp-for="Jornada" class="form-select">
+                <option value="">Seleccione</option>
+                <option value="Tiempo completo">Tiempo completo</option>
+                <option value="Medio tiempo">Medio tiempo</option>
+            </select>
+            <span asp-validation-for="Jornada" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="FechaIngreso" class="form-label">Fecha de Ingreso</label>
+            <input asp-for="FechaIngreso" type="date" class="form-control input-squarespace">
+            <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Telefono" class="form-label">Telefono</label>
+            <input asp-for="Telefono" type="text" class="form-control input-squarespace">
+            <span asp-validation-for="Telefono" class="text-danger"></span>
+        </div>
+        <input type="hidden" asp-for="IdEmpleado" />
+        
+
+
+
+        <div class="col-md-12 pt-3"><h6 class="text-primary">Datos de Planilla</h6></div>
+
+        <div class="col-md-6">
+            <label class="form-label">Deducciones Legales</label>
+            <input type="number" class="form-control input-squarespace" name="deducciones" min="0" step="0.01" placeholder="Deducciones">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Horas Extras</label>
+            <input type="number" class="form-control input-squarespace" name="horas_extras" min="0" placeholder="Horas Extras">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Comisiones</label>
+            <input type="number" class="form-control input-squarespace" name="comisiones" min="0" step="0.01" placeholder="Comisiones">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Ausencias</label>
+            <input type="number" class="form-control input-squarespace" name="ausencias" min="0" placeholder="Ausencias">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Incapacidades</label>
+            <input type="number" class="form-control input-squarespace" name="incapacidades" min="0" placeholder="incapacidades">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Salario Neto</label>
+            <input type="number" class="form-control input-squarespace" name="salario_neto" min="0" step="0.01" placeholder="salario neto">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Salario Bruto</label>
+            <input type="number" class="form-control input-squarespace" name="salario_bruto" min="0" step="0.01" placeholder="salario bruto">
+        </div>
+    </div>
+    <div class="modal-footer bg-light">
+        <button type="submit" class="btn btn-success">
+            <i class="bi bi-check-circle"></i> Guardar
+        </button>
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle"></i> Cancelar
+        </button>
+    </div>
+</form>

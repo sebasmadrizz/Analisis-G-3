@@ -25,66 +25,210 @@
             margin-left: 10rem !important; 
     }
 
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f4f7f9;
+        padding: 0;
+    }
+
+    .page-container {
+        display: flex;
+        min-height: 100vh;
+        width: 100%;
+    }
+
+    .account-sidebar {
+        width: 250px;
+        min-width: 250px;
+        flex-shrink: 0;
+    }
+
+    .main-content-container {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 2rem;
+    }
+
+    .account-sidebar .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: #495057;
+        font-weight: 600;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        transition: background-color 0.2s ease;
+    }
+
+        .account-sidebar .nav-link:hover {
+            background-color: #e9ecef;
+        }
+
+        .account-sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .account-sidebar .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: #212529;
+    }
+
+    .main-content-container .table-responsive {
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
 </style>
 <body>
     
+    <div class="page-container">
 
-    <h1 class="page-title">Gestión de Planilla</h1>
+        <aside class="account-sidebar">
+            <div class="card-soft">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#table-planilla">
+                        <i class="bi bi-people-fill"></i>
+                        Planilla
+                    </a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#table-empleados">
+                        <i class="bi bi-cash-stack"></i>
+                        Empleados
+                    </a>
+                </nav>
+            </div>
+        </aside>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <button class="btn btn-primary ms-6" data-bs-toggle="modal"
-                data-bs-target="#agregarEmpleadoModal">
-            <i class="bi bi-plus-lg"></i> Agregar Empleado
-        </button>
-    </div>
 
-    <div class="table-responsive">
-        <table id="planillaTable" class="table table-striped table-bordered rounded-table text-center">
-            <thead class="table-dark">
-                <tr>
-                    <th>Cédula</th>
-                    <th>Nombre completo</th>
-                    <th>Deducciones legales</th>
-                    <th>Horas extras</th>
-                    <th>Vacaciones</th>
-                    <th>Comisiones</th>
-                    <th>Ausencias</th>
-                    <th>Incapacidades</th>
-                    <th>Salario neto</th>
-                    <th>Salario bruto</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="main-content-container">
+            <div class="container-fluid">
+                <div class="tab-content">
+                    <div class="table-responsive tab-pane fade show active" id="table-planilla">
+                        
+                        <table id="planillaTable" class="table table-striped table-bordered rounded-table text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Cédula</th>
+                                    <th>Nombre completo</th>
+                                    <th>Deducciones legales</th>
+                                    <th>Horas extras</th>
+                                    <th>Vacaciones</th>
+                                    <th>Comisiones</th>
+                                    <th>Ausencias</th>
+                                    <th>Incapacidades</th>
+                                    <th>Salario neto</th>
+                                    <th>Salario bruto</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                <tr>
-                    <td>1-1234-5678</td>
-                    <td>Juan Pérez</td>
-                    <td>₡25,000</td>
-                    <td>10 h</td>
-                    <td>5 días</td>
-                    <td>₡15,000</td>
-                    <td>2 días</td>
-                    <td>1 día</td>
-                    <td>₡550,000</td>
-                    <td>₡600,000</td>
-                    <td>
-                        <button class="btn btn-info btn-sm ver-detalles"
-                                data-cedula="1-1234-5678"
-                                data-nombre="Juan Pérez"
-                                data-correo="juan.perez@email.com"
-                                data-puesto="Contador"
-                                data-padecimientos="Ninguno"
-                                data-cuenta="123456789012"
-                                data-contrato="Indefinido"
-                                data-jornada="Tiempo completo"
-                                data-ingreso="01/01/2022">
-                            <i class="bi bi-eye-fill"></i> Ver
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                                <tr>
+                                    <td>1-1234-5678</td>
+                                    <td>Juan Pérez</td>
+                                    <td>₡25,000</td>
+                                    <td>10 h</td>
+                                    <td>5 días</td>
+                                    <td>₡15,000</td>
+                                    <td>2 días</td>
+                                    <td>1 día</td>
+                                    <td>₡550,000</td>
+                                    <td>₡600,000</td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm ver-detalles"
+                                                data-cedula="1-1234-5678"
+                                                data-nombre="Juan Pérez"
+                                                data-correo="juan.perez@email.com"
+                                                data-puesto="Contador"
+                                                data-padecimientos="Ninguno"
+                                                data-cuenta="123456789012"
+                                                data-contrato="Indefinido"
+                                                data-jornada="Tiempo completo"
+                                                data-ingreso="01/01/2022">
+                                            <i class="bi bi-eye-fill"></i> Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+
+                    <div class="table-responsive tab-pane fade" id="table-empleados">
+                        <h1 class="page-title">Gestión de empleados</h1>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <button class="btn btn-primary ms-6" data-bs-toggle="modal"
+                                    data-bs-target="#agregarEmpleadoModal">
+                                <i class="bi bi-plus-lg"></i> Agregar Empleado
+                            </button>
+                        </div>
+                        <table id="empleadosTable" class="table table-striped table-bordered rounded-table text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Cédula</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Teléfono</th>
+                                    <th>Correo Electrónico</th>
+                                    <th>Puesto</th>
+                                    <th>Padecimientos</th>
+                                    <th>Cuenta Bancaria</th>
+                                    <th>Tipo Contrato</th>
+                                    <th>Jornada</th>
+                                    <th>Fecha Ingreso</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var empleado in Model.empleados)
+                                {
+                                    <tr>
+                                        <td>@empleado.Cedula</td>
+                                        <td>@empleado.NombreCompleto</td>
+                                        <td>@empleado.Telefono</td>
+                                        <td>@empleado.CorreoElectronico</td>
+                                        <td>@empleado.Puesto</td>
+                                        <td>@empleado.Padecimientos</td>
+                                        <td>@empleado.CuentaBancaria</td>
+                                        <td>@empleado.TipoContrato</td>
+                                        <td>@empleado.Jornada</td>
+                                        <td>@empleado.FechaIngreso.ToString("yyyy-MM-dd")</td>
+                                        <td>@empleado.Estado</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <button class="btn btn-primary btn-rounded" title="Editar" data-bs-toggle="modal" data-bs-target="#modalEditarEmpleado" data-url="/Planilla/Planilla?handler=FormularioEmpleadoEditar&idEmpleado=@empleado.IdEmpleado">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </button>
+                                                <button class="btn btn-danger btn-rounded" title="Eliminar" >
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
 
     </div>
 
@@ -115,7 +259,7 @@
     <div class="modal fade" id="agregarEmpleadoModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <form id="formAgregarEmpleado">
+                <form id="formAgregarEmpleado" method="post" asp-page-handler="AgregarEmpleado">
                     <div class="modal-header  text-white">
                         <h5 class="modal-title">Agregar Nuevo Empleado</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -125,49 +269,65 @@
                         <div class="col-md-12"><h6 class="text-primary">Datos Personales</h6></div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Cédula</label>
-                            <input type="text" class="form-control input-squarespace" name="cedula" placeholder="cedula">
+                            <label asp-for="empleadoRequest.Cedula" class="form-label">Cédula</label>
+                            <input asp-for="empleadoRequest.Cedula" type="text" class="form-control input-squarespace"  placeholder="cedula">
+                            <span asp-validation-for="empleadoRequest.Cedula" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Nombre Completo</label>
-                            <input type="text" class="form-control input-squarespace" name="nombre" placeholder="nombre">
+                            <label asp-for="empleadoRequest.NombreCompleto"  class="form-label">Nombre Completo</label>
+                            <input asp-for="empleadoRequest.NombreCompleto" type="text" class="form-control input-squarespace"  placeholder="nombre">
+                            <span asp-validation-for="empleadoRequest.NombreCompleto" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control input-squarespace" name="correo" placeholder="correo">
+                            <label asp-for="empleadoRequest.CorreoElectronico" class="form-label">Correo Electrónico</label>
+                            <input asp-for="empleadoRequest.CorreoElectronico" type="email" class="form-control input-squarespace"  placeholder="correo">
+                            <span asp-validation-for="empleadoRequest.CorreoElectronico" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Puesto</label>
-                            <input type="text" class="form-control input-squarespace" name="puesto" placeholder="puesto">
+                            <label asp-for="empleadoRequest.Puesto" class="form-label">Puesto</label>
+                            <input asp-for="empleadoRequest.Puesto" type="text" class="form-control input-squarespace" placeholder="puesto">
+                            <span asp-validation-for="empleadoRequest.Puesto" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Padecimientos</label>
-                            <input type="text" class="form-control input-squarespace" name="padecimientos" placeholder="padecimientos">
+                            <label asp-for="empleadoRequest.Padecimientos" class="form-label">Padecimientos</label>
+                            <input asp-for="empleadoRequest.Padecimientos" type="text" class="form-control input-squarespace" placeholder="padecimientos">
+                            <span asp-validation-for="empleadoRequest.Padecimientos" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Cuenta Bancaria</label>
-                            <input type="text" class="form-control input-squarespace" name="cuenta" placeholder="cuenta bancaria">
+                            <label asp-for="empleadoRequest.CuentaBancaria" class="form-label">Cuenta Bancaria</label>
+                            <input asp-for="empleadoRequest.CuentaBancaria" type="text" class="form-control input-squarespace" placeholder="cuenta bancaria">
+                            <span asp-validation-for="empleadoRequest.CuentaBancaria" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Tipo de Contrato</label>
-                            <select class="form-select" name="contrato" required>
+                            <label asp-for="empleadoRequest.TipoContrato" class="form-label">Tipo de Contrato</label>
+                            <select asp-for="empleadoRequest.TipoContrato" class="form-select">
                                 <option value="">Seleccione</option>
                                 <option value="Indefinido">Indefinido</option>
                                 <option value="Plazo fijo">Plazo fijo</option>
                             </select>
+                            <span asp-validation-for="empleadoRequest.TipoContrato" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Jornada</label>
-                            <select class="form-select" name="jornada" required>
+                            <label asp-for="empleadoRequest.Jornada" class="form-label">Jornada</label>
+                            <select asp-for="empleadoRequest.Jornada" class="form-select">
                                 <option value="">Seleccione</option>
                                 <option value="Tiempo completo">Tiempo completo</option>
                                 <option value="Medio tiempo">Medio tiempo</option>
                             </select>
+                            <span asp-validation-for="empleadoRequest.Jornada" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Fecha de Ingreso</label>
-                            <input type="date" class="form-control input-squarespace" name="fecha_ingreso">
+                            <label asp-for="empleadoRequest.FechaIngreso" class="form-label">Fecha de Ingreso</label>
+                            <input asp-for="empleadoRequest.FechaIngreso" type="date" class="form-control input-squarespace">
+                            <span asp-validation-for="empleadoRequest.FechaIngreso" class="text-danger"></span>
                         </div>
+                        <div class="col-md-6">
+                            <label asp-for="empleadoRequest.Telefono" class="form-label">Telefono</label>
+                            <input asp-for="empleadoRequest.Telefono" type="text" class="form-control input-squarespace">
+                            <span asp-validation-for="empleadoRequest.Telefono" class="text-danger"></span>
+                        </div>
+                        
+
 
                         
                         <div class="col-md-12 pt-3"><h6 class="text-primary">Datos de Planilla</h6></div>
@@ -213,12 +373,20 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalEditarEmpleado" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content" id="contenidoModalEditar">
+            </div>
+        </div>
+    </div>
 
 
 
     
 </body>
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/editarempleado.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -242,6 +410,17 @@
 
                 $('#verEmpleadoModal').modal('show');
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#empleadosTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                }
+            });
+
+
         });
     </script>
 }
