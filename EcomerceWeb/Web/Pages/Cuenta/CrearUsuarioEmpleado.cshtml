@@ -1,0 +1,148 @@
+﻿@page
+@model Web.Pages.Cuenta.CrearUsuarioEmpleadoModel
+@{
+}
+<head>
+    <link href="~/css/login.css" rel="stylesheet" />
+    <style>
+        body {
+            background-image: url('/img/fondo.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 40px
+        }
+    </style>
+</head>
+
+
+<div class="container" style="margin-top:170px;">
+    <div class="row justify-content-center align-items-center mt-4">
+
+
+        <div class="col-8" style="background-color:white; border-radius:20px">
+            <form method="post">
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <label for="nombreUsuario" class="form-label">Nombre de usuario</label>
+                        <div class="input-group">
+                            <input type="text" id="nombreUsuario" class="form-control input-squarespace" placeholder="Nombre de usuario" asp-for="usuario.NombreUsuario" />
+                            <span class="input-group-text">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span asp-validation-for="usuario.NombreUsuario" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <div class="input-group">
+                            <input type="text" id="apellido" class="form-control input-squarespace" placeholder="Apellido" asp-for="usuario.Apellido" />
+                            <span class="input-group-text">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span asp-validation-for="usuario.Apellido" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <div class="input-group">
+                        <input type="email" id="email" class="form-control input-squarespace" placeholder="name@example.com" asp-for="usuario.CorreoElectronico" />
+                        <span class="input-group-text">
+                            <i class="bi bi-envelope-at-fill"></i>
+                        </span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span asp-validation-for="usuario.CorreoElectronico" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <div class="input-group">
+                            <input type="text" id="telefono" class="form-control input-squarespace" placeholder="7225-7088" asp-for="usuario.Telefono" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span asp-validation-for="usuario.Telefono" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="direccion" class="form-label">Dirección</label>
+                        <div class="input-group">
+                            <input type="text" id="direccion" class="form-control input-squarespace" placeholder="Dirección" asp-for="usuario.Direccion" />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span asp-validation-for="usuario.Direccion" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" id="password" class="form-control input-squarespace" placeholder="Contraseña" asp-for="usuario.Password" />
+                        <span class="input-group-text bg-white border-0">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span asp-validation-for="usuario.Password" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="Confirmarpassword" class="form-label">Confirmar contraseña</label>
+                    <div class="input-group">
+                        <input type="password" id="Confirmarpassword" class="form-control input-squarespace" placeholder="Confirmar contraseña" />
+                        <span class="input-group-text bg-white border-0">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span asp-validation-for="usuario.Password" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="aceptar" />
+                    <label class="form-check-label" for="terms">
+                        He leído y acepto los <a href="#" class="text-decoration-none">términos y condiciones de uso</a>
+                    </label>
+                </div>
+
+
+                <button class="w-100 btn-creative mb-3" type="submit">Crear cuenta</button>
+                @if (Model.ExisteCorreo)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        El correo que ingresaste ya está en uso. Por favor, intenta con otro correo electrónico.
+                    </div>
+                }
+            </form>
+        </div>
+
+
+       
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/js/ValidacionesRegistro.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/navcategorias.js"></script>
+}

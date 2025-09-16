@@ -1,0 +1,77 @@
+﻿@model Abstracciones.Modelos.Productos.ProductosRequest
+@{
+    ViewData.TemplateInfo.HtmlFieldPrefix = "productoRequest";
+}
+
+<form id="formProductoEditar" method="post" asp-page-handler="EditarProducto">
+    <div class="modal-header">
+        <h5 class="modal-title">Editar producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Nombre" class="form-label">Nombre</label>
+                <input asp-for="Nombre" class="form-control input-squarespace"  />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Marca" class="form-label">Marca</label>
+                <input asp-for="Marca" class="form-control input-squarespace"  />
+                <span asp-validation-for="Marca" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Precio" class="form-label">Precio</label>
+                <input asp-for="Precio" class="form-control input-squarespace"  />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            <div class="col-md-8">
+                <label asp-for="Descripcion" class="form-label">Descripción</label>
+                <input asp-for="Descripcion" class="form-control input-squarespace"  />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="Stock" class="form-label">Stock</label>
+                <input asp-for="Stock" class="form-control input-squarespace"  />
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+
+            
+
+            <div class="col-md-4">
+                <label asp-for="IdProveedor" class="form-label">Proveedor</label>
+                
+                <select asp-for="IdProveedor" class="form-select" id="proveedorSelect">
+                    <option value="@Model.IdProveedor">@Html.DisplayFor(p => Model.NombreProveedor)</option>
+                </select>
+                <span asp-validation-for="IdProveedor" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label asp-for="IdCategoria" class="form-label">Categorias</label>
+
+                <select asp-for="IdCategoria" class="form-select" id="categoriasSelect">
+                    <option value="@Model.IdCategoria">@Html.DisplayFor(p => Model.Categoria)</option>
+                </select>
+                <span asp-validation-for="IdCategoria" class="text-danger"></span>
+            </div>
+            <div class="col-md-8">
+                <label for="imagen" class="form-label">Imagen</label>
+                <input type="file" name="imagen" id="imagen" class="form-control" />
+                <input type="hidden" asp-for="ImagenUrl" />
+                <img id="preview" src="@Model.ImagenUrl" alt="Preview" class="img-fluid mt-2" style=" max-height:150px; border-radius:25px;" />
+            </div>
+
+            
+           
+            <input type="hidden" asp-for="IdProducto" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+</form>

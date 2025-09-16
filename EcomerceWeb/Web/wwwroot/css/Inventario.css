@@ -1,0 +1,84 @@
+﻿
+.producto-img {
+    object-fit: cover;
+    height: 150px;
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+    .producto-img:hover {
+        transform: scale(1.05);
+        cursor: pointer;
+    }
+
+
+.card {
+    border: none;
+}
+
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.btn-outline-danger, .btn-outline-secondary {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+        border-color: #dc3545;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: white;
+        border-color: #6c757d;
+    }
+
+
+.low-stock-indicator .badge {
+    width: 34px;
+    height: 34px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.pagination .page-link {
+    border-radius: 50px !important;
+    padding: 0.5rem 1.2rem !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #6c63ff !important;
+    border-color: #6c63ff !important;
+    color: white !important;
+}
+
+.pagination .page-link:hover {
+    background-color: #574fd6 !important;
+    color: white !important;
+}
+
+
+
+
+
+.hover-bg-primary:hover {
+    background-color: #6c63ff;
+    color: white !important;
+}

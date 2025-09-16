@@ -1,0 +1,26 @@
+﻿CREATE PROCEDURE [dbo].[ACTIVAR_HIJA_Y_PADRE]
+  @IdHija UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @PadreId UNIQUEIDENTIFIER;
+
+    SELECT @PadreId = PADRE_ID
+    FROM dbo.CATEGORIAS
+    WHERE CATEGORIAS_ID = @IdHija;
+
+    IF @PadreId IS NOT NULL
+    BEGIN
+        UPDATE dbo.CATEGORIAS
+        SET ESTADO_ID = 1 
+        WHERE CATEGORIAS_ID = @PadreId
+          AND ESTADO_ID != 1;
+    END
+    UPDATE dbo.CATEGORIAS
+    SET ESTADO_ID = 1
+    WHERE CATEGORIAS_ID = @IdHija;
+
+    SELECT @IdHija AS HijaActivada,
+           @PadreId AS PadreActivado;
+END

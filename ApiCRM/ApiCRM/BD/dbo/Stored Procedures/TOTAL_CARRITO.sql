@@ -1,0 +1,20 @@
+﻿CREATE PROCEDURE TOTAL_CARRITO
+    @CarritoId UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @Total DECIMAL(18, 2);
+
+    SELECT @Total = SUM(P.PRECIO * CP.Cantidad)
+    FROM CARRITO_PRODUCTO CP
+    INNER JOIN PRODUCTOS P ON CP.PRODUCTOS_ID = P.PRODUCTOS_ID
+    WHERE CP.CARRITO_ID = @CarritoId;
+    SET @Total = ISNULL(@Total, 0);
+
+    UPDATE Carrito
+    SET Total = @Total
+    WHERE CARRITO_ID = @CarritoId;
+
+    SELECT @CarritoId;
+END

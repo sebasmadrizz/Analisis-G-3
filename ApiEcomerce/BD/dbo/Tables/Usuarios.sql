@@ -1,0 +1,20 @@
+﻿  CREATE TABLE [dbo].[Usuarios](
+	[Id] [uniqueidentifier] NOT NULL,
+	[NombreUsuario] [Nvarchar](max) NOT NULL,
+	APELLIDO NVARCHAR(255) null,
+	[PasswordHash] [varchar](max) NOT NULL,
+	CorreoElectronico VARCHAR(256) NOT NULL UNIQUE,
+	IMAGEN_URL NVARCHAR(256) NULL,
+    TELEFONO VARCHAR(10) NULL,
+    DIRECCION NVARCHAR(256) NULL,
+	[FechaCreacion] [datetime] NULL,
+	[FechaModificacion] [datetime] NULL,
+	[UsuarioCrea] [uniqueidentifier] NULL,
+	[UsuarioModifica] [uniqueidentifier] NULL,
+	 ESTADO_ID INT NOT NULL,
+  FOREIGN KEY (ESTADO_ID) REFERENCES ESTADOS(ESTADO_ID),
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]

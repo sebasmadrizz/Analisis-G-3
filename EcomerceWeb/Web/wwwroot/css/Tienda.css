@@ -1,0 +1,139 @@
+﻿.top-carusel {
+    margin-top: 120px;
+}
+.pagination .page-link {
+    border-radius: 50px !important;
+    padding: 0.5rem 1.2rem !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #6c63ff !important;
+    border-color: #6c63ff !important;
+    color: white !important;
+}
+
+.pagination .page-link:hover {
+    background-color: #574fd6 !important;
+    color: white !important;
+}
+.main-content {
+    margin-left: 240px;
+    padding: 80px 20px 20px;
+}
+
+.modern-carousel {
+    height: 250px;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+    .modern-carousel img {
+        height: 250px;
+        object-fit: cover;
+        transition: transform 6s ease;
+    }
+
+.carousel-item.active img {
+    transform: scale(1.05);
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+    z-index: 1;
+}
+
+.carousel-caption {
+    z-index: 2;
+    animation: fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+.modern-carousel .carousel-control-prev,
+.modern-carousel .carousel-control-next {
+    display: none;
+}
+
+
+@media (max-width: 768px) {
+    .modern-carousel {
+        height: 200px;
+    }
+
+        .modern-carousel img {
+            height: 200px;
+        }
+}
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+        object-fit: cover;
+        height: 200px;
+    }
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.footer {
+    background: #222;
+    color: #ccc;
+    width: 100%;
+}
+
+    .footer a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f9;
+}
+.detalle-btn {
+    background: linear-gradient(135deg, #4a90e2, #357ab8); 
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-weight: 500;
+    font-size: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+    .detalle-btn:hover {
+        background: linear-gradient(135deg, #357ab8, #4a90e2); 
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+        cursor: pointer;
+    }
+
+    .detalle-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }

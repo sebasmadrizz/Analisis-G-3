@@ -1,0 +1,195 @@
+﻿@page
+@model Web.Pages.Proveedor.EliminarProveedorModel
+@{
+}
+<head>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+	<style>
+
+		body {
+			font-family: 'Inter', sans-serif;
+			background-color: #f8f9fa;
+			padding: 20px;
+		}
+
+		h1.page-title {
+			font-weight: 600;
+			margin-bottom: 30px;
+			color: #212529;
+			text-align: center;
+		}
+
+
+		.btn-rounded {
+			border-radius: 20px;
+			padding: 6px 12px;
+		}
+
+		.rounded-card {
+			border-radius: 12px;
+			border: 1px solid #e9ecef;
+			background: #fff;
+			overflow: hidden;
+		}
+
+			.rounded-card .card-header {
+				background: #0d6efd;
+				color: #fff;
+				padding: 16px;
+			}
+
+			.rounded-card .card-body {
+				padding: 20px;
+			}
+
+			.rounded-card .card-footer {
+				background: #f7f9fc;
+				border-top: 1px solid #e9ecef;
+				padding: 12px 20px;
+			}
+
+		.badge-estado {
+			display: inline-block;
+			padding: 6px 10px;
+			font-weight: 600;
+			border-radius: 999px;
+		}
+
+		.badge-activo {
+			background: #e6f4ea;
+			color: #137333;
+			border: 1px solid #c7e6cf;
+		}
+
+		.badge-inactivo {
+			background: #f3f4f6;
+			color: #374151;
+			border: 1px solid #e5e7eb;
+		}
+
+		.btn-regresar {
+			background-color: #eef2f7;
+			color: #374151;
+			border-radius: 999px;
+			padding: 10px 18px;
+			font-weight: 600;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			box-shadow: 0 3px 10px rgba(0,0,0,.08);
+			transition: all 0.2s ease;
+			text-decoration: none;
+		}
+
+			.btn-regresar:hover {
+				background-color: #e3e8f2;
+				transform: translateY(-1px);
+			}
+
+		
+		.btn-eliminar {
+			background-color: #dc3545; /* rojo Bootstrap */
+			color: #fff;
+			border-radius: 999px;
+			padding: 10px 18px;
+			font-weight: 600;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			box-shadow: 0 3px 10px rgba(220,53,69,.25);
+			border: none;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+			.btn-eliminar:hover {
+				background-color: #bb2d3b;
+				transform: translateY(-1px);
+			}
+	</style>
+</head>
+<div class="container mt-4">
+	<form method="post">
+
+		<input type="hidden" name="PROVEEDOR_ID" value="@Model.proveedor.PROVEEDOR_ID" />
+
+		<div class="row">
+			<div class="col-md-10 offset-md-1">
+				<div class="card shadow-lg border-0 rounded-3">
+					<div class="card-header bg-primary text-white text-center py-3">
+						<h3 class="mb-0">@Model.proveedor.Nombre_PROVEEDOR</h3>
+					</div>
+
+					<div class="card-body">
+						<div class="row mb-3">
+							<div class="col-md-6">
+								<strong>Correo electrónico:</strong>
+								<p>@Model.proveedor.Correo_ELECTRONICO</p>
+							</div>
+							<div class="col-md-6">
+								<strong>Teléfono:</strong>
+								<p>@Model.proveedor.Telefono</p>
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<div class="col-md-6">
+								<strong>Tipo:</strong>
+								<p>@Model.proveedor.TIPO</p>
+							</div>
+							<div class="col-md-6">
+								<strong>Nombre de contacto:</strong>
+								<p>@Model.proveedor.Nombre_Contacto</p>
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<div class="col-md-12">
+								<strong>Dirección:</strong>
+								<p>@Model.proveedor.Direccion</p>
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<div class="col-md-6">
+								<strong>Estado:</strong>
+								@if (Model.proveedor.ESTADO_ID == 1)
+								{
+									<button type="button" class="btn btn-success btn-sm toggle-estado btn-rounded"
+											data-id="@Model.proveedor.PROVEEDOR_ID"
+											data-estado="Activo">
+										Activo
+									</button>
+								}
+								else
+								{
+									<button type="button" class="btn btn-warning btn-sm toggle-estado btn-rounded"
+											data-id="@Model.proveedor.PROVEEDOR_ID"
+											data-estado="Inactivo">
+										Inactivo
+									</button>
+								}
+							</div>
+							<div class="col-md-6">
+								<strong>Fecha de registro:</strong>
+								<p>@Model.proveedor.Fecha_Registro.ToString("dd/MM/yyyy")</p>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer d-flex justify-content-between">
+						<div class="form-buttons">
+							<a class="btn-custom btn-regresar" asp-page="./MostrarProveedores">
+								<i class="bi bi-arrow-left"></i> Regresar
+							</a>
+
+							<button type="submit" class="btn-custom btn-eliminar">
+								<i class="bi bi-trash"></i> Eliminar
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+	</form>
+</div>

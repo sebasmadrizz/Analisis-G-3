@@ -1,0 +1,390 @@
+﻿@page
+@model Web.Pages.Categorias.CategoriasModel
+@{
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+<head>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/css/modales.css" rel="stylesheet" />
+    <link href="~/css/tablas.css" rel="stylesheet" />
+    <style>
+        body {
+            padding-top: 80pX !important;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="hidden" id="__RequestVerificationToken" value="@Antiforgery.GetAndStoreTokens(HttpContext).RequestToken" />
+    <h1 class="page-title">Gestión de Categorias</h1>
+
+    <div class="mb-4 d-flex justify-content-end gap-2">
+        <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#agregarCategoriaModal">
+            <i class="bi bi-plus-lg"></i> Agregar Categoria
+        </button>
+    </div>
+    @if (Model.SinCategorias)
+    {
+        <div class="alert alert-warning text-center">
+            No hay categorías disponibles.
+        </div>
+
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table id="tablaCategorias" class="table table-striped table-bordered rounded-table text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Nombre del padre</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.categorias != null && Model.categorias.Any())
+                    {
+                        @foreach (var categoria in Model.categorias)
+                        {
+                            <tr data-id="@categoria.categoriasId">
+                                <td></td>
+                                <td>@categoria.nombre</td>
+                                <td>
+                                    @(string.IsNullOrEmpty(categoria.nombrePadre)
+                                                            ? "Es categoría principal"
+                                                            : categoria.nombrePadre)
+                    </td>
+                    <td>@categoria.descripcion</td>
+                    <td>
+                        @if (categoria.estado == "Activo")
+                                    {
+                                        <button type="button"
+                                                class="btn btn-success rounded-circle toggle-estado"
+                                                title="Activo"
+                                                data-url='@Url.Page("./Categorias", "Verificar", new { id = categoria.categoriasId })'
+                                                onclick="return confirmarEliminar(this)">
+                                            <i class="bi bi-toggle-on"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button"
+                                                class="btn btn-danger rounded-circle toggle-estado"
+                                                title="Inactivo"
+                                                data-url='@Url.Page("./Categorias", "ContarHijasTotales", new { id = categoria.categoriasId })'
+                                                onclick="return confirmarActivar(this)">
+                                            <i class="bi bi-toggle-off"></i>
+                                        </button>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <button type="button"
+                                                class="btn btn-primary btn-rounded edit-btn"
+                                                data-id="@categoria.categoriasId"
+                                                title="Editar">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6">
+                                <div class="alert alert-warning w-100 text-center" role="alert">
+                                    No hay categorías registradas.
+                                </div>
+                            </td>
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    }
+
+
+   
+    <div class="modal fade" id="agregarCategoriaModal" tabindex="-1" aria-labelledby="agregarCategoriaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="agregarCategoriaModalLabel">Agregar Nueva Categoría</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" asp-page-handler="AgregarCategoria">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label asp-for="Categoria.nombre" class="form-label"></label>
+                            <input asp-for="Categoria.nombre" class="form-control" required />
+                            <span asp-validation-for="Categoria.nombre" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Categoria.descripcion" class="form-label"></label>
+                            <textarea asp-for="Categoria.descripcion" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="Categoria.descripcion" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Categoria.padreId" class="form-label">Categoría Padre</label>
+                            <select asp-for="Categoria.padreId" class="form-select">
+                                <option value="">Es una categoría principal</option>
+                                @foreach (var padre in Model.categoriasPadres)
+                                {
+                                    <option value="@padre.categoriasId">@padre.nombre</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Categoría</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("_EditarModal", new Abstracciones.Modelos.Categoria.Categoria())
+    </body>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+               $(document).ready(function () {
+            if ($('#tablaCategorias tbody tr').length > 0 && !$('#tablaCategorias tbody tr td').attr('colspan')) {
+                $('#tablaCategorias').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                    },
+                    columnDefs: [{
+                        targets: 0,
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    }]
+                });
+            }
+        });
+        
+    </script>
+
+    <script>
+
+        async function confirmarEliminar(btn) {
+            try {
+                const urlVerificar = btn.getAttribute('data-url');
+                
+
+                const rVerif = await fetch(urlVerificar, { method: 'GET', headers: { 'Accept': 'application/json' } });
+                const verificar = await rVerif.json();
+
+                const idCategoria = verificar.idCategoria ?? verificar.IdCategoria;
+                const cantidad = verificar.cantidadHijas ?? verificar.CantidadHijas ?? 0;
+                const esPadre = verificar.esPadre ?? verificar.EsPadre ?? (cantidad > 0);
+
+                let mensaje = '¿Desea eliminar esta categoría?';
+                if (esPadre && cantidad > 0) {
+                    mensaje = `Esta categoría tiene ${cantidad} subcategoría(s). ¿Desea eliminarlas también?`;
+                }
+
+                const result = await Swal.fire({
+                    title: 'Confirmar eliminación',
+                    text: mensaje,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#6f42c1',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                });
+
+                if (!result.isConfirmed) return false;
+
+                
+
+                const form = document.createElement('form');
+                form.method = 'post';
+                form.action = '@Url.Page("./Categorias", "Eliminar")';
+                const inputId = document.createElement('input');
+                inputId.type = 'hidden';
+                inputId.name = 'id';
+                inputId.value = idCategoria;
+                form.appendChild(inputId);
+
+                const tokenValue = document.getElementById('__RequestVerificationToken').value;
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = tokenValue;
+                form.appendChild(tokenInput);
+
+                document.body.appendChild(form);
+                form.submit();
+
+            } catch (err) {
+                console.error(err);
+                await Swal.fire('Error', 'Ocurrió un error al procesar la solicitud.', 'error');
+                return false;
+            }
+        }
+    </script>
+    <script>
+               $(document).ready(function () {
+            $('#tablaCategorias').on('click', '.edit-btn', async function () {
+                const categoriaId = $(this).data('id');
+                const modalElement = document.getElementById('editarCategoriaModal');
+
+                const obtenerPorIdUrl = '@Url.Page("/Categorias/Categorias", null, new { handler = "ObtenerPorId" })';
+
+                try {
+                    const response = await fetch(`${obtenerPorIdUrl}&id=${categoriaId}`, {
+                        method: 'GET',
+                        headers: { 'Accept': 'application/json' }
+                    });
+                        const categoria = await response.json();
+
+                        $('#edit-categoriasId').val(categoria.categoriasId);
+                        $('#edit-nombre').val(categoria.nombre);
+                        $('#edit-descripcion').val(categoria.descripcion);
+                        $('#edit-padreId').val(categoria.padreId || '');
+
+                        $('#editarCategoriaModal form').attr('action', `/Categorias/Categorias?handler=EditarCategoria&id=${categoria.categoriasId}`);
+
+                        const modal = new bootstrap.Modal(modalElement);
+                        modal.show();
+
+
+                } catch (error) {
+                    console.error('Error de conexión:', error);
+                    Swal.fire('Error', 'Ocurrió un error en la conexión con el servidor.', 'error');
+                }
+            });
+        });
+    </script>
+    <script>
+        async function confirmarActivar(btn) {
+            try {
+                const urlVerificar = btn.getAttribute('data-url');
+
+                const rVerif = await fetch(urlVerificar, { method: 'GET', headers: { 'Accept': 'application/json' } });
+                const verificar = await rVerif.json();
+
+                const idCategoria = verificar.idCategoria ?? verificar.IdCategoria;
+                const cantidad = verificar.cantidadHijas ?? verificar.CantidadHijas ?? 0;
+                const esPadre = verificar.esPadre ?? verificar.EsPadre ?? (cantidad > 0);
+                const padreId = verificar.padreId ?? null;
+                const padreActivo = verificar.padreActivo ?? true;
+
+
+                let mensaje = '¿Desea activar esta categoría?';
+                let activarHijas = false;
+                let activarPadre = false;
+
+                if (esPadre && cantidad > 0) {
+                    const result = await Swal.fire({
+                        title: 'Confirmar activación',
+                        text: `Esta categoría tiene ${cantidad} subcategoría(s). ¿Desea activarlas también?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        showDenyButton: true,
+                        confirmButtonText: 'Sí, activar padre y hijas',
+                        denyButtonText: 'Solo activar padre',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (result.isDismissed) return false; 
+                    if (result.isConfirmed) activarHijas = true; 
+                    if (result.isDenied) activarHijas = false; 
+
+                } else if (padreId && !padreActivo) {
+                    const result = await Swal.fire({
+                        title: 'Activar padre inactivo',
+                        text: 'Esta categoría tiene un padre inactivo. ¿Desea activar también al padre?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sí, activar padre + hija',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (!result.isConfirmed) return false;
+
+                    activarHijas = true;     
+                    activarPadre = true;      
+                } else {
+                    const result = await Swal.fire({
+                        title: 'Confirmar activación',
+                        text: mensaje,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#6f42c1',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Sí, activar',
+                        cancelButtonText: 'Cancelar'
+                    });
+
+                    if (!result.isConfirmed) return false;
+                }
+
+                const form = document.createElement('form');
+                if (activarPadre) {
+                    form.action = '@Url.Page("./Categorias", "ActivarHijas")';
+                } else {
+                    form.action = '@Url.Page("./Categorias", "ActivarPadreHijas")';
+                }
+                form.method = 'post';
+
+                const inputId = document.createElement('input');
+                inputId.type = 'hidden';
+                inputId.name = 'id';
+                inputId.value = idCategoria;
+                form.appendChild(inputId);
+
+                const inputHijas = document.createElement('input');
+                inputHijas.type = 'hidden';
+                inputHijas.name = 'activarHijas';
+                inputHijas.value = activarHijas;
+                form.appendChild(inputHijas);
+
+                if (activarPadre) {
+                    const inputPadre = document.createElement('input');
+                    inputPadre.type = 'hidden';
+                    inputPadre.name = 'activarPadre';
+                    inputPadre.value = padreId;
+                    form.appendChild(inputPadre);
+                }
+
+                const tokenValue = document.getElementById('__RequestVerificationToken').value;
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '__RequestVerificationToken';
+                tokenInput.value = tokenValue;
+                form.appendChild(tokenInput);
+
+                document.body.appendChild(form);
+                form.submit();
+
+            } catch (err) {
+                console.error(err);
+                await Swal.fire('Error', 'Ocurrió un error al procesar la solicitud.', 'error');
+                return false;
+            }
+        }
+    </script>
+}

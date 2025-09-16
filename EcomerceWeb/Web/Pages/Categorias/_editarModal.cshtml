@@ -1,0 +1,37 @@
+﻿@model Abstracciones.Modelos.Categoria.Categoria
+
+@if (Model != null)
+{
+    <div class="modal fade" id="editarCategoriaModal" tabindex="-1" aria-labelledby="editarCategoriaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" asp-page-handler="EditarCategoria" asp-route-id="@Model.categoriasId">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editarCategoriaModalLabel">Editar Categoría</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="categoriasId" id="edit-categoriasId" />
+                        <div class="mb-3">
+                            <label asp-for="nombre" class="form-label"></label>
+                            <input asp-for="nombre" class="form-control" id="edit-nombre" />
+                            <span asp-validation-for="nombre" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="descripcion" class="form-label"></label>
+                            <textarea asp-for="descripcion" class="form-control" id="edit-descripcion"></textarea>
+                            <span asp-validation-for="descripcion" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <input type="hidden" id="edit-padreId" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

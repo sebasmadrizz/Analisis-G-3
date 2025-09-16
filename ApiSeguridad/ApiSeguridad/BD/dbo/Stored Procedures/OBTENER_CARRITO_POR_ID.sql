@@ -1,0 +1,8 @@
+﻿CREATE PROCEDURE OBTENER_CARRITO_POR_ID
+    @IdCarrito UNIQUEIDENTIFIER
+AS
+BEGIN
+    SELECT CARRITO_ID as carritoId, FECHA_CREACION as fechaCreacion, Total
+    FROM Carrito
+    WHERE CARRITO_ID = @IdCarrito
+END

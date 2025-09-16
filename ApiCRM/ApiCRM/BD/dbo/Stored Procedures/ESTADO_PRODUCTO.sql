@@ -1,0 +1,19 @@
+﻿CREATE PROCEDURE ESTADO_PRODUCTO
+  @IdProducto UNIQUEIDENTIFIER
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  BEGIN TRANSACTION;
+  UPDATE [dbo].[PRODUCTOS]
+  SET ESTADO_ID = CASE 
+                 WHEN ESTADO_ID = 1 THEN 2
+                 WHEN ESTADO_ID = 2 THEN 1
+                 ELSE ESTADO_ID 
+               END
+  WHERE PRODUCTOS_ID = @IdProducto;
+
+  COMMIT TRANSACTION;
+
+  SELECT @IdProducto AS ProductoModificado;
+END;

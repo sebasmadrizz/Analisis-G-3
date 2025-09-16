@@ -1,0 +1,205 @@
+﻿@page
+@model Web.Pages.Carrito.CarritoModel
+@{
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - E-commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .cart-item-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        }
+
+        .quantity-input {
+        width: 60px;
+        text-align: center;
+        }
+
+        .price-text {
+        font-weight: 600;
+        color: #198754;
+        }
+
+        .total-section {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        }
+
+        .empty-cart {
+        min-height: 400px;
+        }
+
+        .cart-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+
+    <div class="container">
+        <div id="cart-with-items">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Productos en tu carrito (<span id="item-count">3</span> artículos)</h5>
+                        </div>
+                        <div class="card-body p-0" data-carrito-id="@Model.Carrito.CarritoId">
+                            @if (Model.Carrito?.Productos?.Any() ?? false)
+                            {
+                                @foreach (var producto in Model.Carrito.Productos)
+                                {
+                                    <div class="cart-item border-bottom p-4"
+                                    id="producto-@producto.CarritoProductoId.ToString("d")"
+                                    data-id="@producto.CarritoProductoId.ToString("d")"
+                                    data-productos-id="@producto.ProductosId.ToString("d")"
+                                    data-precio-unit="@producto.PrecioUnitario">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2">
+                                                <img src="@producto.ImagenUrl" alt="@producto.NombreProducto" class="cart-item-img rounded" style="height:80px; width:80px;" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="mb-1">@producto.NombreProducto</h6>
+                                                <small class="text-muted">@producto.Descripcion</small>
+                                                <div class="mt-2">
+                                                    <span class="badge bg-success">En stock</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <form class="needs-validation" novalidate>
+                                                    <div class="input-group input-group-sm">
+                                                        <button class="btn btn-outline-secondary btn-decrease" type="button"
+                                                        onclick="cambiarCantidad('@producto.CarritoProductoId.ToString("d")', -1)">
+                                                            <i class="bi bi-dash"></i>
+                                                        </button>
+
+                                                        <input type="number" class="form-control quantity-input"
+                                                        value="@producto.Cantidad"
+                                                        min="0"
+                                                        max="@(producto.StockDisponible + producto.Cantidad)"
+                                                        required />
+
+                                                        <button class="btn btn-outline-secondary btn-increase" type="button"
+                                                        onclick="cambiarCantidad('@producto.CarritoProductoId.ToString("d")', 1)">
+                                                            <i class="bi bi-plus"></i>
+                                                        </button>
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-2 text-center">
+                                                <div class="price-text">₡@producto.PrecioUnitario</div>
+                                                <small class="text-muted">c/u</small>
+                                            </div>
+                                            <div class="col-md-2 text-end">
+                                                <div class="item-total price-text">₡@producto.TotalLinea</div>
+                                                <button class="btn btn-sm btn-outline-danger mt-2 btn-remove" type="button" onclick="eliminarProducto('@producto.CarritoProductoId.ToString("d")')">
+                                                    <i class="bi bi-trash"></i> Eliminar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div id="empty-cart" class="text-center empty-cart">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body py-5">
+                                            <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
+                                            <h2 class="mb-3">Tu carrito está vacío</h2>
+                                            <p class="text-muted mb-4">¡Agrega algunos productos para comenzar!</p>
+                                            <a asp-page="../Productos/Index" class="btn btn-primary btn-lg">
+                                                <i class="bi bi-arrow-left me-2"></i>Ir de Compras
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.Carrito?.Productos?.Any() ?? false)
+                {
+                    
+                
+                <div class="col-lg-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Resumen del Pedido</h5>
+                        </div>
+
+                        <div class="card-body">
+                            <hr>
+                            <div class="d-flex justify-content-between h5">
+                                <strong>Total:</strong>
+                                <strong id="total" class="text-success">₡@(Model.Carrito?.Total ?? 0)</strong>
+
+
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <form method="post" asp-page-handler="EnviarCorreo">
+                                    <input type="hidden" name="carritoId" value="@Model.Carrito.CarritoId" />
+                                    <button type="submit" class="btn btn-success btn-lg">
+                                        <i class="bi bi-lock-fill me-2"></i>Proceder al Pago
+                                    </button>
+                                </form>
+                                <a asp-page="../Productos/Index" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-2"></i>Continuar Comprando
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div id="empty-cart" class="text-center empty-cart d-none">
+        <div class="card shadow-sm">
+            <div class="card-body py-5">
+                <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
+                <h2 class="mb-3">Tu carrito está vacío</h2>
+                <p class="text-muted mb-4">¡Agrega algunos productos para comenzar!</p>
+                <a asp-page="../Productos/Index" class="btn btn-primary btn-lg">
+                    <i class="bi bi-arrow-left me-2"></i>Ir de Compras
+                </a>
+              
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>
+@section Scripts {
+    <script>
+        window.endpoints = {
+            actualizarProducto: '@Model.EndpointActualizarProducto',
+            eliminarProducto: '@Model.EndpointEliminarProducto'
+        };
+    </script>
+
+    <script src="~/js/carrito.js"></script>
+    <script src="~/js/eliminarProducto.js"></script>
+    <script src="~/js/navcategorias.js"></script>
+
+
+}

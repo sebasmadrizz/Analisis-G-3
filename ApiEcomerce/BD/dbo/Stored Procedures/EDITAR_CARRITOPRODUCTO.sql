@@ -1,0 +1,36 @@
+﻿CREATE PROCEDURE EDITAR_CARRITOPRODUCTO
+  @CarritoId UNIQUEIDENTIFIER,
+    @CarritoProductoId UNIQUEIDENTIFIER,
+  @ProductosId UNIQUEIDENTIFIER,
+  @Cantidad INT
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  DECLARE @Precio DECIMAL(8,2);
+ 
+ DECLARE @ResultadoCarritoId UNIQUEIDENTIFIER;
+
+  
+  SELECT 
+    @Precio = PRECIO
+  
+  FROM PRODUCTOS
+  WHERE PRODUCTOS_ID = @ProductosId;
+  BEGIN TRANSACTION;
+
+  UPDATE CARRITO_PRODUCTO
+  SET 
+    CANTIDAD = @Cantidad,
+    TOTAL_LINEA = @Cantidad * @Precio
+  WHERE 
+    CARRITO_PRODUCTO_ID = @CarritoProductoId;
+ SELECT 
+    @ResultadoCarritoId = CARRITO_ID
+  FROM CARRITO_PRODUCTO
+  WHERE CARRITO_PRODUCTO_ID = @CarritoProductoId;
+
+  COMMIT TRANSACTION;
+
+  SELECT @ResultadoCarritoId AS Resultado;
+END;

@@ -1,0 +1,154 @@
+﻿@page
+@model Web.Pages.Proveedor.EditarProveedorModel
+@{
+}
+<head>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+	<style>
+
+		body {
+			font-family: 'Inter', sans-serif;
+			background-color: #f8f9fa;
+			padding: 20px;
+		}
+
+		h1.page-title {
+			font-weight: 600;
+			margin-bottom: 30px;
+			color: #212529;
+			text-align: center;
+		}
+
+		
+		.form-buttons {
+			display: flex;
+			gap: 15px;
+			justify-content: flex-end;
+			margin-top: 25px;
+		}
+
+		.btn-custom {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 10px 20px;
+			font-family: 'Inter', sans-serif;
+			font-weight: 600;
+			font-size: 15px;
+			border-radius: 25px;
+			border: none;
+			cursor: pointer;
+			text-decoration: none;
+			transition: all 0.3s ease;
+			box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		
+		.btn-back {
+			background-color: #e9ecef;
+			color: #495057;
+		}
+
+			.btn-back:hover {
+				background-color: #d6d8db;
+				transform: translateY(-2px);
+			}
+
+		.btn-save {
+			background-color: #f0ad4e;
+			color: #fff;
+		}
+
+			.btn-save:hover {
+				background-color: #ec971f;
+				transform: translateY(-2px);
+			}
+
+		
+		.btn-custom i {
+			font-size: 16px;
+		}
+
+	</style>
+</head>
+<section class="page-section bg-light" id="principal">
+	<div class="container">
+		<h1 class="page-title">Editar proveedor</h1>
+
+
+		<div class="text-center">
+
+			<h3 class="section-subheading text-muted">Actualiza la información del proveedor.</h3>
+		</div>
+
+		<div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto">
+			<form method="post">
+				<input type="hidden" asp-for="proveedor.PROVEEDOR_ID" />
+
+				<div class="form-group mb-3">
+					<label class="control-label" asp-for="proveedor.Nombre_PROVEEDOR">Nombre del proveedor</label>
+					<input class="form-control" asp-for="proveedor.Nombre_PROVEEDOR" />
+					<span class="text-danger" asp-validation-for="proveedor.Nombre_PROVEEDOR"></span>
+				</div>
+
+				<div class="form-group mb-3">
+					<label class="control-label" asp-for="proveedor.Correo_ELECTRONICO">Correo electronico</label>
+					<input class="form-control" asp-for="proveedor.Correo_ELECTRONICO" />
+					<span class="text-danger" asp-validation-for="proveedor.Correo_ELECTRONICO"></span>
+				</div>
+
+				<div class="form-group mb-3">
+					<label class="control-label" asp-for="proveedor.TIPO"></label>
+					<input class="form-control" asp-for="proveedor.TIPO" />
+					<span class="text-danger" asp-validation-for="proveedor.TIPO"></span>
+				</div>
+
+				<div class="form-group mb-3">
+					<label class="control-label" asp-for="proveedor.Direccion"></label>
+					<input class="form-control" asp-for="proveedor.Direccion" />
+					<span class="text-danger" asp-validation-for="proveedor.Direccion"></span>
+				</div>
+
+				<div class="form-group mb-3">
+					<label class="control-label" asp-for="proveedor.Telefono"></label>
+					<input class="form-control" asp-for="proveedor.Telefono" />
+					<span class="text-danger" asp-validation-for="proveedor.Telefono"></span>
+				</div>
+
+				<div class="form-group mb-3">
+					<label class="control-label" asp-for="proveedor.Nombre_Contacto">Representante</label>
+					<input class="form-control" asp-for="proveedor.Nombre_Contacto" />
+					<span class="text-danger" asp-validation-for="proveedor.Nombre_Contacto"></span>
+				</div>
+
+				<div class="form-group mb-3">
+					<label class="control-label" asp-for="proveedor.ESTADO_ID">Estado</label>
+					<select class="form-select" asp-for="proveedor.ESTADO_ID">
+						<option value="1">Activo</option>
+						<option value="2">Inactivo</option>
+					</select>
+					<span class="text-danger" asp-validation-for="proveedor.ESTADO_ID"></span>
+				</div>
+
+				<div class="form-group mb-3">
+					<label class="control-label" asp-for="proveedor.Fecha_Registro">Fecha de Registro</label>
+					<input class="form-control" asp-for="proveedor.Fecha_Registro" readonly />
+				</div>
+
+				<div class="text-danger mb-3" asp-validation-summary="All"></div>
+
+				<div class="form-buttons">
+					<a class="btn-custom btn-back" asp-page="./MostrarProveedores">
+						<i class="bi bi-arrow-left"></i> Regresar
+					</a>
+					<button type="submit" class="btn-custom btn-save">
+						<i class="bi bi-pencil-square"></i> Guardar 
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+

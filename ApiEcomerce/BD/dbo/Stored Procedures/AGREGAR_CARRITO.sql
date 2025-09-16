@@ -1,0 +1,15 @@
+﻿CREATE PROCEDURE AGREGAR_CARRITO
+    @CarritoId UNIQUEIDENTIFIER,
+    @UsuarioId UNIQUEIDENTIFIER,
+    @FechaCreacion DATETIME,
+    @Total DECIMAL(18, 2)
+    AS
+BEGIN
+  SET NOCOUNT ON;
+
+  BEGIN TRANSACTION;
+    INSERT INTO Carrito (CARRITO_ID, USUARIO_ID, FECHA_CREACION, Total)
+    VALUES (@CarritoId, @UsuarioId, @FechaCreacion, @Total)
+    COMMIT TRANSACTION;
+    SELECT @CarritoId
+END

@@ -1,0 +1,19 @@
+﻿CREATE PROCEDURE VER_PROVEEDOR_POR_ID
+  @IdProveedor UNIQUEIDENTIFIER
+AS
+BEGIN
+  SET NOCOUNT ON;
+
+  SELECT 
+PROVEEDOR_ID,
+Nombre_PROVEEDOR,
+Correo_ELECTRONICO,
+Telefono,
+Direccion,
+Nombre_Contacto,
+Fecha_Registro,
+TIPO,
+ESTADO_ID
+FROM Proveedores
+  WHERE PROVEEDOR_ID = @IdProveedor;
+END;

@@ -1,0 +1,194 @@
+﻿@page
+@model Web.Pages.Productos.ProductosXCategoriaModel
+@{
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+<head>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/tienda.css" rel="stylesheet" />
+
+    <link href="~/css/slider.css" rel="stylesheet" />
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@6.2.4/dist/simplebar.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/simplebar@6.2.4/dist/simplebar.min.js"></script>
+
+   <style>
+        .hijas-container select {
+            display: block;
+            width: 100%;
+            padding: 0.25rem 0.5rem; 
+            font-size: 0.875rem;
+            border-radius: 0.5rem; 
+            border: 1px solid #ccc;
+            background-color: #fff; 
+            color: #333;
+            appearance: none; 
+            cursor: pointer;
+        }
+
+            .hijas-container select:focus {
+                outline: none;
+                border-color: #6f42c1; 
+                box-shadow: 0 0 0 0.2rem rgba(111,66,193,0.25);
+            }
+
+        .sidebar-nav {
+            margin-top: 59px;
+            width: 64px; 
+            overflow-x: hidden;
+            transition: width 0.3s ease;
+        }
+
+            .sidebar-nav:hover {
+                width: 250px;
+            }
+
+            .sidebar-nav nav .nav-text {
+                opacity: 0;
+                display: inline-block;
+                transition: opacity 0.3s ease;
+                margin-left: 10px;
+            }
+
+            .sidebar-nav:hover nav .nav-text {
+                opacity: 1;
+            }
+
+            .sidebar-nav nav .hijas-container {
+                display: none;
+            }
+
+            .sidebar-nav:hover nav .hijas-container {
+                display: block;
+            }
+   </style>
+</head>
+
+<body class="bg-light">
+
+    <div class="position-fixed top-0 start-0 sidebar-nav bg-white rounded-4 shadow-lg"
+         style="z-index: 1000; height: 100vh; overflow-x: hidden; overflow-y: auto;">
+        <nav class="px-2">
+        </nav>
+    </div>
+
+    <div class="container py-4" style="margin-top:100px; padding:45px;">
+        <div class="container-fluid px-4 py-4">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-5 row-cols-xxl-5 g-3" id="productos">
+
+
+                @if (Model.productos != null && Model.productos.Any())
+                {
+                    foreach (var producto in Model.productos)
+                    {
+                        <div class="col">
+                            <div class="card h-100 text-center shadow-sm">
+                                <img src="@Html.DisplayFor(p => producto.ImagenUrl)" alt="..." class="img-hover" onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'" style="cursor:pointer;" />
+
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title mb-1">@Html.DisplayFor(p => producto.Nombre)</h5>
+                                    <p class="card-text fw-bold text-dark mb-4">Precio:$@Html.DisplayFor(p => producto.Precio)</p>
+
+                                    <div class="mt-auto d-flex justify-content-between px-4">
+                                        <button class="btn detalle-btn" onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'">
+                                            ver detalle producto
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                }
+
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="alert alert-warning w-100 text-center" role="alert">
+                        Productos no disponibles
+                    </div>
+                </div>
+            }
+        </div>
+        </div>
+    </div>
+    <div id="btnChat" class="position-fixed bottom-0 end-0 m-4" style="z-index: 1050;">
+        <button class="btn btn-primary rounded-circle shadow-lg" style="width: 60px; height: 60px;">
+            <i class="bi bi-chat-dots fs-3 text-white"></i>
+        </button>
+    </div>
+
+    <div id="chatBox" class="position-fixed bottom-0 end-0 m-4 bg-white rounded shadow" style="width: 350px; height: 450px; display: none; z-index: 1051;">
+
+
+        <div class="bg-primary text-white p-3 d-flex justify-content-between align-items-center rounded-top">
+            <strong>Chat Sumicom</strong>
+            <button class="btn btn-sm btn-light text-primary rounded-circle" onclick="cerrarChat()">&times;</button>
+        </div>
+
+
+        <div id="chatMessages" class="p-3 flex-grow-1 overflow-auto" style="height: 230px;">
+            <div class="bg-light p-3 rounded shadow-sm mb-3">
+                <p class="mb-1">Hola 👋</p>
+                <small>¿En qué podemos ayudarte?</small>
+            </div>
+
+        </div>
+
+
+        <div class="p-3 border-top d-flex gap-2">
+            <input id="chatInput" type="text" class="form-control" placeholder="Escribe tu mensaje..." aria-label="Mensaje">
+            <button id="sendBtn" class="btn btn-primary d-flex align-items-center">
+                Enviar <i class="bi bi-send-fill ms-2"></i>
+            </button>
+        </div>
+
+    </div>
+
+
+
+    <nav aria-label="Paginacion de productos">
+    <ul class="pagination justify-content-center">
+        @if (Model.ProductosPaginados.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@(Model.ProductosPaginados.PageIndex - 1)&PageSize=5">Anterior</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+        }
+
+        @for (int i = 1; i <= Model.ProductosPaginados.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.ProductosPaginados.PageIndex ? "active" : "")">
+                <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@i&PageSize=5">@i</a>
+            </li>
+        }
+
+        @if (Model.ProductosPaginados.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@(Model.ProductosPaginados.PageIndex + 1)&PageSize=5">Siguiente</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+        }
+    </ul>
+</nav>
+
+
+
+
+</body>
+@section Scripts {
+    <script src="~/js/chatbox.js"></script>
+    <script src="~/js/busquedasindex.js"></script>
+    <script src="~/js/asidecategorias.js"></script>
+    <script src="~/js/navcategorias.js"></script>
+
+}
