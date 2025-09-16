@@ -98,7 +98,14 @@
                     data-bs-target="#modalFormulario">
                 Crear producto
             </button>
-
+            <a class="btn btn-success px-4 py-2 shadow-sm rounded-3"
+                asp-page-handler="ExportExcel">
+                Exportar inventario a Excel
+            </a>
+            <a class="btn btn-danger px-4 py-2 shadow-sm rounded-3"
+                asp-page-handler="ExportPDF">
+                Exportar inventario a PDF
+            </a>
 
         </div>
 
