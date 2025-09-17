@@ -2,9 +2,8 @@
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.AspNetCore.Mvc;
-using System.Text;
-
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 namespace Reglas
 {
     public class ExportarArchivosReglas : IExportarArchivosReglas
@@ -36,7 +35,7 @@ namespace Reglas
                     var headerRow = new Row();
                     foreach (var prop in propiedades)
                     {
-                        headerRow.Append(new Cell()
+                        headerRow.Append(new DocumentFormat.OpenXml.Spreadsheet.Cell()
                         {
                             DataType = CellValues.String,
                             CellValue = new CellValue(prop.Name)
@@ -51,7 +50,7 @@ namespace Reglas
                         foreach (var prop in propiedades)
                         {
                             var valor = prop.GetValue(item)?.ToString() ?? "";
-                            newRow.Append(new Cell()
+                            newRow.Append(new DocumentFormat.OpenXml.Spreadsheet.Cell()
                             {
                                 DataType = CellValues.String,
                                 CellValue = new CellValue(valor)
@@ -69,28 +68,52 @@ namespace Reglas
 
         public byte[] ExportPdf<T>(IEnumerable<T> data)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("<html><head><meta charset='utf-8'><title>Inventario</title></head><body>");
-            sb.AppendLine("<h2>REPORTE DE INVENTARIO</h2>");
-            sb.AppendLine("<table border='1' cellpadding='5' cellspacing='0'>");
-            sb.AppendLine("<tr><th>ID</th><th>Nombre</th><th>Marca</th><th>Precio</th></tr>");
+            using var ms = new MemoryStream();
 
+            // Crear documento
+            var document = new Document(PageSize.A4, 25, 25, 30, 30);
+            var writer = PdfWriter.GetInstance(document, ms);
+            document.Open();
+
+            // Título
+            var titulo = new Paragraph("REPORTE DE INVENTARIO")
+            {
+                Alignment = Element.ALIGN_CENTER,
+                SpacingAfter = 20f
+            };
+            document.Add(titulo);
+
+            // Tabla con 4 columnas: Id, Nombre, Marca, Precio
+            var table = new PdfPTable(4)
+            {
+                WidthPercentage = 100
+            };
+            table.SetWidths(new float[] { 1f, 3f, 2f, 2f }); // Anchos proporcionales
+
+            // Encabezados
+            table.AddCell("ID");
+            table.AddCell("Nombre");
+            table.AddCell("Marca");
+            table.AddCell("Precio");
+
+            // Filas con datos
             foreach (var p in data)
             {
-                var id = p.GetType().GetProperty("IdProducto")?.GetValue(p);
-                var nombre = p.GetType().GetProperty("Nombre")?.GetValue(p);
-                var marca = p.GetType().GetProperty("Marca")?.GetValue(p);
-                var precio = p.GetType().GetProperty("Precio")?.GetValue(p);
+                var id = p.GetType().GetProperty("IdProducto")?.GetValue(p)?.ToString() ?? "";
+                var nombre = p.GetType().GetProperty("Nombre")?.GetValue(p)?.ToString() ?? "";
+                var marca = p.GetType().GetProperty("Marca")?.GetValue(p)?.ToString() ?? "";
+                var precio = p.GetType().GetProperty("Precio")?.GetValue(p)?.ToString() ?? "";
 
-                sb.AppendLine($"<tr><td>{id}</td><td>{nombre}</td><td>{marca}</td><td>{precio}</td></tr>");
+                table.AddCell(id);
+                table.AddCell(nombre);
+                table.AddCell(marca);
+                table.AddCell(precio);
             }
 
-            sb.AppendLine("</table></body></html>");
+            document.Add(table);
+            document.Close();
 
-            
-            
-
-            return  Encoding.UTF8.GetBytes(sb.ToString());
+            return ms.ToArray();
         }
     }
 }
