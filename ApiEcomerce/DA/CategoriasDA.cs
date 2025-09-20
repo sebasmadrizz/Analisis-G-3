@@ -68,7 +68,8 @@ namespace DA
                 Nombre = categorias.Nombre,
                 Descripcion = categorias.Descripcion,
                 FechaCreacion = DateTime.Now,
-                EstadoId = 1
+                EstadoId = 1,
+                Icono= categorias.Icono
 
             });
             return resultadoConsulta;
@@ -84,7 +85,8 @@ namespace DA
                 Nombre = categorias.Nombre,
                 Descripcion = categorias.Descripcion,
                 FechaCreacion = DateTime.Now,
-                EstadoId = 1
+                EstadoId = 1,
+                Icono = categorias.Icono
 
             });
             return resultadoConsulta;
@@ -117,7 +119,8 @@ namespace DA
 			{
                 IdCategoria = IdCategoria,
                 Nombre = categorias.Nombre,
-                Descripcion = categorias.Descripcion
+                Descripcion = categorias.Descripcion,
+                Icono = categorias.Icono
             });
 
 			return resultado;
@@ -130,6 +133,31 @@ namespace DA
 			var resultadoConsulta = await _sqlConnection.QueryAsync<CategoriasResponse>(query);
 			return resultadoConsulta;
 		}
+
+        public async Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas()
+        {
+            string query = @"sp_ObtenerCategoriasPadresConHijas";
+            var resultadoConsulta = await _sqlConnection.QueryAsync<CategoriaFlat>(query);
+            var categorias = resultadoConsulta
+    .GroupBy(r => new { r.PadreNombre, r.PadreIcono,r.PadreId })
+    .Select(g => new CategoriaPadreConHijas
+    {
+        PadreNombre = g.Key.PadreNombre,
+        PadreIcono = g.Key.PadreIcono,
+        PadreId=g.Key.PadreId,
+        Hijas = g.Where(x => x.HijaId != null).Select(x => new CategoriasResponse
+        {
+            CategoriasId = x.HijaId.Value,
+            PadreId = x.HijaPadreId ?? Guid.Empty,
+            Nombre = x.HijaNombre,
+            Descripcion = x.HijaDescripcion,
+            Icono = x.HijaIcono,
+            NombrePadre = g.Key.PadreNombre
+
+        }).ToList()
+    }).ToList();
+            return categorias;
+        }
 
         public async Task<IEnumerable<CategoriasResponse>> ObtenerHijas(Guid idPadre)
         {

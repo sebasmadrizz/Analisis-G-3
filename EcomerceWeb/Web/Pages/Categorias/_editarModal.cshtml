@@ -1,5 +1,5 @@
 ﻿@model Abstracciones.Modelos.Categoria.Categoria
-
+@using Abstracciones.Modelos.Categoria
 @if (Model != null)
 {
     <div class="modal fade" id="editarCategoriaModal" tabindex="-1" aria-labelledby="editarCategoriaModalLabel" aria-hidden="true">
@@ -21,6 +21,29 @@
                             <label asp-for="descripcion" class="form-label"></label>
                             <textarea asp-for="descripcion" class="form-control" id="edit-descripcion"></textarea>
                             <span asp-validation-for="descripcion" class="text-danger"></span>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownIconos" data-bs-toggle="dropdown" aria-expanded="false">
+                                Selecciona tu categoría
+                            </button>
+                            <ul class="dropdown-menu p-3" aria-labelledby="dropdownIconos">
+                                <div class="d-flex flex-wrap gap-3">
+                                    @foreach (var icono in IconosCategorias.Lista)
+                                    {
+                                    <li>
+    <input type="radio"
+           class="btn-check"
+           asp-for="Icono"
+           id="edit-@icono"    
+           value="@icono"
+           autocomplete="off" />
+    <label class="btn btn-outline-primary" for="edit-@icono">
+        <i class="@icono fs-3"></i>
+    </label>
+</li>
+                                }
+                                </div>
+                            </ul>
                         </div>
                         <div class="mb-3">
                             <input type="hidden" id="edit-padreId" />

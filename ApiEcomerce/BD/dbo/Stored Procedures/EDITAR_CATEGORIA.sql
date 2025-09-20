@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE EDITAR_CATEGORIA
  @IdCategoria UNIQUEIDENTIFIER,
   @Nombre NVARCHAR(255),
-  @Descripcion NVARCHAR(255)
+  @Descripcion NVARCHAR(255),
+  @Icono NVARCHAR(255) 
 AS
 BEGIN
   SET NOCOUNT ON;
@@ -11,7 +12,8 @@ BEGIN
  UPDATE dbo.CATEGORIAS
   SET
     NOMBRE = @Nombre,
-    DESCRIPCION = @Descripcion
+    DESCRIPCION = @Descripcion,
+    ICONO = @Icono
   WHERE CATEGORIAS_ID = @IdCategoria;
 
   COMMIT TRANSACTION;

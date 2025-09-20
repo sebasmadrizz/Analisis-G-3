@@ -162,5 +162,11 @@ namespace API.Controllers
             var resultado = await _categoriasFlujo.ActivarHijas(idCategoria);
             return Ok(resultado);
         }
+        [AllowAnonymous]
+        [HttpGet("padre-con-hijas")]
+        public async Task<IActionResult> ObtenerCategoriaPadreConHijas()
+        {
+            return Ok(await _categoriasFlujo.ObtenerCategoriaPadreConHijas());
+        }
     }
 }

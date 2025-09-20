@@ -1,0 +1,30 @@
+﻿@using Abstracciones.Modelos.Categoria
+@model IEnumerable<CategoriaPadreConHijas>
+<div class="position-fixed top-0 start-0 sidebar-nav bg-white rounded-4 shadow-lg"
+     style="z-index: 1000; height: 100vh; overflow-x: hidden; overflow-y: auto;">
+    <nav class="px-2">
+        @foreach (var padre in Model)
+        {
+            <div class="padre-item mb-1">
+                
+                <a class="nav-link d-flex align-items-center p-3 rounded-3 text-decoration-none text-dark" href="#">
+                    <i class="@padre.PadreIcono me-2"></i>
+                    <span class="nav-text">@padre.PadreNombre</span>
+                </a>
+
+                
+                @if (padre.Hijas != null && padre.Hijas.Any())
+                {
+                    <div class="hijas-container mt-1 ps-3">
+                        @foreach (var hija in padre.Hijas)
+                        {
+                            <a href="/Productos/ProductosxCategoria?categoriaId=@hija.categoriasId">
+                                @hija.nombre
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </nav>
+</div>

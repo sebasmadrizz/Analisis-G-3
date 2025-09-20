@@ -11,6 +11,7 @@ namespace Abstracciones.Interfaces.DA
 	public interface ICategoriasDA
 	{
 		Task<IEnumerable<CategoriasResponse>> Obtener();
+        Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas();
         Task<IEnumerable<CategoriasResponse>> ObtenerPadres();
         Task<CategoriasResponse> ObtenerPorId(Guid IdCategoria);
 

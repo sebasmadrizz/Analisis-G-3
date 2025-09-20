@@ -11,6 +11,7 @@ namespace Abstracciones.Interfaces.API
 	public interface ICategoriasController
 	{
 		Task<IActionResult> Obtener();
+        Task<IActionResult> ObtenerCategoriaPadreConHijas();
         Task<IActionResult> ObtenerPadres();
         Task<IActionResult> ObtenerPorId(Guid IdCategoria);
 

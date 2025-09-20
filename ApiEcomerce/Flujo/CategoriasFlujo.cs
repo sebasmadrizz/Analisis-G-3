@@ -90,6 +90,11 @@ namespace Flujo
         {
             return await _categoriasDA.ActivarHijas(idCategoria);
         }
+
+        public async Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas()
+        {
+            return await _categoriasDA.ObtenerCategoriaPadreConHijas();
+        }
     }
 
 }

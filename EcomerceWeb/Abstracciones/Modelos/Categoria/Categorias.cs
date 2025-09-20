@@ -20,6 +20,8 @@ namespace Abstracciones.Modelos.Categoria
         public string nombrePadre { get; set; }
         [Required]
         public string descripcion { get; set; }
+        [Required]
+        public string Icono { get; set; }
         public DateTime fechaCreacion { get; set; }
     }
 
@@ -31,5 +33,12 @@ namespace Abstracciones.Modelos.Categoria
         public int CantidadHijas { get; set; }
         public Guid? PadreId { get; set; }
         public bool PadreActivo { get; set; }
+    }
+    public class CategoriaPadreConHijas
+    {
+        public string PadreNombre { get; set; }
+        public Guid PadreId { get; set; }
+        public string PadreIcono { get; set; }
+        public List<Categoria> Hijas { get; set; }
     }
 }

@@ -9,6 +9,7 @@ BEGIN
             NOMBRE,
             DESCRIPCION,
             FECHA_CREACION,
+            ICONO,
             ESTADO_ID,
             CAST(CATEGORIAS_ID AS VARCHAR(MAX)) AS Ruta
         FROM CATEGORIAS
@@ -20,6 +21,7 @@ BEGIN
             c.NOMBRE,
             c.DESCRIPCION,
             c.FECHA_CREACION,
+            c.ICONO,
             c.ESTADO_ID,
             cr.Ruta + '>' + CAST(c.CATEGORIAS_ID AS VARCHAR(MAX))
         FROM CATEGORIAS c
@@ -32,6 +34,7 @@ BEGIN
         cr.NOMBRE AS Nombre,
         cr.DESCRIPCION AS Descripcion,
         cr.FECHA_CREACION AS FechaCreacion,
+        cr.ICONO AS Icono, 
         e.TIPO AS Estado
     FROM CategoriasRecursivas cr
     INNER JOIN ESTADOS e ON cr.ESTADO_ID = e.ESTADO_ID
