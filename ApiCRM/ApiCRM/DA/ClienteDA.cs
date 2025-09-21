@@ -30,7 +30,7 @@ namespace DA
 				DIRECCION = cliente.DIRECCION,
 				FECHA_CREACION = DateTime.Now,
 				FECHA_ACTUALIZACION = cliente.FECHA_ACTUALIZACION,
-				EstadoId = 1
+				ESTADO_ID = 1
 
 			});
 			return resultadoConsulta;
@@ -42,19 +42,17 @@ namespace DA
 			await VerificarExistenciaCliente(CLIENTE_ID);
 
 
-			string query = @"EDITAR_EMPLEADO";
+			string query = @"EDITAR_CLIENTE";
 
 			var resultado = await _sqlConnection.ExecuteScalarAsync<Guid>(query, new
 			{
-				CLIENTE_ID = Guid.NewGuid(),
+				CLIENTE_ID = CLIENTE_ID,          
 				TIPO_CLIENTE = cliente.TIPO_CLIENTE,
 				NOMBRE = cliente.NOMBRE,
 				IDENTIFICACION = cliente.IDENTIFICACION,
 				CORREO = cliente.CORREO,
 				TELEFONO = cliente.TELEFONO,
-				DIRECCION = cliente.DIRECCION,
-				FECHA_CREACION = DateTime.Now,
-				FECHA_ACTUALIZACION = cliente.FECHA_ACTUALIZACION,
+				DIRECCION = cliente.DIRECCION
 			});
 
 			return resultado;
@@ -82,7 +80,7 @@ namespace DA
 		{
 			string query = @"VER_CLIENTE_POR_ID";
 			var resultadoConsulta = await _sqlConnection.QueryAsync<ClienteResponse>(query,
-				new { IdEmpleado = CLIENTE_ID });
+				new { CLIENTE_ID = CLIENTE_ID });
 			return resultadoConsulta.FirstOrDefault();
 		}
 		private async Task VerificarExistenciaCliente(Guid CLIENTE_ID)

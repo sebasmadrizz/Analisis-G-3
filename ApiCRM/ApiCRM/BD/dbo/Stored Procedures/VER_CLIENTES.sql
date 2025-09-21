@@ -16,4 +16,4 @@ BEGIN
         ESTADO_ID   
     FROM CLIENTES;
 END;
-GO
+GO 

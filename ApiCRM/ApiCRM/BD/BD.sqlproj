@@ -171,12 +171,10 @@
     <Build Include="dbo\Stored Procedures\VER_EMPLEADOS.sql" />
     <Build Include="dbo\Stored Procedures\VER_EMPLEADO_POR_ID.sql" />
     <Build Include="dbo\Tables\CLIENTES.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dbo\Stored Procedures\AGREGAR_CLIENTE.sql" />
-    <None Include="dbo\Stored Procedures\EDITAR_CLIENTE.sql" />
-    <None Include="dbo\Stored Procedures\ESTADO_CLIENTE.sql" />
-    <None Include="dbo\Stored Procedures\VER_CLIENTE_POR_ID.sql" />
-    <None Include="dbo\Stored Procedures\VER_CLIENTES.sql" />
+    <Build Include="dbo\Stored Procedures\VER_CLIENTE_POR_ID.sql" />
+    <Build Include="dbo\Stored Procedures\VER_CLIENTES.sql" />
+    <Build Include="dbo\Stored Procedures\AGREGAR_CLIENTE.sql" />
+    <Build Include="dbo\Stored Procedures\EDITAR_CLIENTE.sql" />
+    <Build Include="dbo\Stored Procedures\ESTADO_CLIENTE.sql" />
   </ItemGroup>
 </Project>
