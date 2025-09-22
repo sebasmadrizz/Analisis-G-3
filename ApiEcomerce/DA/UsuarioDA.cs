@@ -1,8 +1,9 @@
-﻿using Abstracciones.Interfaces.DA;
+﻿
+using Abstracciones.Interfaces.DA;
 using Abstracciones.Modelos;
-using Microsoft.Data.SqlClient;
 using Dapper;
 using Helpers;
+using Microsoft.Data.SqlClient;
 
 namespace DA
 {
@@ -82,6 +83,13 @@ namespace DA
 
             var sql = @"[AgregarUsuarioEmpleado]";
             var resultado = await _SqlConnection.ExecuteScalarAsync<Guid>(sql, new { NombreUsuario = usuario.NombreUsuario, PasswordHash = usuario.PasswordHash, CorreoElectronico = usuario.CorreoElectronico, IdEstado = 1, Telefono = usuario.Telefono, Direccion = usuario.Direccion, Apellido = usuario.Apellido });
+            return resultado;
+        }
+
+        public async Task<Guid?> CambiarContraseña(CambiarContraseña data)
+        {
+            var sql = @"[CambiarContrasena]";
+            var resultado = await _SqlConnection.ExecuteScalarAsync<Guid>(sql, new {  NuevaContraseña=data.NuevaContraseña, Correo=data.Correo });
             return resultado;
         }
     }

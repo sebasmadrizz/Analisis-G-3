@@ -122,5 +122,6 @@
     <Build Include="dbo\Stored Procedures\ObtenerDatosCarritoPorUsuario.sql" />
     <Build Include="dbo\Stored Procedures\AgregarUsuarioEmpleado.sql" />
     <Build Include="dbo\Stored Procedures\sp_ObtenerCategoriasPadresConHijas.sql" />
+    <Build Include="dbo\Stored Procedures\CambiarContrasena.sql" />
   </ItemGroup>
 </Project>

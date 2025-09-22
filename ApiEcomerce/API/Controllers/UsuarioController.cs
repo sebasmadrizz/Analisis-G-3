@@ -57,5 +57,12 @@ namespace API.Controllers
                 return BadRequest(new { existeCorreo = true });
             return Ok(resultado);
         }
+        [Authorize(Roles = "2")]
+        [HttpPost("CambiarContrasena")]
+
+        public async Task<IActionResult> CambiarContraseña([FromBody] CambiarContraseña data)
+        {
+            return Ok(await _usuarioFlujo.CambiarContraseña(data));//ver si siempre sirve
+        }
     }
 }
