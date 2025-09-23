@@ -55,7 +55,10 @@
                                 <div class="alert alert-warning" role="alert">
                                     Contraseña actual incorrecta
                                 </div>
+                                
                             }
+                        <div id="mensajeError">
+                        </div>
                             <button class="w-100 btn-creative" type="submit">Iniciar session</button>
                         </form>
 
@@ -76,5 +79,23 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/navcategorias.js"></script>
+    <script>
+        $("form").submit(function (e) {
+            let nueva = document.getElementById("passwordNueva").value;
+            let confirmar = document.getElementById("passwordNuevaConfirmacion").value;
+            let mensajeError = document.getElementById("mensajeError");
+
+            
+            mensajeError.innerHTML = "";
+
+            if (nueva !== confirmar) {
+                e.preventDefault(); 
+                mensajeError.innerHTML = `
+                    <div class="alert alert-warning" role="alert">
+                        Las contraseñas no coinciden
+                    </div>`;
+            }
+        });
+    </script>
 }
 
