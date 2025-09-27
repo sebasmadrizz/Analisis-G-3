@@ -123,5 +123,8 @@
     <Build Include="dbo\Stored Procedures\AgregarUsuarioEmpleado.sql" />
     <Build Include="dbo\Stored Procedures\sp_ObtenerCategoriasPadresConHijas.sql" />
     <Build Include="dbo\Stored Procedures\CambiarContrasena.sql" />
+    <Build Include="dbo\Tables\ResetPasswordTokens.sql" />
+    <Build Include="dbo\Stored Procedures\GUARDAR_RESETPASSWORDTOKEN.sql" />
+    <Build Include="dbo\Stored Procedures\RESETPASSWORD.sql" />
   </ItemGroup>
 </Project>

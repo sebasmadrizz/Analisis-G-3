@@ -81,6 +81,10 @@ builder.Services.AddScoped<ICarritoFlujo, CarritoFlujo>();
 builder.Services.AddScoped<ICarritoDA, CarritoDA>();
 builder.Services.AddScoped<ICarritoProductoReglas, CarritoProductoReglas>();
 builder.Services.AddScoped<IExportarArchivosReglas, ExportarArchivosReglas>();
+builder.Services.AddScoped<IGenerarResetTokenRegla, GenerarResetTokenRegla>();
+builder.Services.AddScoped<IResetPasswordFlujo, ResetPasswordFlujo>();
+builder.Services.AddScoped<IRepositorioResetPassword, RepositorioResetPassword>();
+builder.Services.AddScoped<IResetPasswordDA, ResetPasswordDA>();
 
 
 builder.Services.AddTransient<IAutorizacionBW, Autorizacion.BW.AutorizacionBW>();
