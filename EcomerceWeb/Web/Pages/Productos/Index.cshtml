@@ -14,7 +14,26 @@
     <link href="~/css/sidebar.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@6.2.4/dist/simplebar.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/simplebar@6.2.4/dist/simplebar.min.js"></script>
+    <style>
+        .product-overlay-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* overlay no bloquea clicks */
+        }
 
+        .overflow-hidden:hover .product-overlay-gradient {
+            opacity: 1;
+        }
+
+        .product-overlay-gradient button {
+            pointer-events: auto; /* solo el botón puede recibir clicks */
+        }
+
+
+    </style>
 </head>
 
 <body class="bg-light">
@@ -76,49 +95,70 @@
     
 
     <div class="container py-4">
-        <div class="container-fluid px-4 py-4">
-            <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-5 row-cols-xxl-5 g-3" id="productos">
+    <div class="container-fluid px-4 py-4">
 
+        @if (Model.productos != null && Model.productos.Any(p => p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo"))
+        {
+            // Obtener categorías únicas de productos activos con stock
+            var categorias = Model.productos
+                                  .Where(p => p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo")
+                                  .Select(p => p.Categoria ?? "General")
+                                  .Distinct();
 
-                @if (Model.productos != null && Model.productos.Any())
-                {
-                    foreach (var producto in Model.productos)
+            foreach (var categoria in categorias)
+            {
+                <h3 class="mb-3">@categoria</h3>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+                    @foreach (var producto in Model.productos.Where(p => p.Categoria == categoria && p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo"))
                     {
-                        @if (producto.Stock > 0 && producto.Estado?.Trim().ToLower() == "activo")
-                        {
-                            <div class="col">
-                                <div class="card h-100 text-center shadow-sm">
-                                    <img src="@Html.DisplayFor(p => producto.ImagenUrl)" alt="..." class="img-hover" onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'" style="cursor:pointer;" />
+                        <div class="col rounded-3">
+                            <div class="card h-100 shadow-sm border-0 position-relative product-card">
+                                <div class="overflow-hidden position-relative">
+                                    <img src="@Html.DisplayFor(p => producto.ImagenUrl)"
+                                         alt="@producto.Nombre"
+                                         class="card-img-top img-fluid product-img"
+                                         onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'"
+                                         style="cursor:pointer; height: 220px; object-fit: cover;" />
+                                </div>
 
-                                    <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title mb-1">@Html.DisplayFor(p => producto.Nombre)</h5>
-                                        <p class="card-text fw-bold text-dark mb-4">Precio:$@Html.DisplayFor(p => producto.Precio)</p>
+                                <!-- Body con fondo gris claro -->
+                                <div class="card-body text-center bg-light rounded-bottom-3">
+                                    <h5 class="card-title text-truncate">@producto.Nombre</h5>
+                                    <p class="card-text text-muted small mb-2">
+                                        @producto.Categoria
+                                    </p>
+                                    <p class="card-text fw-bold text-truncate fs-5">
+                                        $@producto.Precio
+                                    </p>
 
-                                        <div class="mt-auto d-flex justify-content-between px-4">
-                                            <button class="btn detalle-btn" onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'">
-                                                ver detalle producto
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <!-- Badge de stock -->
+                                    @if (producto.Stock > 10)
+                                    {
+                                        <span class="badge bg-success">Disponible</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">¡Últimas unidades!</span>
+                                    }
                                 </div>
                             </div>
-                            
-                        }
-
+                        </div>
                     }
-
-            }
-            else
-            {
-                <div class="col-12">
-                    <div class="alert alert-warning w-100 text-center" role="alert">
-                        Productos no disponibles
-                    </div>
                 </div>
             }
-        </div>
-        </div>
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-warning w-100 text-center" role="alert">
+                    Productos no disponibles
+                </div>
+            </div>
+        }
     </div>
+</div>
+
     <div id="btnChat" class="position-fixed bottom-0 end-0 m-4" style="z-index: 1050;">
         <button class="btn btn-primary rounded-circle shadow-lg" style="width: 60px; height: 60px;">
             <i class="bi bi-chat-dots fs-3 text-white"></i>
