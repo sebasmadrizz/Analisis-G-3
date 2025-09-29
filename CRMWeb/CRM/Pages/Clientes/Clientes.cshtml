@@ -75,6 +75,15 @@
 
 <body>
 
+   
+    <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" id="modalEditarClienteContent">
+             
+            </div>
+        </div>
+    </div>
+
     <div class="page-container">
 
           <aside class="account-sidebar">
@@ -92,13 +101,6 @@
             </div>
         </aside>
 
-        <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                    <!-- Aquí se cargará el partial _FormularioEditarCliente -->
-                </div>
-            </div>
-        </div>
         <div class="main-content-container">
             <div class="container-fluid">
                 <div class="tab-content">
@@ -370,29 +372,39 @@
             });
         </script>
         <script>
-                   document.addEventListener('DOMContentLoaded', function () {
-                const modal = document.getElementById('modalEditarCliente');
+            $(document).ready(function () {
 
-                modal.addEventListener('show.bs.modal', async (event) => {
-                    const button = event.relatedTarget;
-                    const clienteId = button.getAttribute('data-id');
+                $('.btn-editar').click(function () {
+                    var clienteId = $(this).data('id');
+                    $.get('/Clientes?handler=EditarFormulario', { idCliente: clienteId }, function (data) {
+                        $('#modalEditarClienteContent').html(data);
+                    });
+                });
 
-                    if (!clienteId) return;
-
-                    try {
-                        const response = await fetch(`/Clientes?handler=EditarFormulario&idCliente=${clienteId}`);
-                        if (!response.ok) throw new Error('Cliente no encontrado');
-
-                        const html = await response.text();
-                        modal.querySelector('.modal-content').innerHTML = html;
-
-                    } catch (err) {
-                        console.error(err);
-                        modal.querySelector('.modal-content').innerHTML = `
-                            <div class="modal-body text-danger">Error cargando datos del cliente.</div>`;
-                    }
+             
+                $(document).on('submit', '#formCliente', function (e) {
+                    e.preventDefault();
+                    var form = $(this);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Clientes?handler=EditarCliente',
+                        data: form.serialize(),
+                        success: function (response) {
+                            if (response.ok) {
+                                $('#modalEditarCliente').modal('hide');
+                                location.reload(); 
+                            } else {
+                            
+                                $('#modalEditarClienteContent').html(response);
+                            }
+                        },
+                        error: function () {
+                            alert('Error al procesar la solicitud.');
+                        }
+                    });
                 });
             });
         </script>
+
     }
 </body>

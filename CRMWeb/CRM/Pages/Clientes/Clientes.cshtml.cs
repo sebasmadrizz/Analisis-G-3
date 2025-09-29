@@ -8,8 +8,8 @@ using System.Text.Json;
 
 namespace Web.Pages.Clientes
 {
-    public class ClientesModel : PageModel
-    {
+	public class ClientesModel : PageModel
+	{
 		private readonly IConfiguracion _configuracion;
 		public IList<ClienteResponse> clientes { get; set; }
 
@@ -47,18 +47,18 @@ namespace Web.Pages.Clientes
 
 			using var http = new HttpClient();
 
-			
+
 			var content = new StringContent("", Encoding.UTF8, "application/json");
 			var resp = await http.PutAsync(url, content);
 			var body = await resp.Content.ReadAsStringAsync();
 
-			
+
 
 			return RedirectToPage();
 		}
 		public async Task<IActionResult> OnPostAgregarCliente()
 		{
-			
+
 
 			var endpoint = _configuracion.ObtenerMetodo("EndPointsClientes", "AgregarCliente");
 			using var http = new HttpClient();
@@ -75,7 +75,7 @@ namespace Web.Pages.Clientes
 			};
 
 
-			
+
 			var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions { WriteIndented = true });
 			Console.WriteLine(" JSON que se enviará al API:");
 			Console.WriteLine(json);
@@ -83,24 +83,17 @@ namespace Web.Pages.Clientes
 			var resp = await http.PostAsJsonAsync(endpoint, payload);
 			var body = await resp.Content.ReadAsStringAsync();
 
-			if (!resp.IsSuccessStatusCode)
-			{
-				ModelState.AddModelError(string.Empty, $"Error API {(int)resp.StatusCode}: {resp.ReasonPhrase}. {body}");
-				await OnGet();
-				return Page();
-			}
 
-			TempData["Ok"] = "Cliente agregado correctamente.";
+
 			return RedirectToPage();
 		}
-
 
 
 		public async Task<IActionResult> OnGetEditarFormulario(Guid idCliente)
 		{
 			var endpoint = _configuracion.ObtenerMetodo("EndPointsClientes", "ObtenerCliente");
 			using var http = new HttpClient();
-			
+
 			var resp = await http.GetAsync(string.Format(endpoint, idCliente));
 			if (!resp.IsSuccessStatusCode) return NotFound();
 
@@ -110,8 +103,11 @@ namespace Web.Pages.Clientes
 
 			if (modelo is null) return NotFound();
 
+			
 			return Partial("_FormularioEditarCliente", modelo);
 		}
+
+
 		public async Task<IActionResult> OnPostEditarCliente(Cliente cliente)
 		{
 			if (cliente.ClienteId == Guid.Empty)
@@ -125,11 +121,11 @@ namespace Web.Pages.Clientes
 
 			string endpoint = _configuracion.ObtenerMetodo("ApiEndPointsClientes", "EditarCliente");
 			using var http = new HttpClient();
-			http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.User.Claims.Where(c => c.Type == "Token").FirstOrDefault().Value);
+			http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
+				"Bearer", HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Token")?.Value);
 
 			var resp = await http.PutAsJsonAsync(string.Format(endpoint, cliente.ClienteId), new ClienteRequest
 			{
-				
 				TipoCliente = cliente.TipoCliente,
 				Nombre = cliente.Nombre,
 				Identificacion = cliente.Identificacion,
@@ -146,6 +142,5 @@ namespace Web.Pages.Clientes
 			ModelState.AddModelError(string.Empty, $"Error API: {body}");
 			return Partial("_FormularioEditarCliente", cliente);
 		}
-
 	}
 }
