@@ -92,7 +92,13 @@
             </div>
         </aside>
 
-
+        <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <!-- Aquí se cargará el partial _FormularioEditarCliente -->
+                </div>
+            </div>
+        </div>
         <div class="main-content-container">
             <div class="container-fluid">
                 <div class="tab-content">
@@ -114,78 +120,58 @@
                                     <th>Teléfono</th>
                                     <th>Correo</th>
                                     <th>Dirección</th>
-                                    <th>Representante Legal</th>
                                     <th>Fecha Registro</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Persona Física</td>
-                                    <td>Juan Pérez</td>
-                                    <td>1-1234-5678</td>
-                                    <td>8888-1234</td>
-                                    <td>juanperez@email.com</td>
-                                    <td>San José, Costa Rica</td>
-                                    <td>-</td>
-                                    <td>01/08/2025</td>
-                                    <td>Activo</td>
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <button class="btn btn-primary btn-rounded" title="Editar">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Persona Jurídica</td>
-                                    <td>Comercial XYZ S.A.</td>
-                                    <td>3-101-456789</td>
-                                    <td>2299-4455</td>
-                                    <td>info@xyz.com</td>
-                                    <td>Heredia, Costa Rica</td>
-                                    <td>Ana Gómez</td>
-                                    <td>10/07/2025</td>
-                                    <td>Activo</td>
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <button class="btn btn-primary btn-rounded" title="Editar">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Persona Física</td>
-                                    <td>María Rodríguez</td>
-                                    <td>1-5678-1234</td>
-                                    <td>8700-0000</td>
-                                    <td>maria.rod@email.com</td>
-                                    <td>Cartago, Costa Rica</td>
-                                    <td>-</td>
-                                    <td>05/07/2025</td>
-                                    <td>Inactivo</td>
-                                    <td>
-                                        <div class="d-flex justify-content-center gap-2">
-                                            <button class="btn btn-primary btn-rounded" title="Editar">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                            <button class="btn btn-danger btn-rounded" title="Eliminar">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @foreach (var cliente in Model.clientes)
+                                {
+                                    <tr data-id="@cliente.ClienteId">
+                                        <td>@cliente.TipoCliente</td>
+                                        <td>@cliente.Nombre</td>
+                                        <td>@cliente.Identificacion</td>
+                                        <td>@cliente.Telefono</td>
+                                        <td>@cliente.Correo</td>
+                                        <td>@cliente.Direccion</td>
+                                        <td>@cliente.FechaCreacion.ToString("yyyy-MM-dd")</td>
+                                        <td>
+                                            <form method="post"
+                                                  asp-page-handler="EliminarCliente"
+                                                  asp-route-idCliente="@cliente.ClienteId"
+                                                  class="d-inline">
+                                                @if (cliente.EstadoId == 1)
+                                                {
+                                                    <button type="submit" class="btn btn-success btn-sm rounded-pill" title="Desactivar">
+                                                        <i class="bi bi-toggle-off"></i>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit" class="btn btn-warning btn-sm rounded-pill" title="Activar">
+                                                        <i class="bi bi-toggle-on"></i>
+                                                    </button>
+                                                }
+                                            </form>
+
+
+                                        </td>
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <button class="btn btn-primary rounded-pill btn-editar"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#modalEditarCliente"
+                                                        data-id="@cliente.ClienteId">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
+
 
                     </div>
 
@@ -281,70 +267,66 @@
 
         </div>
 
-
-
     <div class="modal fade" id="agregarClienteModal" tabindex="-1" aria-labelledby="agregarClienteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
-                <form id="formAgregarCliente">
+                <form method="post" asp-page-handler="AgregarCliente" asp-antiforgery="true" id="formAgregarCliente">
+
                     <div class="modal-header">
                         <h5 class="modal-title" id="agregarClienteModalLabel">Agregar Cliente</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
+
                     <div class="modal-body row g-3">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
                         <div class="col-md-6">
-                            <label class="form-label" for="tipo">Tipo</label>
-                            <select class="form-select" id="tipo" name="tipo" required>
+                            <label class="form-label" asp-for="cliente.TipoCliente">Tipo</label>
+                            <select class="form-select" asp-for="cliente.TipoCliente" required>
                                 <option value="" disabled selected>Seleccione un tipo</option>
                                 <option value="Persona Física">Persona Física</option>
                                 <option value="Persona Jurídica">Persona Jurídica</option>
                             </select>
-                            <div class="invalid-feedback">Seleccione un tipo válido.</div>
+                            <span class="text-danger" asp-validation-for="cliente.TipoCliente"></span>
                         </div>
+
                         <div class="col-md-6">
-                            <label class="form-label" for="nombre">Nombre / Razón Social</label>
-                            <input type="text" class="form-control input-squarespace" id="nombre" name="nombre" placeholder="nombre">
-                            <div class="invalid-feedback">Este campo es obligatorio.</div>
+                            <label class="form-label" asp-for="cliente.Nombre">Nombre / Razón Social</label>
+                            <input class="form-control input-squarespace" asp-for="cliente.Nombre" required />
+                            <span class="text-danger" asp-validation-for="cliente.Nombre"></span>
                         </div>
+
                         <div class="col-md-6">
-                            <label class="form-label" for="identificacion">Identificación</label>
-                            <input type="text" class="form-control input-squarespace" id="identificacion" name="identificacion" placeholder="identificacion">
-                            <div class="invalid-feedback">Este campo es obligatorio.</div>
+                            <label class="form-label" asp-for="cliente.Identificacion">Identificación</label>
+                            <input class="form-control input-squarespace" asp-for="cliente.Identificacion" required />
+                            <span class="text-danger" asp-validation-for="cliente.Identificacion"></span>
                         </div>
+
                         <div class="col-md-6">
-                            <label class="form-label" for="telefono">Teléfono</label>
-                            <input type="tel" class="form-control input-squarespace" id="telefono" name="telefono" placeholder="telefono">
-                            <div class="invalid-feedback">Ingrese un teléfono válido.</div>
+                            <label class="form-label" asp-for="cliente.Telefono">Teléfono</label>
+                            <input class="form-control input-squarespace" asp-for="cliente.Telefono" required />
+                            <span class="text-danger" asp-validation-for="cliente.Telefono"></span>
                         </div>
+
                         <div class="col-md-6">
-                            <label class="form-label" for="correo">Correo</label>
-                            <input type="email" class="form-control input-squarespace" id="correo" name="correo" placeholder="email">
-                            <div class="invalid-feedback">Ingrese un correo válido.</div>
+                            <label class="form-label" asp-for="cliente.Correo">Correo</label>
+                            <input type="email" class="form-control input-squarespace" asp-for="cliente.Correo" required />
+                            <span class="text-danger" asp-validation-for="cliente.Correo"></span>
                         </div>
+
                         <div class="col-md-6">
-                            <label class="form-label" for="direccion">Dirección</label>
-                            <input type="text" class="form-control input-squarespace" id="direccion" name="direccion" placeholder="direccion">
-                            <div class="invalid-feedback">Este campo es obligatorio.</div>
+                            <label class="form-label" asp-for="cliente.Direccion">Dirección</label>
+                            <input class="form-control input-squarespace" asp-for="cliente.Direccion" required />
+                            <span class="text-danger" asp-validation-for="cliente.Direccion"></span>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label" for="representante">Representante Legal</label>
-                            <input type="text" class="form-control input-squarespace" id="representante" name="representante" placeholder="Opcional">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label" for="fecha">Fecha de Registro</label>
-                            <input type="date" class="form-control input-squarespace" id="fecha" name="fecha" required>
-                            <div class="invalid-feedback">Seleccione una fecha válida.</div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label" for="estado">Estado</label>
-                            <select class="form-select" id="estado" name="estado" required>
-                                <option value="" disabled selected>Seleccione estado</option>
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
-                            </select>
-                            <div class="invalid-feedback">Seleccione un estado válido.</div>
-                        </div>
+
+                        <input type="hidden" asp-for="cliente.ClienteId" />
+                        <input type="hidden" asp-for="cliente.FechaCreacion" />
+                        <input type="hidden" asp-for="cliente.FechaActualizacion" />
+                        <input type="hidden" asp-for="cliente.EstadoId" value="1" />
+
                     </div>
+
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">
                             <i class="bi bi-check-lg"></i> Guardar
@@ -353,10 +335,14 @@
                             <i class="bi bi-x-lg"></i> Cancelar
                         </button>
                     </div>
+
                 </form>
             </div>
         </div>
     </div>
+
+
+
 
 
     @section Scripts {
@@ -381,6 +367,31 @@
                 });
 
 
+            });
+        </script>
+        <script>
+                   document.addEventListener('DOMContentLoaded', function () {
+                const modal = document.getElementById('modalEditarCliente');
+
+                modal.addEventListener('show.bs.modal', async (event) => {
+                    const button = event.relatedTarget;
+                    const clienteId = button.getAttribute('data-id');
+
+                    if (!clienteId) return;
+
+                    try {
+                        const response = await fetch(`/Clientes?handler=EditarFormulario&idCliente=${clienteId}`);
+                        if (!response.ok) throw new Error('Cliente no encontrado');
+
+                        const html = await response.text();
+                        modal.querySelector('.modal-content').innerHTML = html;
+
+                    } catch (err) {
+                        console.error(err);
+                        modal.querySelector('.modal-content').innerHTML = `
+                            <div class="modal-body text-danger">Error cargando datos del cliente.</div>`;
+                    }
+                });
             });
         </script>
     }
