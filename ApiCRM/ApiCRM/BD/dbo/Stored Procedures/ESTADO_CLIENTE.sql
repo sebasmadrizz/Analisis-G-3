@@ -1,21 +1,21 @@
 ﻿CREATE PROCEDURE ESTADO_CLIENTE
-  @CLIENTE_ID UNIQUEIDENTIFIER
+  @ClienteId UNIQUEIDENTIFIER
 AS
 BEGIN
   SET NOCOUNT ON;
 
   BEGIN TRANSACTION;
 
-  UPDATE CLIENTES
-  SET ESTADO_ID = CASE 
-                     WHEN ESTADO_ID = 1 THEN 2
-                     WHEN ESTADO_ID = 2 THEN 1
-                     ELSE ESTADO_ID 
-                   END
-  WHERE CLIENTE_ID = @CLIENTE_ID;  
+  UPDATE Clientes
+  SET EstadoId = CASE 
+                     WHEN EstadoId = 1 THEN 2
+                     WHEN EstadoId = 2 THEN 1
+                     ELSE EstadoId 
+                 END
+  WHERE ClienteId = @ClienteId;  
 
   COMMIT TRANSACTION;
 
-  SELECT @CLIENTE_ID AS CLIENTE_ID;
+  SELECT @ClienteId AS ClienteId;
 END
 GO

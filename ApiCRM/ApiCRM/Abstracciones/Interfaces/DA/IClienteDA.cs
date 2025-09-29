@@ -10,11 +10,11 @@ namespace Abstracciones.Interfaces.DA
 	public interface IClienteDA
 	{
 		Task<IEnumerable<ClienteResponse>> Obtener();
-		Task<ClienteResponse> ObtenerPorId(Guid CLIENTE_ID);
+		Task<ClienteResponse> ObtenerPorId(Guid ClienteId);
 		Task<Guid> Agregar(Cliente cliente);
 
-		Task<Guid> Editar(Guid CLIENTE_ID, Cliente cliente);
+		Task<Guid> Editar(Guid ClienteId, Cliente cliente);
 
-		Task<Guid> Eliminar(Guid CLIENTE_ID);
+		Task<Guid> Eliminar(Guid ClienteId);
 	}
 }

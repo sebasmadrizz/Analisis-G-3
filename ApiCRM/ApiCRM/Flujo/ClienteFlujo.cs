@@ -21,14 +21,14 @@ namespace Flujo
 			return await _clienteDA.Agregar(cliente);
 		}
 
-		public async Task<Guid> Editar(Guid CLIENTE_ID, Cliente cliente)
+		public async Task<Guid> Editar(Guid ClienteId, Cliente cliente)
 		{
-			return await _clienteDA.Editar(CLIENTE_ID, cliente);
+			return await _clienteDA.Editar(ClienteId, cliente);
 		}
 
-		public async Task<Guid> Eliminar(Guid CLIENTE_ID)
+		public async Task<Guid> Eliminar(Guid ClienteId)
 		{
-			return await _clienteDA.Eliminar(CLIENTE_ID);
+			return await _clienteDA.Eliminar(ClienteId);
 		}
 
 		public async Task<IEnumerable<ClienteResponse>> Obtener()
@@ -36,9 +36,9 @@ namespace Flujo
 			return await _clienteDA.Obtener();
 		}
 
-		public async Task<ClienteResponse> ObtenerPorId(Guid CLIENTE_ID)
+		public async Task<ClienteResponse> ObtenerPorId(Guid ClienteId)
 		{
-			return await _clienteDA.ObtenerPorId(CLIENTE_ID);
+			return await _clienteDA.ObtenerPorId(ClienteId);
 		}
 	}
 }

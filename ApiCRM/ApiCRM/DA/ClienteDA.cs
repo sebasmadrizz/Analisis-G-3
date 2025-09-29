@@ -2,11 +2,12 @@
 using Abstracciones.Modelos;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace DA
 {
-	public class ClienteDA: IClienteDA
+	public class ClienteDA : IClienteDA
 	{
 		private IRepositorioDapper _repositorioDapper;
 		private SqlConnection _sqlConnection;
@@ -21,50 +22,49 @@ namespace DA
 			string query = @"AGREGAR_CLIENTE";
 			var resultadoConsulta = await _sqlConnection.ExecuteScalarAsync<Guid>(query, new
 			{
-				CLIENTE_ID = Guid.NewGuid(),
-				TIPO_CLIENTE = cliente.TIPO_CLIENTE,
-				NOMBRE = cliente.NOMBRE,
-				IDENTIFICACION = cliente.IDENTIFICACION,
-				CORREO = cliente.CORREO,
-				TELEFONO = cliente.TELEFONO,
-				DIRECCION = cliente.DIRECCION,
-				FECHA_CREACION = DateTime.Now,
-				FECHA_ACTUALIZACION = cliente.FECHA_ACTUALIZACION,
-				ESTADO_ID = 1
-
+				ClienteId = Guid.NewGuid(),
+				TipoCliente = cliente.TipoCliente,
+				Nombre = cliente.Nombre,
+				Identificacion = cliente.Identificacion,
+				Correo = cliente.Correo,
+				Telefono = cliente.Telefono,
+				Direccion = cliente.Direccion,
+				FechaCreacion = DateTime.Now,
+				FechaActualizacion = cliente.FechaActualizacion,
+				EstadoId = 1
 			});
 			return resultadoConsulta;
 		}
 
 
-		public async Task<Guid> Editar(Guid CLIENTE_ID, Cliente cliente)
+		public async Task<Guid> Editar(Guid ClienteId, Cliente cliente)
 		{
-			await VerificarExistenciaCliente(CLIENTE_ID);
+			await VerificarExistenciaCliente(ClienteId);
 
 
 			string query = @"EDITAR_CLIENTE";
 
 			var resultado = await _sqlConnection.ExecuteScalarAsync<Guid>(query, new
 			{
-				CLIENTE_ID = CLIENTE_ID,          
-				TIPO_CLIENTE = cliente.TIPO_CLIENTE,
-				NOMBRE = cliente.NOMBRE,
-				IDENTIFICACION = cliente.IDENTIFICACION,
-				CORREO = cliente.CORREO,
-				TELEFONO = cliente.TELEFONO,
-				DIRECCION = cliente.DIRECCION
+				ClienteId = ClienteId,
+				TipoCliente = cliente.TipoCliente,
+				Nombre = cliente.Nombre,
+				Identificacion = cliente.Identificacion,
+				Correo = cliente.Correo,
+				Telefono = cliente.Telefono,
+				Direccion = cliente.Direccion
 			});
 
 			return resultado;
 		}
 
-		public async Task<Guid> Eliminar(Guid CLIENTE_ID)
+		public async Task<Guid> Eliminar(Guid ClienteId)
 		{
-			await VerificarExistenciaCliente(CLIENTE_ID);
+			await VerificarExistenciaCliente(ClienteId);
 			string query = @"ESTADO_CLIENTE";
 			var resultadoConsulta = await _sqlConnection.ExecuteScalarAsync<Guid>(query, new
 			{
-				CLIENTE_ID = CLIENTE_ID
+				ClienteId = ClienteId
 			});
 			return resultadoConsulta;
 		}
@@ -76,16 +76,16 @@ namespace DA
 			return resultadoConsulta;
 		}
 
-		public async Task<ClienteResponse> ObtenerPorId(Guid CLIENTE_ID)
+		public async Task<ClienteResponse> ObtenerPorId(Guid ClienteId)
 		{
 			string query = @"VER_CLIENTE_POR_ID";
 			var resultadoConsulta = await _sqlConnection.QueryAsync<ClienteResponse>(query,
-				new { CLIENTE_ID = CLIENTE_ID });
+				new { ClienteId = ClienteId });
 			return resultadoConsulta.FirstOrDefault();
 		}
-		private async Task VerificarExistenciaCliente(Guid CLIENTE_ID)
+		private async Task VerificarExistenciaCliente(Guid ClienteId)
 		{
-			ClienteResponse? resutadoConsulta = await ObtenerPorId(CLIENTE_ID);
+			ClienteResponse? resutadoConsulta = await ObtenerPorId(ClienteId);
 			if (resutadoConsulta == null)
 				throw new Exception("no se encontro el cliente");
 		}

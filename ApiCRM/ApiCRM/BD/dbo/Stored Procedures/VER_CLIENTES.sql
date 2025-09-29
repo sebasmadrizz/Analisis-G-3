@@ -4,16 +4,16 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT 
-        CLIENTE_ID,
-        TIPO_CLIENTE,
-        NOMBRE,
-        IDENTIFICACION,
-        CORREO,
-        TELEFONO,
-        DIRECCION,
-        FECHA_CREACION,
-        FECHA_ACTUALIZACION,
-        ESTADO_ID   
-    FROM CLIENTES;
+        ClienteId,
+        TipoCliente,
+        Nombre,
+        Identificacion,
+        Correo,
+        Telefono,
+        Direccion,
+        FechaCreacion,
+        FechaActualizacion,
+        EstadoId   
+    FROM Clientes;
 END;
-GO 
+GO

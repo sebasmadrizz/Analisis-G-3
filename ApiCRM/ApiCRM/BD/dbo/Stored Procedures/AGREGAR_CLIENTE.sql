@@ -1,45 +1,45 @@
 ﻿CREATE PROCEDURE AGREGAR_CLIENTE
-    @CLIENTE_ID UNIQUEIDENTIFIER ,
-    @TIPO_CLIENTE NVARCHAR(50),
-    @NOMBRE NVARCHAR(150),
-    @IDENTIFICACION NVARCHAR(50),
-    @CORREO NVARCHAR(100) ,
-    @TELEFONO NVARCHAR(20),
-    @DIRECCION NVARCHAR(255) ,
-    @FECHA_CREACION DATE ,
-    @FECHA_ACTUALIZACION DATE ,
-    @ESTADO_ID INT
+    @ClienteId UNIQUEIDENTIFIER,
+    @TipoCliente NVARCHAR(50),
+    @Nombre NVARCHAR(150),
+    @Identificacion NVARCHAR(50),
+    @Correo NVARCHAR(100),
+    @Telefono NVARCHAR(20),
+    @Direccion NVARCHAR(255),
+    @FechaCreacion DATE,
+    @FechaActualizacion DATE,
+    @EstadoId INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO CLIENTES
+    INSERT INTO Clientes
     (
-        CLIENTE_ID,
-        TIPO_CLIENTE,
-        NOMBRE,
-        IDENTIFICACION,
-        CORREO,
-        TELEFONO,
-        DIRECCION,
-        FECHA_CREACION,
-        FECHA_ACTUALIZACION,
-        ESTADO_ID
+        ClienteId,
+        TipoCliente,
+        Nombre,
+        Identificacion,
+        Correo,
+        Telefono,
+        Direccion,
+        FechaCreacion,
+        FechaActualizacion,
+        EstadoId
     )
     VALUES
     (
-        @CLIENTE_ID,
-        @TIPO_CLIENTE,
-        @NOMBRE,
-        @IDENTIFICACION,
-        @CORREO,
-        @TELEFONO,
-        @DIRECCION,
-        @FECHA_CREACION,
-        @FECHA_ACTUALIZACION,
-        @ESTADO_ID
+        @ClienteId,
+        @TipoCliente,
+        @Nombre,
+        @Identificacion,
+        @Correo,
+        @Telefono,
+        @Direccion,
+        @FechaCreacion,
+        @FechaActualizacion,
+        @EstadoId
     );
 
-    SELECT @CLIENTE_ID; 
+    SELECT @ClienteId;
 END;
 GO
