@@ -245,35 +245,28 @@
             });
 
             // --- Delegación de Eventos ---
-           $('#tablaCategorias').on('click', '.toggle-estado', function () {
-    const btn = this;
+          // --- Delegación de Eventos ---
+$('#tablaCategorias').on('click', '.toggle-estado', function () {
+    const btn = this; // el botón clickeado
     const url = $(btn).data('url');
 
     if ($(btn).hasClass('btn-success')) {
+        // Botón verde → categoría Activa → quieres desactivarla
         console.log("Desactivar categoría", url);
 
-        $.get(url)
-            .done(function (data) {
-                console.log("Respuesta OnGetVerificar:", data);
-                // si quieres refrescar la tabla
-                // $('#tablaCategorias').DataTable().ajax.reload();
-            })
-            .fail(function (xhr) {
-                console.error("Error en desactivar:", xhr);
-            });
+        // Llamar tu función de confirmar eliminar
+        confirmarEliminar(btn);
 
     } else {
+        // Botón rojo → categoría Inactiva → quieres activarla
         console.log("Activar categoría", url);
 
-        $.get(url)
-            .done(function (data) {
-                console.log("Respuesta OnGetContarHijasTotales:", data);
-            })
-            .fail(function (xhr) {
-                console.error("Error en activar:", xhr);
-            });
+        // Llamar tu función de confirmar activar
+        confirmarActivar(btn);
     }
 });
+
+
 
 
         });
