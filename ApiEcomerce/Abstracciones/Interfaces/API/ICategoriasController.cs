@@ -10,7 +10,12 @@ namespace Abstracciones.Interfaces.API
 {
 	public interface ICategoriasController
 	{
-		Task<IActionResult> Obtener();
+        Task<IActionResult> ObtenerCategoriasPaginado(int start, int length, int draw);
+
+        Task<IActionResult> ObtenerCategoriasPaginadoBusqueda(int start, int length, int draw, string searchTerm);
+        Task<IActionResult> Obtener();
+
+        Task<IActionResult> ObtenerCategoriaPadreConHijas();
         Task<IActionResult> ObtenerPadres();
         Task<IActionResult> ObtenerPorId(Guid IdCategoria);
 

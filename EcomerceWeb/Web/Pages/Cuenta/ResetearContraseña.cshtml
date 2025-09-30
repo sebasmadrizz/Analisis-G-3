@@ -1,0 +1,72 @@
+﻿@page "{userId:guid?}/{token?}"
+@model Web.Pages.Cuenta.ResetearContraseñaModel
+@{
+}
+<head>
+    <link href="~/css/login.css" rel="stylesheet" />
+    <style>
+        body {
+            background-image: url('/img/fondo.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 40px
+        }
+    </style>
+</head>
+
+<div class="container" style="margin-top:170px;">
+    <div class="row justify-content-center align-items-center mt-4">
+        <div class="col-lg-8 col-md-10">
+            <div class="row">
+                <div class="col-md-8 border-end" style="background-color:white; border-radius:20px">
+                    <div class="text-center mb-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Squarespace_logo.svg/768px-Squarespace_logo.svg.png" alt="Logo" width="40">
+                        <h4 class="mt-3">Resetear contraseña</h4>
+                    </div>
+                    @if (Model.accesoAprobado)
+                    {
+                        <form method="post">
+
+                            <input type="hidden" asp-for="resetPassword.Token" />
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" asp-for="resetPassword.Email" id="email" class="form-control input-squarespace" placeholder="name@example.com">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña nueva</label>
+                                <input type="password" asp-for="resetPassword.Password" id="password" class="form-control input-squarespace">
+                            </div>
+                            <div class="mb-3">
+                                <label for="passwordConfirm" class="form-label">Confirmar contraseña</label>
+                                <input type="password" asp-for="resetPassword.ConfirmPassword" id="passwordConfirm" class="form-control input-squarespace">
+                            </div>
+
+                            <button class="w-100 btn-creative" type="submit">Cambiar contraseña</button>
+                        </form>
+                        
+                    }
+                    @if (Model.accesoAprobado==false)
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            No puedes resetear tu contraseña sin antes hacer la recuperacion!
+                        </div>
+                    }
+                    @if (Model.peticionAprobada == false)
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            Ocurrio un error en tu solicitud el token ya ha expirado o es invalido!
+                        </div>
+                    }
+
+
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

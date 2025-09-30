@@ -13,7 +13,8 @@ BEGIN
         FechaCreacion,
         FechaModificacion,
         UsuarioCrea,
-        UsuarioModifica
+        UsuarioModifica,
+        ESTADO_ID as IdEstado
     FROM dbo.Usuarios
     WHERE 
         (NombreUsuario = @NombreUsuario)

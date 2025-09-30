@@ -18,6 +18,8 @@ namespace Abstracciones.Interfaces.Reglas
         /// <returns>Lista de todas las categorías hijas (directas e indirectas).</returns>
         IEnumerable<CategoriasResponse> ObtenerHijasRecursivo(IEnumerable<CategoriasResponse> todasCategorias, Guid idPadre);
 
-    
+        Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>
+        ObtenerCategoriasApiAsync(int start, int length, string searchTerm);
+
     }
 }

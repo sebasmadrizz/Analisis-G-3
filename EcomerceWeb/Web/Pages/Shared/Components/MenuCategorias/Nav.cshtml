@@ -1,0 +1,23 @@
+﻿@using Abstracciones.Modelos.Categoria
+@model IEnumerable<CategoriaPadreConHijas>
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    @foreach (var padre in Model.Where(p => p.Hijas != null && p.Hijas.Any()).Take(4))
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="cat_@padre.PadreId" role="button" data-bs-toggle="dropdown">
+                <i class="@padre.PadreIcono"></i> @padre.PadreNombre
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="cat_@padre.PadreId">
+                @foreach (var hija in padre.Hijas)
+                {
+                    <li>
+                        <a class="dropdown-item" href="/Productos/ProductosxCategoria?categoriaId=@hija.categoriasId">
+                            @hija.nombre
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+</ul>
+

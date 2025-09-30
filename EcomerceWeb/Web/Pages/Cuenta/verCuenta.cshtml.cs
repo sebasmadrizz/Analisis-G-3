@@ -1,5 +1,6 @@
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Modelos.Seguridad;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -48,5 +49,32 @@ namespace Web.Pages.Cuenta
             return Page();
 
         }
+
+        [Authorize]
+        public async Task<IActionResult> OnPostDesactivarAsync()
+        {
+            string idUsuarioToken = HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == "idUsuario")?.Value;
+
+            string endpoint = _configuracion.ObtenerMetodo("ApiEndPointsSeguridad", "DesactivarUsuario");
+            string url = string.Format(endpoint, idUsuarioToken);
+
+            using var cliente = new HttpClient();
+            var token = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Token")?.Value;
+            cliente.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var respuesta = await cliente.PutAsync(url, null);
+            string contenido = await respuesta.Content.ReadAsStringAsync();
+
+            return new ContentResult
+            {
+                StatusCode = (int)respuesta.StatusCode,
+                Content = contenido,
+                ContentType = "application/json"
+            };
+        }
+
+
     }
 }

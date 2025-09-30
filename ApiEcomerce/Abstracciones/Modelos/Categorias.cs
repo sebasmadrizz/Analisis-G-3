@@ -12,7 +12,8 @@ namespace Abstracciones.Modelos
 		{
 			public string Nombre { get; set; }
 			public string Descripcion { get; set; }
-			public DateTime FechaCreacion { get; set; }
+            public string Icono { get; set; }
+            public DateTime FechaCreacion { get; set; }
 		}
         public class CategoriasRequestPadre : CategoriasBase
         {
@@ -30,7 +31,9 @@ namespace Abstracciones.Modelos
 			public Guid PadreId { get; set; }
             public string NombrePadre { get; set; }
             public string Estado { get; set; }
-		}
+
+            public int Distancia { get; set; } = int.MaxValue;
+        }
 
         public class VerificarCategoriaResponse
         {
@@ -39,6 +42,25 @@ namespace Abstracciones.Modelos
             public int CantidadHijas { get; set; }
             public Guid? PadreId { get; set; }
             public bool PadreActivo { get; set; }
+        }
+        public class CategoriaFlat
+        {
+            public string PadreNombre { get; set; }
+            public string PadreIcono { get; set; }
+            public Guid? HijaId { get; set; }
+            public Guid? HijaPadreId { get; set; }
+            public string HijaNombre { get; set; }
+            public string HijaDescripcion { get; set; }
+            public string HijaIcono { get; set; }
+            public Guid PadreId { get; set; }
+        }
+
+        public class CategoriaPadreConHijas
+        {
+            public string PadreNombre { get; set; }
+            public Guid PadreId { get; set; }
+            public string PadreIcono { get; set; }
+            public List<CategoriasResponse> Hijas { get; set; } 
         }
 
     }

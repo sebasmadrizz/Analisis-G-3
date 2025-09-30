@@ -4,7 +4,8 @@
   @Nombre NVARCHAR(255),
   @Descripcion NVARCHAR(255),
   @FechaCreacion DATE,
-  @EstadoId INT
+  @EstadoId INT,
+  @Icono NVARCHAR(255)
 AS
 BEGIN
   SET NOCOUNT ON;
@@ -17,7 +18,8 @@ BEGIN
     NOMBRE,
     FECHA_CREACION,
     DESCRIPCION,
-    ESTADO_ID
+    ESTADO_ID,
+    Icono
   )
   VALUES (
     @IdCategoria,
@@ -25,7 +27,8 @@ BEGIN
     @Nombre,
     @FechaCreacion,
     @Descripcion,
-    @EstadoId
+    @EstadoId,
+    @Icono
   );
 
   COMMIT TRANSACTION;

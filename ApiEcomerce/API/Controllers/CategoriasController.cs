@@ -79,14 +79,31 @@ namespace API.Controllers
 
 
         [AllowAnonymous]
-        [HttpGet]
-		public async Task<IActionResult> Obtener()
-		{
-			var resultado = await _categoriasFlujo.Obtener();
-			if (!resultado.Any())
-				return NoContent();
-			return Ok(resultado);
-		}
+        [HttpGet("paginado-categorias")]
+        public async Task<IActionResult> ObtenerCategoriasPaginado(
+     [FromQuery] int start,
+     [FromQuery] int length,
+     [FromQuery] int draw)
+        {
+            // Asignamos defaults dentro del método si es necesario
+            start = start < 0 ? 0 : start;
+            length = length <= 0 ? 10 : length;
+            draw = draw <= 0 ? 1 : draw;
+
+            var (categorias, total) = await _categoriasFlujo.ObtenerPaginado(start, length);
+
+            if (!categorias.Any())
+                return NoContent();
+
+            return Ok(new
+            {
+                draw,
+                recordsTotal = total,
+                recordsFiltered = total,
+                data = categorias
+            });
+        }
+
 
         [AllowAnonymous]
         [HttpGet("{IdCategoria}")]
@@ -160,6 +177,85 @@ namespace API.Controllers
             if (!await VerificarExistenciaCategoria(idCategoria))
                 return NotFound("la categoria no existe");
             var resultado = await _categoriasFlujo.ActivarHijas(idCategoria);
+            return Ok(resultado);
+        }
+
+
+
+
+        [AllowAnonymous]
+        [HttpGet("paginado-categorias-fts")]
+        public async Task<IActionResult> ObtenerCategoriasPaginadoBusqueda(
+            [FromQuery] int start,
+            [FromQuery] int length,
+            [FromQuery] int draw,
+            [FromQuery] string searchTerm)
+        {
+            // Validaciones básicas
+            start = Math.Max(start, 0);
+            length = length <= 0 ? 10 : length;
+            draw = draw <= 0 ? 1 : draw;
+
+            // Llamada al flujo/servicio
+            var (categorias, total, filtradas, sugerencia) =
+                await _categoriasFlujo.ObtenerCategoriasPaginadasAsync(start, length, searchTerm);
+
+            if (!categorias.Any())
+                return NoContent();
+
+            // Devolvemos resultado compatible con DataTables server-side
+            return Ok(new
+            {
+                draw,
+                recordsTotal = total,          // total de filas en la tabla
+                recordsFiltered = filtradas,   // total filtrado según searchTerm
+                data = categorias,
+                suggestion = sugerencia        // opcional: puedes usarlo en la UI
+            });
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet("busqueda-api")]
+        public async Task<IActionResult> BusquedaCategoriasApi(
+     [FromQuery] int start,
+     [FromQuery] int length,
+     [FromQuery] int draw,
+     [FromQuery] string searchTerm)
+        {
+            // Validaciones básicas
+            start = Math.Max(start, 0);
+            length = length <= 0 ? 10 : length;
+            draw = draw <= 0 ? 1 : draw;
+
+            // 1️⃣ Llamada al flujo (nombre correcto del método)
+            var (categorias, total, filtradas, sugerencia) =
+                await _categoriasFlujo.BuscarCategoriasAsync(start, length, searchTerm);
+
+            // 2️⃣ Siempre devolver objeto aunque no haya resultados
+            return Ok(new
+            {
+                draw,
+                recordsTotal = total,           // total de filas en la tabla
+                recordsFiltered = filtradas,    // total filtrado según searchTerm
+                data = categorias,              // lista paginada
+                suggestion = sugerencia         // sugerencia de búsqueda
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("padre-con-hijas")]
+        public async Task<IActionResult> ObtenerCategoriaPadreConHijas()
+        {
+            return Ok(await _categoriasFlujo.ObtenerCategoriaPadreConHijas());
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Obtener()
+        {
+            var resultado = await _categoriasFlujo.Obtener();
+            if (!resultado.Any())
+                return NoContent();
             return Ok(resultado);
         }
     }

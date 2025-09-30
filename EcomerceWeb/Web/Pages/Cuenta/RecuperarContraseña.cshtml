@@ -1,0 +1,50 @@
+﻿@page
+@model Web.Pages.Cuenta.RecuperarContraseñaModel
+@{
+}
+<head>
+    <link href="~/css/login.css" rel="stylesheet" />
+    <style>
+        body {
+            background-image: url('/img/fondo.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 40px
+        }
+    </style>
+</head>
+
+<div class="container" style="margin-top:170px;">
+    <div class="row justify-content-center align-items-center mt-4">
+        <div class="col-lg-8 col-md-10">
+            <div class="row">
+                <div class="col-md-8 border-end" style="background-color:white; border-radius:20px">
+                    <div class="text-center mb-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Squarespace_logo.svg/768px-Squarespace_logo.svg.png" alt="Logo" width="40">
+                        <h4 class="mt-3">Inicia session</h4>
+                    </div>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" asp-for="Correo" id="email" class="form-control input-squarespace" placeholder="name@example.com" >
+                            
+                        </div>
+                        
+                        <button class="w-100 btn-creative" type="submit">Recuperar contraseña</button>
+                    </form>
+
+                    
+                </div>
+
+
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+}
