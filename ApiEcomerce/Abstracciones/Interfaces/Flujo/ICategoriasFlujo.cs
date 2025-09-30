@@ -10,9 +10,17 @@ namespace Abstracciones.Interfaces.Flujo
 {
 	public interface ICategoriasFlujo
 	{
+        Task<(IEnumerable<CategoriasResponse> categorias, int total)> ObtenerPaginado(int start, int length);
+    
+        Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>
+     ObtenerCategoriasPaginadasAsync(int start, int length, string searchTerm);
+    
 		Task<IEnumerable<CategoriasResponse>> Obtener();
+    
         Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas();
+    
         Task<IEnumerable<CategoriasResponse>> ObtenerPadres();
+    
         Task<CategoriasResponse> ObtenerPorId(Guid IdCategoria);
 
 		Task<Guid> AgregarPadre(CategoriasRequestPadre categorias);
@@ -30,5 +38,8 @@ namespace Abstracciones.Interfaces.Flujo
 
         Task<Guid> ActivarPadreHijas(Guid idCategoria, bool activarHijas);
         Task<Guid> ActivarHijas(Guid idCategoria);
+
+        Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>
+             BuscarCategoriasAsync(int start, int length, string searchTerm);
     }
 }

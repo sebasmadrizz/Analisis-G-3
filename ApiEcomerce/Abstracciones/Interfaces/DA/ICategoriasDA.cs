@@ -10,9 +10,17 @@ namespace Abstracciones.Interfaces.DA
 {
 	public interface ICategoriasDA
 	{
+        Task<(IEnumerable<CategoriasResponse> categorias, int total)> ObtenerPaginado(int start, int length);
+
+        Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>
+        ObtenerPaginadoBusquedaAsync(int start, int length, string searchTerm);
+    
 		Task<IEnumerable<CategoriasResponse>> Obtener();
+    
         Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas();
+    
         Task<IEnumerable<CategoriasResponse>> ObtenerPadres();
+    
         Task<CategoriasResponse> ObtenerPorId(Guid IdCategoria);
 
         Task<Guid> AgregarPadre(CategoriasRequestPadre categorias);
@@ -33,6 +41,9 @@ namespace Abstracciones.Interfaces.DA
         Task<Guid> ActivarPadreHijas(Guid idCategoria, bool activarHijas);
 
         Task<Guid> ActivarHijas(Guid idCategoria);
+
+        Task<(List<CategoriasResponse> categorias, int total, int filtradas, bool usaFallback)>
+          ObtenerCategoriasApiAsync(int start, int length, string searchTerm);
 
 
     }

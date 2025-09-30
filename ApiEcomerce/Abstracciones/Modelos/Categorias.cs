@@ -31,7 +31,9 @@ namespace Abstracciones.Modelos
 			public Guid PadreId { get; set; }
             public string NombrePadre { get; set; }
             public string Estado { get; set; }
-		}
+
+            public int Distancia { get; set; } = int.MaxValue;
+        }
 
         public class VerificarCategoriaResponse
         {

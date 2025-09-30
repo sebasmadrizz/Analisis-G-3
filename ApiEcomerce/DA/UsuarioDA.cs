@@ -62,6 +62,15 @@ namespace DA
             });
             return Convertidor.Convertir<Abstracciones.Entidades.Usuario, Abstracciones.Modelos.Usuario>(consulta.FirstOrDefault());
         }
+
+
+        private async Task VerificarUsuarioExiste(Guid idUsuario)
+        {
+            Usuario? resutadoConsultaUser = await DetalleUsuario(idUsuario);
+            if (resutadoConsultaUser == null)
+                throw new Exception("no se encontro el user");
+        }
+
         public async Task<bool> ExisteCorreo(string correo) 
         { 
             
@@ -86,11 +95,23 @@ namespace DA
             return resultado;
         }
 
+        public async Task<Guid> Desactivar(Guid idUsuario)
+        {
+            await VerificarUsuarioExiste(idUsuario);
+            string query = @"DESACTIVAR_USER";
+            var resultadoConsulta = await _SqlConnection.ExecuteScalarAsync<Guid>(query, new
+            {
+                idUsuario = idUsuario
+            });
+            return resultadoConsulta;
+         }
+            
         public async Task<Guid?> CambiarContraseña(CambiarContraseña data)
         {
             var sql = @"[CambiarContrasena]";
             var resultado = await _SqlConnection.ExecuteScalarAsync<Guid>(sql, new {  NuevaContraseña=data.NuevaContraseña, Correo=data.Correo });
             return resultado;
         }
+        
     }
 }

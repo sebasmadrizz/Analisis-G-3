@@ -39,6 +39,10 @@
     else
     {
         <div class="table-responsive">
+
+            <div id="sugerencia-container" class="mt-2 mb-2 text-primary fw-bold">
+            </div>
+
             <table id="tablaCategorias" class="table table-striped table-bordered rounded-table text-center">
                 <thead class="table-dark">
                     <tr>
@@ -51,69 +55,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model.categorias != null && Model.categorias.Any())
-                    {
-                        @foreach (var categoria in Model.categorias)
-                        {
-                            <tr data-id="@categoria.categoriasId">
-                                <td></td>
-                                <td>@categoria.nombre</td>
-                                <td>
-                                    @(string.IsNullOrEmpty(categoria.nombrePadre)
-                                                            ? "Es categoría principal"
-                                                            : categoria.nombrePadre)
-                    </td>
-                    <td>@categoria.descripcion</td>
-                    <td>
-                        @if (categoria.estado == "Activo")
-                                    {
-                                        <button type="button"
-                                                class="btn btn-success rounded-circle toggle-estado"
-                                                title="Activo"
-                                                data-url='@Url.Page("./Categorias", "Verificar", new { id = categoria.categoriasId })'
-                                                onclick="return confirmarEliminar(this)">
-                                            <i class="bi bi-toggle-on"></i>
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button type="button"
-                                                class="btn btn-danger rounded-circle toggle-estado"
-                                                title="Inactivo"
-                                                data-url='@Url.Page("./Categorias", "ContarHijasTotales", new { id = categoria.categoriasId })'
-                                                onclick="return confirmarActivar(this)">
-                                            <i class="bi bi-toggle-off"></i>
-                                        </button>
-                                    }
-                                </td>
-                                <td>
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <button type="button"
-                                                class="btn btn-primary btn-rounded edit-btn"
-                                                data-id="@categoria.categoriasId"
-                                                title="Editar">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="6">
-                                <div class="alert alert-warning w-100 text-center" role="alert">
-                                    No hay categorías registradas.
-                                </div>
-                            </td>
-                        </tr>
-
-                    }
-
                 </tbody>
             </table>
-
         </div>
     }
 
@@ -184,25 +127,136 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-               $(document).ready(function () {
-            if ($('#tablaCategorias tbody tr').length > 0 && !$('#tablaCategorias tbody tr td').attr('colspan')) {
-                $('#tablaCategorias').DataTable({
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                    },
-                    columnDefs: [{
-                        targets: 0,
+        $(document).ready(function () {
+
+            var urlVerificarBase = '@Url.Page("./Categorias", "Verificar", new { id = "_ID_" })';
+            var urlContarHijasBase = '@Url.Page("./Categorias", "ContarHijasTotales", new { id = "_ID_" })';
+
+            const $sugerenciaContainer = $('#sugerencia-container');
+
+            var dataTable = $('#tablaCategorias').DataTable({
+                processing: true,
+                serverSide: true,
+
+                // ✅ ajax como función
+                ajax: function (data, callback, settings) {
+                    const searchTerm = data.search ? data.search.value : '';
+
+                    let url = !searchTerm || searchTerm.length === 0
+                        ? 'https://localhost:7266/api/Categorias/paginado-categorias'
+                        : 'https://localhost:7266/api/Categorias/busqueda-api';
+
+                    $.getJSON(url, {
+                        start: data.start,
+                        length: data.length,
+                        draw: data.draw,
+                        searchTerm: data.search.value
+                    }).done(function (json) {
+                        callback(json); // ✅ pasamos la respuesta completa a DataTables
+                    }).fail(function () {
+                        callback({
+                            draw: data.draw,
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: []
+                        });
+                    });
+                },
+
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                },
+
+                columns: [
+                    {
                         data: null,
                         render: function (data, type, row, meta) {
-                            return meta.row + 1;
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
-                    }]
+                    },
+                    { data: 'nombre' },
+                    {
+                        data: 'nombrePadre',
+                        render: function (data) {
+                            return data || 'Es categoría principal';
+                        }
+                    },
+                    { data: 'descripcion' },
+                    {
+                        data: 'estado',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            if (data === "Activo") {
+                                return `<button type="button"
+                                                 class="btn btn-success rounded-circle toggle-estado"
+                                                 title="Activo"
+                                                 data-url='${urlVerificarBase.replace("_ID_", row.categoriasId)}'>
+                                             <i class="bi bi-toggle-on"></i>
+                                         </button>`;
+                            } else {
+                                return `<button type="button"
+                                                 class="btn btn-danger rounded-circle toggle-estado"
+                                                 title="Inactivo"
+                                                 data-url='${urlContarHijasBase.replace("_ID_", row.categoriasId)}'>
+                                             <i class="bi bi-toggle-off"></i>
+                                         </button>`;
+                            }
+                        }
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return `<div class="d-flex justify-content-center gap-2">
+                                        <button type="button"
+                                                class="btn btn-primary btn-rounded edit-btn"
+                                                data-id="${row.categoriasId}"
+                                                title="Editar">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                    </div>`;
+                        }
+                    }
+                ]
+            });
+
+            // --- Manejo de sugerencias ---
+            $('#tablaCategorias').on('xhr.dt', function (e, settings, json) {
+                $sugerenciaContainer.empty();
+
+                if (json && json.suggestion && json.suggestion !== 'No existe') {
+                    const currentSearch = $('input[type="search"]').val();
+
+                    if (json.suggestion.toLowerCase() !== currentSearch.toLowerCase()) {
+                        $sugerenciaContainer.html(
+                            '¿Quizás quiso decir: <a href="#" id="correct-search">' + json.suggestion + '</a>?'
+                        );
+                    }
+                }
+
+                $('#correct-search').off('click').on('click', function (e) {
+                    e.preventDefault();
+                    const correctTerm = $(this).text();
+                    dataTable.search(correctTerm).draw();
                 });
-            }
+            });
+
+            // --- Delegación de Eventos ---
+            $('#tablaCategorias').on('click', '.toggle-estado', function () {
+                const btn = this;
+                if ($(btn).hasClass('btn-success')) {
+                    // ... lógica de desactivar
+                    console.log("Desactivar categoría", $(btn).data('url'));
+                } else {
+                    // ... lógica de activar
+                    console.log("Activar categoría", $(btn).data('url'));
+                }
+            });
+
         });
-        
     </script>
 
     <script>

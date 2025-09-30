@@ -29,6 +29,11 @@ namespace Flujo
             return await _usuarioDA.CrearUsuarioEmpleado(usuario);
         }
 
+        public async Task<Guid> Desactivar(Guid idUsuario)
+        {
+            return await _usuarioDA.Desactivar(idUsuario);
+        }
+
         public async Task<Usuario> DetalleUsuario(Guid idUsuario)
         {
             return await _usuarioDA.DetalleUsuario(idUsuario);

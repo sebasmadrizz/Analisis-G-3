@@ -31,18 +31,7 @@ namespace Web.Pages.Categorias
         public async Task<IActionResult> OnGet()
         {
             var cliente = new HttpClient();
-            string endpointTodas = _configuracion.ObtenerMetodo("ApiEndPointsCategorias", "ObtenerCategoriasTotales");
-            var respuestaTodas = await cliente.GetAsync(endpointTodas);
-            respuestaTodas.EnsureSuccessStatusCode();
-            if (respuestaTodas.StatusCode == HttpStatusCode.NoContent)
-            {
-
-                SinCategorias = true;
-                return Page();
-            }
-            var resultadoTodas = await respuestaTodas.Content.ReadAsStringAsync();
-            categorias = JsonSerializer.Deserialize<List<Categoria>>(resultadoTodas,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+           
 
             string endpointPadres = _configuracion.ObtenerMetodo("ApiEndPointsCategorias", "VerPadres");
             var respuestaPadres = await cliente.GetAsync(endpointPadres);

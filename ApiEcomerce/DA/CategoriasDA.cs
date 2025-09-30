@@ -126,13 +126,46 @@ namespace DA
 			return resultado;
 		}
 
-        
-        public async Task<IEnumerable<CategoriasResponse>> Obtener()
-		{
-			string query = @"VER_CATEGORIAS";
-			var resultadoConsulta = await _sqlConnection.QueryAsync<CategoriasResponse>(query);
-			return resultadoConsulta;
-		}
+        public async Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>
+       ObtenerPaginadoBusquedaAsync(int start, int length, string searchTerm)
+        {
+            using var multi = await _sqlConnection.QueryMultipleAsync(
+                "VER_CATEGORIAS_PAGINADO_FTS_OPT_V30",
+                new
+                {
+                    Start = start,
+                    Length = length,
+                    SearchTerm = searchTerm
+                },
+                commandType: CommandType.StoredProcedure
+            );
+
+            // --- Primer result set: listado de categorías ---
+            var categorias = (await multi.ReadAsync<CategoriasResponse>()).ToList();
+
+            // --- Segundo result set: totales y sugerencia ---
+            var meta = await multi.ReadFirstAsync<dynamic>();
+            int total = meta.recordsTotal;
+            int filtradas = meta.recordsFiltered;
+            string sugerencia = meta.Sugerencia;
+
+            return (categorias, total, filtradas, sugerencia);
+        }
+
+
+        public async Task<(IEnumerable<CategoriasResponse> categorias, int total)> ObtenerPaginado(int start, int length)
+        {
+            using var multi = await _sqlConnection.QueryMultipleAsync(
+                "VER_CATEGORIAS_PAGINADO",
+                new { Start = start, Length = length },
+                commandType: CommandType.StoredProcedure
+            );
+
+            var categorias = (await multi.ReadAsync<CategoriasResponse>()).ToList();
+            var total = await multi.ReadFirstAsync<int>();
+
+            return (categorias, total);
+        }
 
         public async Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas()
         {
@@ -217,5 +250,26 @@ namespace DA
 				throw new Exception("la categoria no esta registrada");
 		}
 
-	}
+        public async Task<(List<CategoriasResponse> categorias, int total, int filtradas, bool usaFallback)>
+            ObtenerCategoriasApiAsync(int start, int length, string searchTerm)
+        {
+            using var multi = await _sqlConnection.QueryMultipleAsync(
+                "VER_CATEGORIAS_FTS_API_OPT",
+                new { Start = start, Length = length, SearchTerm = searchTerm },
+                commandType: CommandType.StoredProcedure
+            );
+
+            var categorias = (await multi.ReadAsync<CategoriasResponse>()).ToList();
+            var metadata = await multi.ReadFirstAsync<dynamic>();
+
+            int total = metadata.recordsTotal;
+            int filtradas = metadata.recordsFiltered;
+            bool usaFallback = metadata.usaFallback;
+
+            return (categorias, total, filtradas, usaFallback);
+        }
+
+
+
+    }
 }
