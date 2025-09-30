@@ -14,9 +14,9 @@ namespace Abstracciones.Interfaces.DA
 
         Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>
         ObtenerPaginadoBusquedaAsync(int start, int length, string searchTerm);
-    
-		Task<IEnumerable<CategoriasResponse>> Obtener();
-    
+
+        Task<IEnumerable<CategoriasResponse>> Obtener();
+
         Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas();
     
         Task<IEnumerable<CategoriasResponse>> ObtenerPadres();

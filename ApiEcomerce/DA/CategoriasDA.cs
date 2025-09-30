@@ -24,6 +24,12 @@ namespace DA
 			_repositorioDapper = repositorioDapper;
 			_sqlConnection = _repositorioDapper.ObtenerRepositorio();
 		}
+        public async Task<IEnumerable<CategoriasResponse>> Obtener()
+        {
+            string query = @"VER_CATEGORIAS";
+            var resultadoConsulta = await _sqlConnection.QueryAsync<CategoriasResponse>(query);
+            return resultadoConsulta;
+        }
 
         public async Task<Guid> ActivarHijas(Guid idCategoria)
         {

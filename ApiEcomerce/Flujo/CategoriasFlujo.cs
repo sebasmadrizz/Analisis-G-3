@@ -31,6 +31,10 @@ namespace Flujo
         {
             return await _categoriasDA.AgregarHija(categorias);
         }
+        public async Task<IEnumerable<CategoriasResponse>> Obtener()
+        {
+            return await _categoriasDA.Obtener();
+        }
 
         public async Task<Guid> AgregarPadre(CategoriasRequestPadre categorias)
         {

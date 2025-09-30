@@ -249,5 +249,14 @@ namespace API.Controllers
         {
             return Ok(await _categoriasFlujo.ObtenerCategoriaPadreConHijas());
         }
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Obtener()
+        {
+            var resultado = await _categoriasFlujo.Obtener();
+            if (!resultado.Any())
+                return NoContent();
+            return Ok(resultado);
+        }
     }
 }
