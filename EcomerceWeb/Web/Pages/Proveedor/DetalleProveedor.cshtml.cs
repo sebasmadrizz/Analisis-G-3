@@ -19,22 +19,35 @@ namespace Web.Pages.Proveedor
 
 		public async Task OnGet(Guid? PROVEEDOR_ID)
 		{
-			
+			if (PROVEEDOR_ID == null)
+				return;
 
 			var endpoint = _configuracion.ObtenerMetodo("ApiEndPointsProveedores", "ObtenerProveedor")
 										.Replace("{0}", PROVEEDOR_ID.ToString());
-			var cliente = new HttpClient();
-			var solicitud = new HttpRequestMessage(HttpMethod.Get, string.Format(endpoint, PROVEEDOR_ID));
-			var respuesta = await cliente.SendAsync(solicitud);
+
+			using var http = new HttpClient();
+
+			
+			var tokenClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Token");
+			if (tokenClaim != null && !string.IsNullOrEmpty(tokenClaim.Value))
+			{
+				http.DefaultRequestHeaders.Authorization =
+					new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenClaim.Value);
+			}
+
+			var solicitud = new HttpRequestMessage(HttpMethod.Get, endpoint);
+			var respuesta = await http.SendAsync(solicitud);
+
 			respuesta.EnsureSuccessStatusCode();
+
 			if (respuesta.StatusCode == HttpStatusCode.OK)
 			{
 				var resultado = await respuesta.Content.ReadAsStringAsync();
 				var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-				proveedor = JsonSerializer.Deserialize<ProveedoresBase>(resultado, opciones);
+				proveedor = JsonSerializer.Deserialize<ProveedoresBase>(resultado, opciones)!;
 			}
-
 		}
+
 	}
 }
 
