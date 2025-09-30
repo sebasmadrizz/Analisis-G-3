@@ -18,7 +18,7 @@
 
                 <div class="collapse navbar-collapse" id="categoryNav">
                     <a class="navbar-brand" asp-page="../Productos/Index">Ecomerce</a>
-                    <ul id="navCategorias" class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+                    @await Component.InvokeAsync("MenuCategorias", new { viewName = "Nav" })
                     <div class="position-relative">
                         <form class="d-flex me-3 search-form" role="search" id="BusquedaForm" method="post">
                             <input class="form-control search-input" type="search" placeholder="Buscar productos..." aria-label="Buscar productos" id="buscador" />
@@ -68,6 +68,7 @@
             </div>
         </nav>
     </header>
+    @await Component.InvokeAsync("MenuCategorias", new { viewName = "Aside" })
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

@@ -21,13 +21,13 @@ namespace DA
             string query = @"AGREGAR_PROVEEDOR";
             var resultadoConsulta = await _sqlConnection.ExecuteScalarAsync<Guid>(query, new
             {
-                ProveedorId = proveedor.PROVEEDOR_ID,
+                ProveedorId = Guid.NewGuid(),
                 Nombre = proveedor.Nombre_PROVEEDOR,
                 CorreoElectronico = proveedor.Correo_ELECTRONICO,
                 Tipo = proveedor.TIPO,
                 Direccion = proveedor.Direccion,
                 Telefono = proveedor.Telefono,
-                EstadoId = proveedor.ESTADO_ID,
+                EstadoId = 1,
                 FechaCreacion = proveedor.Fecha_Registro,
                 NombreContacto = proveedor.Nombre_Contacto
 

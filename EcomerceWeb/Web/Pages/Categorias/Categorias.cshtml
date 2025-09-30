@@ -1,5 +1,6 @@
 ﻿@page
 @model Web.Pages.Categorias.CategoriasModel
+@using Abstracciones.Modelos.Categoria
 @{
 }
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
@@ -80,6 +81,24 @@
                             <textarea asp-for="Categoria.descripcion" class="form-control" rows="3" required></textarea>
                             <span asp-validation-for="Categoria.descripcion" class="text-danger"></span>
                         </div>
+                        <div class="dropdown">
+                             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownIconos" data-bs-toggle="dropdown" aria-expanded="false">
+                             Selecciona tu categoría
+                         </button>
+                             <ul class="dropdown-menu p-3" aria-labelledby="dropdownIconos">
+                             <div class="d-flex flex-wrap gap-3">
+                                  @foreach (var icono in IconosCategorias.Lista)
+                                    {
+                               <li>
+                        <input type="radio" class="btn-check" asp-for="Categoria.Icono" id="@icono" value="@icono" autocomplete="off">
+                              <label class="btn btn-outline-primary" for="@icono">
+                             <i class="@icono fs-3"></i>
+                                </label>
+                            </li>
+                                    }
+                            </div>
+                             </ul>
+                                </div>
                         <div class="mb-3">
                             <label asp-for="Categoria.padreId" class="form-label">Categoría Padre</label>
                             <select asp-for="Categoria.padreId" class="form-select">
@@ -90,6 +109,7 @@
                                 }
                             </select>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -316,6 +336,8 @@
 
                         $('#edit-categoriasId').val(categoria.categoriasId);
                         $('#edit-nombre').val(categoria.nombre);
+                        $(`input[name="Icono"][value="${categoria.icono}"]`).prop('checked', true);
+
                         $('#edit-descripcion').val(categoria.descripcion);
                         $('#edit-padreId').val(categoria.padreId || '');
 

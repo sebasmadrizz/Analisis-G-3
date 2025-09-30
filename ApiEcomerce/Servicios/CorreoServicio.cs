@@ -96,4 +96,63 @@ public class CorreoServicio : ICorreoServicio
 
         return html;
     }
+    public async Task EnviarCorreoRecuperacionAsync(string nombreUsuario, string correoElectronico, string tokenLink)
+    {
+        var html = GenerarHtmlCorreoRecuperacion(nombreUsuario, tokenLink);
+
+        using var mensaje = new MailMessage();
+        mensaje.From = new MailAddress(_from); 
+        mensaje.To.Add(correoElectronico);
+        mensaje.Subject = "Sales - Recuperación de contraseña";
+        mensaje.Body = html;
+        mensaje.IsBodyHtml = true;
+
+        using var cliente = new SmtpClient(_smtpServer, _smtpPort)
+        {
+            Credentials = new NetworkCredential(_usuario, _password),
+            EnableSsl = true
+        };
+
+        await cliente.SendMailAsync(mensaje);
+    }
+    private string GenerarHtmlCorreoRecuperacion(string nombreUsuario, string tokenLink)
+    {
+        var html = $@"
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; }}
+        a {{ color: #ffffff; text-decoration: none; }}
+        .btn {{ display: inline-block; background-color: #007bff; color: #fff; padding: 10px 20px; border-radius: 5px; }}
+    </style>
+</head>
+<body>
+    <h1>Sales - Recuperación de contraseña</h1>
+    <p>Hola {nombreUsuario},</p>
+    <p>Para recuperar tu contraseña, por favor haz clic en el botón a continuación:</p>
+    <p><a href='{tokenLink}' class='btn'>Recuperar Contraseña</a></p>
+    <p>Si no solicitaste este cambio, ignora este correo.</p>
+    <p>¡Gracias por usar Sales!</p>
+</body>
+</html>";
+
+        return html;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

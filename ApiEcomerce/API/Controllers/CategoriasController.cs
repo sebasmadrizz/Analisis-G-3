@@ -243,5 +243,11 @@ namespace API.Controllers
             });
         }
 
+        [AllowAnonymous]
+        [HttpGet("padre-con-hijas")]
+        public async Task<IActionResult> ObtenerCategoriaPadreConHijas()
+        {
+            return Ok(await _categoriasFlujo.ObtenerCategoriaPadreConHijas());
+        }
     }
 }

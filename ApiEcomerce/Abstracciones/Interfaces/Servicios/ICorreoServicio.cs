@@ -10,5 +10,6 @@ namespace Abstracciones.Interfaces.Servicios
     public interface ICorreoServicio
     {
         Task EnviarCorreoCarritoAsync(CarritoCorreo carrito);
+        Task EnviarCorreoRecuperacionAsync(string nombreUsuario, string correoElectronico, string tokenLink);
     }
 }

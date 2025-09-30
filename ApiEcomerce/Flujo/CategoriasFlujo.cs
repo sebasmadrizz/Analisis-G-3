@@ -115,6 +115,10 @@ namespace Flujo
             return await _categoriaReglas.ObtenerCategoriasApiAsync(start, length, searchTerm);
         }
 
+        public async Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas()
+        {
+            return await _categoriasDA.ObtenerCategoriaPadreConHijas();
+        }
     }
 
 }

@@ -14,6 +14,11 @@ namespace Flujo
             _usuarioDA = usuarioDA;
         }
 
+        public async Task<Guid?> CambiarContraseña(CambiarContraseña data)
+        {
+            return await _usuarioDA.CambiarContraseña(data);
+        }
+
         public async Task<Guid?> CrearUsuario(Usuario usuario)
         {
             return await _usuarioDA.CrearUsuario(usuario);

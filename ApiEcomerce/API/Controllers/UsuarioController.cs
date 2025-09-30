@@ -59,7 +59,6 @@ namespace API.Controllers
             return Ok(resultado);
         }
 
-
         [Authorize(Roles = "2")]
         [HttpPut("desactivar-user/{idUsuario}")]
         public async Task<IActionResult> Desactivar(Guid idUsuario)
@@ -83,6 +82,9 @@ namespace API.Controllers
 
             return Ok(resultado);
         }
+        
+        
+        
 
         private async Task<bool> VerificarExistenciaUser(Guid idUsuario)
         {
@@ -91,6 +93,14 @@ namespace API.Controllers
             if (resultadoUserExiste != null)
                 ResultadoValidacion = true;
             return ResultadoValidacion;
+          }  
+         
+        [Authorize(Roles = "2")]
+        [HttpPost("CambiarContrasena")]
+
+        public async Task<IActionResult> CambiarContraseña([FromBody] CambiarContraseña data)
+        {
+            return Ok(await _usuarioFlujo.CambiarContraseña(data));//ver si siempre sirve
         }
     }
 }
