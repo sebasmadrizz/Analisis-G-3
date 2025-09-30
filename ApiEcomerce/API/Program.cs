@@ -80,6 +80,7 @@ builder.Services.AddScoped<ICategoriasDA, CategoriasDA>();
 builder.Services.AddScoped<ICarritoFlujo, CarritoFlujo>();
 builder.Services.AddScoped<ICarritoDA, CarritoDA>();
 builder.Services.AddScoped<ICarritoProductoReglas, CarritoProductoReglas>();
+builder.Services.AddSingleton<LevenshteinService>();
 
 
 builder.Services.AddTransient<IAutorizacionBW, Autorizacion.BW.AutorizacionBW>();
@@ -110,6 +111,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseClaimsPerfiles();
 app.UseCors(MyAllowSpecificOrigins);
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

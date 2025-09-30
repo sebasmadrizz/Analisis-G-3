@@ -57,6 +57,9 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Storage\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="Assemblies\" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BD.refactorlog" />
@@ -121,5 +124,29 @@
     <Build Include="dbo\Stored Procedures\ESTADO_PROVEEDOR.sql" />
     <Build Include="dbo\Stored Procedures\ObtenerDatosCarritoPorUsuario.sql" />
     <Build Include="dbo\Stored Procedures\AgregarUsuarioEmpleado.sql" />
+    <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_PAGINADO_BUSQUEDA.sql" />
+    <Build Include="Storage\ftCatalogCategorias.sql" />
+    <Build Include="FullTextIndexes.sql" />
+    <Build Include="dbo\Functions\TestFunc.sql" />
+    <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_PAGINADO_FTS_OPT.sql" />
+    <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_PAGINADO_FTS.sql" />
+    <Build Include="dbo\Stored Procedures\DESACTIVAR_USER.sql" />
+    <Build Include="dbo\Functions\LevenshteinTVF.sql" />
+    <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_PAGINADO_FTS_OPT_V30.sql" />
+    <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_FTS_API_OPT.sql" />
+    <Build Include="dbo\Functions\Levenshtein.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assemblies\SQLCLRFunc.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="SQLCLRFunc">
+      <HintPath>Assemblies\SQLCLRFunc.dll</HintPath>
+      <SqlAssemblyName>SQLCLRFunc</SqlAssemblyName>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+      <SqlOwnerName>dbo</SqlOwnerName>
+      <SqlPermissionSet>SAFE</SqlPermissionSet>
+    </Reference>
   </ItemGroup>
 </Project>

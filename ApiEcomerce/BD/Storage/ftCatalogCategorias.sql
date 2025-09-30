@@ -1,0 +1,5 @@
+﻿CREATE FULLTEXT CATALOG [ftCatalogCategorias]
+    WITH ACCENT_SENSITIVITY = ON
+    AS DEFAULT
+    AUTHORIZATION [dbo];
+

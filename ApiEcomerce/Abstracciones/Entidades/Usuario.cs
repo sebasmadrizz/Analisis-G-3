@@ -11,5 +11,6 @@
         public Guid UsuarioCrea { get; set; }
         public Guid UsuarioModifica { get; set; }
 
+        public int IdEstado { get; set; }
     }
 }

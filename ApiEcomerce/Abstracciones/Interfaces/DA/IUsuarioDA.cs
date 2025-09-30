@@ -10,5 +10,7 @@ namespace Abstracciones.Interfaces.DA
         Task<Guid?> CrearUsuarioEmpleado(Usuario usuario);
         Task<Guid> EditarUsuario(Guid idUsuario, UsuarioEditar usuario);
         Task<Usuario> DetalleUsuario(Guid idUsuario);
+        Task<Guid> Desactivar(Guid idUsuario);
+
     }
 }
