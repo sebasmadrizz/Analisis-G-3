@@ -245,16 +245,36 @@
             });
 
             // --- Delegación de Eventos ---
-            $('#tablaCategorias').on('click', '.toggle-estado', function () {
-                const btn = this;
-                if ($(btn).hasClass('btn-success')) {
-                    // ... lógica de desactivar
-                    console.log("Desactivar categoría", $(btn).data('url'));
-                } else {
-                    // ... lógica de activar
-                    console.log("Activar categoría", $(btn).data('url'));
-                }
+           $('#tablaCategorias').on('click', '.toggle-estado', function () {
+    const btn = this;
+    const url = $(btn).data('url');
+
+    if ($(btn).hasClass('btn-success')) {
+        console.log("Desactivar categoría", url);
+
+        $.get(url)
+            .done(function (data) {
+                console.log("Respuesta OnGetVerificar:", data);
+                // si quieres refrescar la tabla
+                // $('#tablaCategorias').DataTable().ajax.reload();
+            })
+            .fail(function (xhr) {
+                console.error("Error en desactivar:", xhr);
             });
+
+    } else {
+        console.log("Activar categoría", url);
+
+        $.get(url)
+            .done(function (data) {
+                console.log("Respuesta OnGetContarHijasTotales:", data);
+            })
+            .fail(function (xhr) {
+                console.error("Error en activar:", xhr);
+            });
+    }
+});
+
 
         });
     </script>
