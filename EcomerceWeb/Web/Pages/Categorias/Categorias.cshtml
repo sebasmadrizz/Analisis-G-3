@@ -245,16 +245,29 @@
             });
 
             // --- Delegación de Eventos ---
-            $('#tablaCategorias').on('click', '.toggle-estado', function () {
-                const btn = this;
-                if ($(btn).hasClass('btn-success')) {
-                    // ... lógica de desactivar
-                    console.log("Desactivar categoría", $(btn).data('url'));
-                } else {
-                    // ... lógica de activar
-                    console.log("Activar categoría", $(btn).data('url'));
-                }
-            });
+          // --- Delegación de Eventos ---
+$('#tablaCategorias').on('click', '.toggle-estado', function () {
+    const btn = this; // el botón clickeado
+    const url = $(btn).data('url');
+
+    if ($(btn).hasClass('btn-success')) {
+        // Botón verde → categoría Activa → quieres desactivarla
+        console.log("Desactivar categoría", url);
+
+        // Llamar tu función de confirmar eliminar
+        confirmarEliminar(btn);
+
+    } else {
+        // Botón rojo → categoría Inactiva → quieres activarla
+        console.log("Activar categoría", url);
+
+        // Llamar tu función de confirmar activar
+        confirmarActivar(btn);
+    }
+});
+
+
+
 
         });
     </script>
