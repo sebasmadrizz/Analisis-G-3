@@ -50,7 +50,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            var myToken =  _generarResetTokenRegla.GenerarResetToken();
+            var myToken =  _generarResetTokenRegla.GenerarResetToken(correo);
             var tokenHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(myToken)));
             await _resetPasswordFlujo.GuardarResetPasswordToken(new ResetPasswordToken { UserId=user.Id, TokenHash= tokenHash, ExpiraEn= DateTime.UtcNow.AddHours(1) });
             var tokenLink = $"{_rutaWeb}/Cuenta/ResetearContraseña?userid={user.Id}&token={myToken}";

@@ -28,10 +28,8 @@
                         <form method="post">
 
                             <input type="hidden" asp-for="resetPassword.Token" />
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <input type="email" asp-for="resetPassword.Email" id="email" class="form-control input-squarespace" placeholder="name@example.com">
-                            </div>
+                            <input type="hidden" asp-for="resetPassword.Email" />
+                           
                             <div class="mb-3">
                                 <label for="password" class="form-label">Contraseña nueva</label>
                                 <input type="password" asp-for="resetPassword.Password" id="password" class="form-control input-squarespace">

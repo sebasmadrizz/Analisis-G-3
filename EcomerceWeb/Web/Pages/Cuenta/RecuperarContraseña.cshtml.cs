@@ -13,6 +13,8 @@ namespace Web.Pages.Cuenta
         private IConfiguracion _configuracion;
         [BindProperty]
         public string Correo { get; set; }
+        [TempData] 
+        public string Mensaje { get; set; }
         public RecuperarContraseñaModel(IConfiguracion configuracion)
         {
             _configuracion = configuracion;
@@ -23,7 +25,15 @@ namespace Web.Pages.Cuenta
             var cliente = new HttpClient();
             var solicitud = new HttpRequestMessage(HttpMethod.Post, endpoint);
             var respuesta = await cliente.PostAsJsonAsync(endpoint, Correo);
-            return Page();
+            if (respuesta.IsSuccessStatusCode)//no funciona falta validar bien 
+            {
+                Mensaje = "ok"; 
+            }
+            else
+            {
+                Mensaje = "error";
+            }
+            return RedirectToPage();
         }
     }
 }

@@ -12,13 +12,15 @@ namespace Web.Pages.Cuenta
     public class ResetearContraseñaModel : PageModel
     {
         private IConfiguracion _configuracion;
+        private readonly IObtenerCorreoDesdeTokenRegla _obtenerCorreoDesdeTokenRegla;
         [BindProperty]
         public ResetPassword resetPassword { get; set; } = default!;
         public bool accesoAprobado { get; set; }
         public bool peticionAprobada { get; set; }=true;
-        public ResetearContraseñaModel(IConfiguracion configuracion)
+        public ResetearContraseñaModel(IConfiguracion configuracion, IObtenerCorreoDesdeTokenRegla obtenerCorreoDesdeTokenRegla)
         {
             _configuracion = configuracion;
+            _obtenerCorreoDesdeTokenRegla = obtenerCorreoDesdeTokenRegla;
         }
         public void OnGet(Guid userId, string token)
         {
@@ -32,7 +34,8 @@ namespace Web.Pages.Cuenta
             resetPassword = new ResetPassword
             {
                 Token = tokenHash,
-                
+                Email = _obtenerCorreoDesdeTokenRegla.ObtenerCorreoDesdeToken(token)
+
             };
             return;
 
@@ -49,6 +52,7 @@ namespace Web.Pages.Cuenta
             var hash2 = Autenticacion.GenerarHash(resetPassword.ConfirmPassword);
             var hashString2 = Autenticacion.ObtenerHash(hash2);
             resetPassword.ConfirmPassword= hashString2;
+           
             var respuesta = await cliente.PostAsJsonAsync(endpoint, resetPassword);
             if (respuesta.StatusCode == HttpStatusCode.BadRequest)
             {

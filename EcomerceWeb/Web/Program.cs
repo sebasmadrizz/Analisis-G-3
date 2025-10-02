@@ -20,6 +20,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddTransient<IRepositorioDapper, RepositorioDapper>();
 builder.Services.AddTransient<ISeguridadDA, SeguridadDA>();
 builder.Services.AddTransient<IAutorizacionBW, AutorizacionBW>();
+builder.Services.AddTransient<IObtenerCorreoDesdeTokenRegla, ObtenerCorreoDesdeTokenRegla>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();

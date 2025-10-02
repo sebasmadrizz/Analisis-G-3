@@ -2,7 +2,7 @@
 {
     public interface IGenerarResetTokenRegla
     {
-        string GenerarResetToken();
+        string GenerarResetToken(string correo);
 
     }
 }
