@@ -194,42 +194,6 @@
 
 
 
-    <nav aria-label="Paginacion de productos">
-        <select id="PageSize" name="PageSize" class="form-select w-auto" onchange="window.location='?PagesIndex=@Model.ProductosPaginados.PageIndex&PageSize=' + this.value">
-            <option value="2" selected=@(Model.ProductosPaginados.PageSize == 2)>2</option>
-            <option value="3" selected=@(Model.ProductosPaginados.PageSize == 3)>3</option>
-            <option value="4" selected=@(Model.ProductosPaginados.PageSize == 4)>4</option>
-            <option value="50" selected=@(Model.ProductosPaginados.PageSize == 50)>50</option>
-</select>
-
-
-        <ul class="pagination justify-content-center">
-            @if (Model.ProductosPaginados.HasPreviousPage)
-            {
-                <li class="page-item"><a class="page-link" href="?PagesIndex=@(Model.ProductosPaginados.PageIndex - 1)&PageSize=@Model.ProductosPaginados.PageSize">Anterior</a></li>
-            }
-            else
-            {
-                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
-            }
-
-            @for (int i = 1; i <= Model.ProductosPaginados.TotalPages; i++)
-            {
-                <li class="page-item @(i == Model.ProductosPaginados.PageIndex ? "active" : "")">
-                    <a class="page-link" href="?PagesIndex=@i&PageSize=@Model.ProductosPaginados.PageSize">@i</a>
-                </li>
-            }
-
-            @if (Model.ProductosPaginados.HasNextPage)
-            {
-                <li class="page-item"><a class="page-link" href="?PagesIndex=@(Model.ProductosPaginados.PageIndex + 1)&PageSize=@Model.ProductosPaginados.PageSize">Siguiente</a></li>
-            }
-            else
-            {
-                <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
-            }
-        </ul>
-    </nav>
 
 
 

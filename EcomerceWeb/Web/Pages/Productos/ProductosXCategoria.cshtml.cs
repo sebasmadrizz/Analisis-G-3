@@ -41,7 +41,7 @@ namespace Web.Pages.Productos
                 var resultado = await respuesta.Content.ReadAsStringAsync();
                 var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                 ProductosPaginados = JsonSerializer.Deserialize<ProductoPaginado>(resultado, opciones);
-
+                ProductosPaginados.PageSize = PageSize;
                 productos = ProductosPaginados.Items;
 
             }

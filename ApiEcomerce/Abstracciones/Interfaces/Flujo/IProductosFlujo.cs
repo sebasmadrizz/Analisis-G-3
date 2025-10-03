@@ -9,7 +9,7 @@ namespace Abstracciones.Interfaces.Flujo
 {
     public interface IProductosFlujo
     {
-
+        
         Task<IEnumerable<ProductosResponse>> Obtener();
         Task<IEnumerable<ProductosResponse>> ObtenerProductosBuscados(string nombre);
         Task<Paginacion<ProductosResponse>> ObtenerProductosXCategoria(Guid idCategoria, int pageIndex, int pageSize);

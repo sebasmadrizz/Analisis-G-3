@@ -1,0 +1,80 @@
+﻿/* Contenedor tipo glassmorphism */
+.filter-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+    .filter-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+
+/* Títulos modernos */
+.filter-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Secciones internas */
+.filter-section {
+    margin-bottom: 20px;
+}
+
+/* Slider estilo moderno */
+.filter-range {
+    width: 100%;
+    height: 8px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    -webkit-appearance: none;
+}
+
+    .filter-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        border: 3px solid #2575fc;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+        .filter-range::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+/* Subtítulos y checkboxes modernos */
+.filter-subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.form-check-input {
+    accent-color: #2575fc;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+    .form-check-input:hover {
+        transform: scale(1.2);
+    }
+
+.form-check-label {
+    margin-left: 8px;
+    font-weight: 500;
+    color: #333;
+}

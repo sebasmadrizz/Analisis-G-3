@@ -10,6 +10,7 @@ namespace Abstracciones.Interfaces.DA
 {
 	public interface ICategoriasDA
 	{
+        
         Task<(IEnumerable<CategoriasResponse> categorias, int total)> ObtenerPaginado(int start, int length);
 
         Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>

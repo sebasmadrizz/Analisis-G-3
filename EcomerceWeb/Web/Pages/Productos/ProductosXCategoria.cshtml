@@ -10,9 +10,10 @@
 
     <link href="~/css/slider.css" rel="stylesheet" />
     <link href="~/css/sidebar.css" rel="stylesheet" />
+    <link href="~/css/Filtros.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@6.2.4/dist/simplebar.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/simplebar@6.2.4/dist/simplebar.min.js"></script>
-
+    
 
 </head>
 
@@ -21,15 +22,91 @@
   
 
     <div class="container py-4" style="margin-top:100px; padding:45px;">
+
         <div class="container-fluid px-4 py-4">
+
+            <div class="d-flex justify-content-end align-items-center mb-3">
+                <span class="me-2 fw-bold">Mostrar:</span>
+
+                @foreach (var size in new int[] { 1, 3, 4, 50 })
+                {
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm me-1 @(Model.ProductosPaginados.PageSize == size ? "active" : "")"
+                            onclick="window.location='?PagesIndex=@Model.ProductosPaginados.PageIndex&PageSize=@size@(Request.Query["categoriaId"].ToString() != "" ? "&categoriaId=" + Request.Query["categoriaId"] : "")'">
+                        @size
+                    </button>
+                }
+            </div>
+
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5" id="productos">
+                <div class="col-md-3 mb-4">
+                    <div class="filter-card">
+                        <h5 class="filter-title">Filtrar productos</h5>
+
+                        @{
+                            var precioMax = string.IsNullOrEmpty(Request.Query["precioMax"])
+                            ? Model.productos.Max(p => p.Precio)
+                            : decimal.Parse(Request.Query["precioMax"]);
+
+                            var marcasSeleccionadas = string.IsNullOrEmpty(Request.Query["marcas"])
+                            ? new string[] { }
+                            : Request.Query["marcas"].ToString().Split(',');
+
+                            var minPrecio = Model.productos.Min(p => p.Precio);
+                            var maxPrecio = Model.productos.Max(p => p.Precio);
+                        }
+
+                        <form method="get">
+                            <input type="hidden" name="categoriaId" value="@Model.CategoriaId" />
+                            <input type="hidden" name="PagesIndex" value="@Model.ProductosPaginados.PageIndex" />
+                            <input type="hidden" name="PageSize" value="@Model.ProductosPaginados.PageSize" />
+
+                            <!-- Slider de precio -->
+                            <div class="filter-section">
+                                <label for="precioRange" class="filter-label">
+                                    Precio: $<span id="precioValor">@precioMax</span>
+                                </label>
+                                <input type="range"
+                                       name="precioMax"
+                                       min="@minPrecio"
+                                       max="@maxPrecio"
+                                       value="@precioMax"
+                                       id="precioRange"
+                                       class="filter-range"
+                                       onchange="this.form.submit()">
+                            </div>
+
+                            <!-- Marcas -->
+                            <div class="filter-section">
+                                <h6 class="filter-subtitle">Marcas</h6>
+                                @foreach (var marca in Model.productos.Select(p => p.Marca).Distinct())
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="marcas"
+                                               value="@marca"
+                                               @(marcasSeleccionadas.Contains(marca) ? "checked" : "")
+                                               onchange="this.form.submit()">
+                                        <label class="form-check-label">@marca</label>
+                                    </div>
+                                }
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
 
 
                 @if (Model.productos != null && Model.productos.Any())
                 {
-                    @foreach (var producto in Model.productos.Where(p =>  p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo"))
+
+                    @foreach (var producto in Model.productos.Where(p => p.Stock > 0
+                                    && p.Estado?.Trim().ToLower() == "activo"
+                                    && p.Precio <= precioMax
+                                    && (marcasSeleccionadas.Length == 0 || marcasSeleccionadas.Contains(p.Marca))))
                     {
-                        <div class="col rounded-3">
+                        <div class="col rounded-3 producto-item" data-precio="@producto.Precio" data-marca="@producto.Marca">
                             <div class="card h-100 shadow-sm border-0 position-relative product-card">
                                 <div class="overflow-hidden position-relative">
                                     <img src="@Html.DisplayFor(p => producto.ImagenUrl)"
@@ -38,26 +115,13 @@
                                          onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'"
                                          style="cursor:pointer; height: 220px; object-fit: cover;" />
                                 </div>
-
-                                <!-- Body con fondo gris claro -->
                                 <div class="card-body text-center bg-light rounded-bottom-3">
                                     <h5 class="card-title text-truncate">@producto.Nombre</h5>
-                                    <p class="card-text text-muted small mb-2">
-                                        @producto.Categoria
-                                    </p>
-                                    <p class="card-text fw-bold text-truncate fs-5">
-                                        $@producto.Precio
-                                    </p>
-
-                                    <!-- Badge de stock -->
-                                    @if (producto.Stock > 10)
-                                    {
-                                        <span class="badge bg-success">Disponible</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">¡Últimas unidades!</span>
-                                    }
+                                    <p class="card-text text-muted small mb-2">@producto.Categoria</p>
+                                    <p class="card-text fw-bold text-truncate fs-5">$@producto.Precio</p>
+                                    <span class="badge @(producto.Stock > 10 ? "bg-success" : "bg-danger")">
+                                        @(producto.Stock > 10 ? "Disponible" : "¡Últimas unidades!")
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -111,37 +175,37 @@
 
 
     <nav aria-label="Paginacion de productos">
-    <ul class="pagination justify-content-center">
-        @if (Model.ProductosPaginados.HasPreviousPage)
-        {
-            <li class="page-item">
-                <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@(Model.ProductosPaginados.PageIndex - 1)&PageSize=5">Anterior</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item disabled"><span class="page-link">Anterior</span></li>
-        }
+        <ul class="pagination justify-content-center">
+            @if (Model.ProductosPaginados.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@(Model.ProductosPaginados.PageIndex - 1)&PageSize=@Model.ProductosPaginados.PageSize">Anterior</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+            }
 
-        @for (int i = 1; i <= Model.ProductosPaginados.TotalPages; i++)
-        {
-            <li class="page-item @(i == Model.ProductosPaginados.PageIndex ? "active" : "")">
-                <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@i&PageSize=5">@i</a>
-            </li>
-        }
+            @for (int i = 1; i <= Model.ProductosPaginados.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.ProductosPaginados.PageIndex ? "active" : "")">
+                    <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@i&PageSize=@Model.ProductosPaginados.PageSize">@i</a>
+                </li>
+            }
 
-        @if (Model.ProductosPaginados.HasNextPage)
-        {
-            <li class="page-item">
-                <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@(Model.ProductosPaginados.PageIndex + 1)&PageSize=5">Siguiente</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
-        }
-    </ul>
-</nav>
+            @if (Model.ProductosPaginados.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?categoriaId=@Model.CategoriaId&PagesIndex=@(Model.ProductosPaginados.PageIndex + 1)&PageSize=@Model.ProductosPaginados.PageSize">Siguiente</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+            }
+        </ul>
+    </nav>
 
 
 
@@ -150,6 +214,7 @@
 @section Scripts {
     <script src="~/js/chatbox.js"></script>
     <script src="~/js/busquedasindex.js"></script>
+    
 
 
 }
