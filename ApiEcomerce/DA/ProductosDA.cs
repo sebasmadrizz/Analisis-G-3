@@ -138,5 +138,12 @@ namespace DA
             var respuesta = new Paginacion<ProductosResponse>(productos, pageIndex, totalPages);
             return respuesta;
         }
+
+        public async Task<IEnumerable<ProductosResponse>> ObtenerProductosIndex()
+        {
+            string query = @"VER_PRODUCTOS_INDEX";
+            var resultadoConsulta = await _sqlConnection.QueryAsync<ProductosResponse>(query);
+            return resultadoConsulta;
+        }
     }
 }

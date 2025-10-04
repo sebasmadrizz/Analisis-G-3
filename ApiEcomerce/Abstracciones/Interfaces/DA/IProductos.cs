@@ -4,6 +4,7 @@ namespace Abstracciones.Interfaces.DA
 {
     public interface IProductosDA
     {
+        Task<IEnumerable<ProductosResponse>> ObtenerProductosIndex();
         Task<IEnumerable<ProductosResponse>> Obtener();
        
         Task<ProductosResponse> ObtenerPorId(Guid IdProducto);

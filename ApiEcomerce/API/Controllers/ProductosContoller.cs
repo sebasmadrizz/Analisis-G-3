@@ -5,6 +5,7 @@ using Abstracciones.Modelos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reglas;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API.Controllers
 {
@@ -122,6 +123,13 @@ namespace API.Controllers
         "application/pdf",   
         "Inventario.pdf"     
     );
+        }
+        [AllowAnonymous]
+        [HttpGet("ObtenerProductosIndex")]
+        public async Task<IActionResult> ObtenerProductosIndex()
+        {
+            var resultado = await _productosFlujo.ObtenerProductosIndex();
+            return Ok(resultado);
         }
     }
 }

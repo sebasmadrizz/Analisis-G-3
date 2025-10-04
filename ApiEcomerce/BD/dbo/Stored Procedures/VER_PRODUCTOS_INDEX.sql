@@ -1,0 +1,33 @@
+﻿CREATE OR ALTER PROCEDURE VER_PRODUCTOS_INDEX
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Mostrar solo 15 productos de las categorías seleccionadas
+    SELECT TOP 15
+        P.PRODUCTOS_ID AS IdProducto,
+        P.NOMBRE AS Nombre,
+        P.MARCA AS Marca,
+        P.PRECIO AS Precio,
+        P.DESCRIPCION AS Descripcion,
+        P.STOCK AS Stock,
+        P.IMAGEN_URL AS ImagenUrl,
+        P.FECHA_CREACION AS FechaCreacion,
+        PR.Nombre_PROVEEDOR AS NombreProveedor,
+        C.NOMBRE AS Categoria,
+        E.TIPO AS Estado
+    FROM PRODUCTOS P
+    INNER JOIN Proveedores PR ON P.PROVEEDOR_ID = PR.PROVEEDOR_ID
+    INNER JOIN CATEGORIAS C ON P.CATEGORIAS_ID = C.CATEGORIAS_ID
+    INNER JOIN ESTADOS E ON P.ESTADO_ID = E.ESTADO_ID
+    WHERE P.CATEGORIAS_ID IN (
+        'AE393D87-3B78-467E-8CAC-69F14DDB2DD6',
+        '911769C2-CD0E-4E8A-A6BB-33AA0FF65C80',
+        'B462C0A1-22CF-4C2B-9D38-FD05955B9762',
+        'F5CC896F-9F64-47E3-A3F9-5A9F77E91313',
+        '06CACFAB-7FBE-4F7E-A70B-9F13A615AC33',
+		'5C363B64-B96E-4779-A1FF-CEBBEC0168E8'
+    )
+    ORDER BY P.FECHA_CREACION DESC; -- puedes cambiar el orden como prefieras
+
+END

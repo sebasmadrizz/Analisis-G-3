@@ -135,6 +135,7 @@
     <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_PAGINADO_FTS_OPT_V30.sql" />
     <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_FTS_API_OPT.sql" />
     <Build Include="dbo\Functions\Levenshtein.sql" />
+    <Build Include="dbo\Stored Procedures\VER_PRODUCTOS_INDEX.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assemblies\SQLCLRFunc.dll" />

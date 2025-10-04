@@ -15,22 +15,18 @@ namespace Web.Pages.Productos
         public IList<Producto> productos { get; set; } = default!;
         public IList<Categoria> categorias { get; set; } = new List<Categoria>();
 
-        [BindProperty]
-        public ProductoPaginado ProductosPaginados { get; set; } = default!;
-       
-        
-
+    
         public IndexModel(IConfiguracion configuracion)
         {
             _configuracion = configuracion;
         }
-        public async Task OnGet(int PagesIndex = 1, int PageSize = 5)
+        public async Task OnGet()
         {
 
 
-            string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ObtenerProductosPaginados");
+            string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ObtenerProductosIndex");
             var cliente = new HttpClient();
-            var solicitud = new HttpRequestMessage(HttpMethod.Get, string.Format(endpoint, PagesIndex, PageSize));
+            var solicitud = new HttpRequestMessage(HttpMethod.Get, endpoint);
 
             var respuesta = await cliente.SendAsync(solicitud);
             respuesta.EnsureSuccessStatusCode();
@@ -38,13 +34,13 @@ namespace Web.Pages.Productos
             {
                 var resultado = await respuesta.Content.ReadAsStringAsync();
                 var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                ProductosPaginados = JsonSerializer.Deserialize<ProductoPaginado>(resultado, opciones);
+                productos = JsonSerializer.Deserialize<IList<Producto>>(resultado, opciones);
 
-                productos = ProductosPaginados.Items;
-                ProductosPaginados.PageSize = PageSize;
+              
 
             }
         }
+        /*
         public async Task OnPost(int PagesIndex = 1, int PageSize = 5)
         {
 
@@ -65,7 +61,7 @@ namespace Web.Pages.Productos
 
             }
         }
-
+        */
         public async Task<IActionResult> OnGetObtenerCategoriasPadres()
         {
             var cliente = new HttpClient();

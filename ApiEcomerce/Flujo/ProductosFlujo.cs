@@ -2,6 +2,7 @@
 using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Modelos;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Flujo
 {
@@ -54,6 +55,11 @@ namespace Flujo
         public async Task<IEnumerable<ProductosResponse>> ObtenerProductosBuscados(string nombre)
         {
             return await _productosDA.ObtenerProductosBuscados(nombre);
+        }
+
+        public async Task<IEnumerable<ProductosResponse>> ObtenerProductosIndex()
+        {
+            return await _productosDA.ObtenerProductosIndex();
         }
 
         public async Task<Paginacion<ProductosResponse>> ObtenerProductosXCategoria(Guid idCategoria, int pageIndex, int pageSize)

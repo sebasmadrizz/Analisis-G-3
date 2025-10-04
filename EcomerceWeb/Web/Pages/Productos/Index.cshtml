@@ -1,4 +1,5 @@
 ﻿@page
+@using Abstracciones.Modelos.Productos
 @model Web.Pages.Productos.IndexModel
 @{
 
@@ -92,72 +93,102 @@
     </div>
 
 
-    
+@functions {
+    // Función para obtener productos activos de una categoría
+    public List<Producto> ObtenerProductosPorCategoria(string categoria, IList<Producto> todos)
+    {
+        return todos
+            .Where(p => p.Categoria == categoria && p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo")
+            .ToList();
+    }
+}
 
-    <div class="container py-4">
-    <div class="container-fluid px-4 py-4">
+<div class="container-fluid py-4">
+    @if (Model.productos != null && Model.productos.Any(p => p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo"))
+    {
+        var categorias = Model.productos
+            .Where(p => p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo")
+            .Select(p => p.Categoria ?? "General")
+            .Distinct()
+            .ToList();
 
-        @if (Model.productos != null && Model.productos.Any(p => p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo"))
+        foreach (var categoria in categorias)
         {
-            // Obtener categorías únicas de productos activos con stock
-            var categorias = Model.productos
-                                  .Where(p => p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo")
-                                  .Select(p => p.Categoria ?? "General")
-                                  .Distinct();
+            var productosPorCategoria = ObtenerProductosPorCategoria(categoria, Model.productos);
 
-            foreach (var categoria in categorias)
+            if (productosPorCategoria.Count == 0)
             {
-                <h3 class="mb-3">@categoria</h3>
+                continue; // Saltar categorías sin productos
+            }
 
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
-                    @foreach (var producto in Model.productos.Where(p => p.Categoria == categoria && p.Stock > 0 && p.Estado?.Trim().ToLower() == "activo"))
+            <h3 class="mb-3">@categoria</h3>
+
+            <div id="carousel-@categoria.Replace(" ", "")" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @for (int i = 0; i < productosPorCategoria.Count; i += 5)
                     {
-                        <div class="col rounded-3">
-                            <div class="card h-100 shadow-sm border-0 position-relative product-card">
-                                <div class="overflow-hidden position-relative">
-                                    <img src="@Html.DisplayFor(p => producto.ImagenUrl)"
-                                         alt="@producto.Nombre"
-                                         class="card-img-top img-fluid product-img"
-                                         onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'"
-                                         style="cursor:pointer; height: 220px; object-fit: cover;" />
-                                </div>
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+                                @foreach (var producto in productosPorCategoria.Skip(i).Take(5))
+                                {
+                                    <div class="col">
+                                        <div class="card shadow-sm position-relative product-card">
+                                            <div class="overflow-hidden position-relative">
+                                                <img src="@producto.ImagenUrl"
+                                                     alt="@producto.Nombre"
+                                                     class="card-img-top img-fluid product-img"
+                                                     onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'"
+                                                     style="cursor:pointer; height:180px; object-fit:cover;" />
+                                            </div>
+                                            <div class="card-body text-center rounded-bottom-3" style="background-color:#f2f2f2">
+                                                <h5 class="card-title text-truncate">@producto.Nombre</h5>
+                                                <p class="card-text text-muted small mb-2">@producto.Categoria</p>
+                                                <p class="card-text fw-bold text-truncate fs-5">$@producto.Precio</p>
 
-                                <!-- Body con fondo gris claro -->
-                                <div class="card-body text-center bg-light rounded-bottom-3">
-                                    <h5 class="card-title text-truncate">@producto.Nombre</h5>
-                                    <p class="card-text text-muted small mb-2">
-                                        @producto.Categoria
-                                    </p>
-                                    <p class="card-text fw-bold text-truncate fs-5">
-                                        $@producto.Precio
-                                    </p>
-
-                                    <!-- Badge de stock -->
-                                    @if (producto.Stock > 10)
-                                    {
-                                        <span class="badge bg-success">Disponible</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">¡Últimas unidades!</span>
-                                    }
-                                </div>
+                                                @if (producto.Stock > 10)
+                                                {
+                                                    <span class="badge bg-success">Disponible</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">¡Últimas unidades!</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     }
                 </div>
-            }
-        }
-        else
-        {
-            <div class="col-12">
-                <div class="alert alert-warning w-100 text-center" role="alert">
-                    Productos no disponibles
-                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@categoria.Replace(" ", "")" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel-@categoria.Replace(" ", "")" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
             </div>
         }
-    </div>
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-warning w-100 text-center" role="alert">
+                Productos no disponibles
+            </div>
+        </div>
+    }
 </div>
+
+
+
+
+    
+
+
 
     <div id="btnChat" class="position-fixed bottom-0 end-0 m-4" style="z-index: 1050;">
         <button class="btn btn-primary rounded-circle shadow-lg" style="width: 60px; height: 60px;">

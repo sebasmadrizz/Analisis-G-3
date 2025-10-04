@@ -21,9 +21,9 @@
 
   
 
-    <div class="container py-4" style="margin-top:100px; padding:45px;">
+    <div class="container-fluid " style="margin-top:100px; padding:45px;">
 
-        <div class="container-fluid px-4 py-4">
+        
 
             <div class="d-flex justify-content-end align-items-center mb-3">
                 <span class="me-2 fw-bold">Mostrar:</span>
@@ -37,64 +37,65 @@
                     </button>
                 }
             </div>
+        <div class="col-md-3 mb-4">
+            <div class="filter-card">
+                <h5 class="filter-title">Filtrar productos</h5>
+
+                @{
+                    var precioMax = string.IsNullOrEmpty(Request.Query["precioMax"])
+                    ? Model.productos.Max(p => p.Precio)
+                    : decimal.Parse(Request.Query["precioMax"]);
+
+                    var marcasSeleccionadas = string.IsNullOrEmpty(Request.Query["marcas"])
+                    ? new string[] { }
+                    : Request.Query["marcas"].ToString().Split(',');
+
+                    var minPrecio = Model.productos.Min(p => p.Precio);
+                    var maxPrecio = Model.productos.Max(p => p.Precio);
+                }
+
+                <form method="get">
+                    <input type="hidden" name="categoriaId" value="@Model.CategoriaId" />
+                    <input type="hidden" name="PagesIndex" value="@Model.ProductosPaginados.PageIndex" />
+                    <input type="hidden" name="PageSize" value="@Model.ProductosPaginados.PageSize" />
+
+                    <!-- Slider de precio -->
+                    <div class="filter-section">
+                        <label for="precioRange" class="filter-label">
+                            Precio: $<span id="precioValor">@precioMax</span>
+                        </label>
+                        <input type="range"
+                               name="precioMax"
+                               min="@minPrecio"
+                               max="@maxPrecio"
+                               value="@precioMax"
+                               id="precioRange"
+                               class="filter-range"
+                               onchange="this.form.submit()">
+                    </div>
+
+                    <!-- Marcas -->
+                    <div class="filter-section">
+                        <h6 class="filter-subtitle">Marcas</h6>
+                        @foreach (var marca in Model.productos.Select(p => p.Marca).Distinct())
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="marcas"
+                                       value="@marca"
+                                       @(marcasSeleccionadas.Contains(marca) ? "checked" : "")
+                                       onchange="this.form.submit()">
+                                <label class="form-check-label">@marca</label>
+                            </div>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5" id="productos">
-                <div class="col-md-3 mb-4">
-                    <div class="filter-card">
-                        <h5 class="filter-title">Filtrar productos</h5>
-
-                        @{
-                            var precioMax = string.IsNullOrEmpty(Request.Query["precioMax"])
-                            ? Model.productos.Max(p => p.Precio)
-                            : decimal.Parse(Request.Query["precioMax"]);
-
-                            var marcasSeleccionadas = string.IsNullOrEmpty(Request.Query["marcas"])
-                            ? new string[] { }
-                            : Request.Query["marcas"].ToString().Split(',');
-
-                            var minPrecio = Model.productos.Min(p => p.Precio);
-                            var maxPrecio = Model.productos.Max(p => p.Precio);
-                        }
-
-                        <form method="get">
-                            <input type="hidden" name="categoriaId" value="@Model.CategoriaId" />
-                            <input type="hidden" name="PagesIndex" value="@Model.ProductosPaginados.PageIndex" />
-                            <input type="hidden" name="PageSize" value="@Model.ProductosPaginados.PageSize" />
-
-                            <!-- Slider de precio -->
-                            <div class="filter-section">
-                                <label for="precioRange" class="filter-label">
-                                    Precio: $<span id="precioValor">@precioMax</span>
-                                </label>
-                                <input type="range"
-                                       name="precioMax"
-                                       min="@minPrecio"
-                                       max="@maxPrecio"
-                                       value="@precioMax"
-                                       id="precioRange"
-                                       class="filter-range"
-                                       onchange="this.form.submit()">
-                            </div>
-
-                            <!-- Marcas -->
-                            <div class="filter-section">
-                                <h6 class="filter-subtitle">Marcas</h6>
-                                @foreach (var marca in Model.productos.Select(p => p.Marca).Distinct())
-                                {
-                                    <div class="form-check">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               name="marcas"
-                                               value="@marca"
-                                               @(marcasSeleccionadas.Contains(marca) ? "checked" : "")
-                                               onchange="this.form.submit()">
-                                        <label class="form-check-label">@marca</label>
-                                    </div>
-                                }
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                
 
 
 
@@ -106,7 +107,7 @@
                                     && p.Precio <= precioMax
                                     && (marcasSeleccionadas.Length == 0 || marcasSeleccionadas.Contains(p.Marca))))
                     {
-                        <div class="col rounded-3 producto-item" data-precio="@producto.Precio" data-marca="@producto.Marca">
+                    <div class="col-lg-3 rounded-3 producto-item" data-precio="@producto.Precio" data-marca="@producto.Marca">
                             <div class="card h-100 shadow-sm border-0 position-relative product-card">
                                 <div class="overflow-hidden position-relative">
                                     <img src="@Html.DisplayFor(p => producto.ImagenUrl)"
@@ -136,7 +137,7 @@
                     </div>
                 </div>
             }
-        </div>
+        
         </div>
     </div>
     <div id="btnChat" class="position-fixed bottom-0 end-0 m-4" style="z-index: 1050;">
