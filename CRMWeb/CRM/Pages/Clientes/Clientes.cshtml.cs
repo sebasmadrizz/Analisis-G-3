@@ -32,7 +32,6 @@ namespace Web.Pages.Clientes
 				clientes = new List<ClienteResponse>();
 				return;
 			}
-
 			var json = await resp.Content.ReadAsStringAsync();
 			clientes = JsonSerializer.Deserialize<List<ClienteResponse>>(json, new JsonSerializerOptions
 			{
@@ -44,10 +43,7 @@ namespace Web.Pages.Clientes
 		{
 			var endpoint = _configuracion.ObtenerMetodo("EndPointsClientes", "EliminarCliente");
 			var url = string.Format(endpoint, idCliente);
-
 			using var http = new HttpClient();
-
-
 			var content = new StringContent("", Encoding.UTF8, "application/json");
 			var resp = await http.PutAsync(url, content);
 			var body = await resp.Content.ReadAsStringAsync();
@@ -58,8 +54,6 @@ namespace Web.Pages.Clientes
 		}
 		public async Task<IActionResult> OnPostAgregarCliente()
 		{
-
-
 			var endpoint = _configuracion.ObtenerMetodo("EndPointsClientes", "AgregarCliente");
 			using var http = new HttpClient();
 
@@ -74,16 +68,11 @@ namespace Web.Pages.Clientes
 				FechaActualizacion = DateTime.UtcNow
 			};
 
-
-
 			var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions { WriteIndented = true });
 			Console.WriteLine(" JSON que se enviará al API:");
 			Console.WriteLine(json);
-
 			var resp = await http.PostAsJsonAsync(endpoint, payload);
 			var body = await resp.Content.ReadAsStringAsync();
-
-
 
 			return RedirectToPage();
 		}
@@ -104,25 +93,19 @@ namespace Web.Pages.Clientes
 			if (modelo is null) return NotFound();
 
 			
-			return Partial("_FormularioEditarCliente", modelo);
+			return Partial("_FormularioClienteEditar", modelo);
 		}
 
 
 		public async Task<IActionResult> OnPostEditarCliente(Cliente cliente)
 		{
-			if (cliente.ClienteId == Guid.Empty)
-			{
-				ModelState.AddModelError(string.Empty, "Identificador inválido.");
-				return Partial("_FormularioEditarCliente", cliente);
-			}
 
 			if (!ModelState.IsValid)
 				return Partial("_FormularioEditarCliente", cliente);
 
-			string endpoint = _configuracion.ObtenerMetodo("ApiEndPointsClientes", "EditarCliente");
+			string endpoint = _configuracion.ObtenerMetodo("EndPointsClientes", "EditarCliente");
 			using var http = new HttpClient();
-			http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
-				"Bearer", HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Token")?.Value);
+			
 
 			var resp = await http.PutAsJsonAsync(string.Format(endpoint, cliente.ClienteId), new ClienteRequest
 			{
@@ -138,8 +121,8 @@ namespace Web.Pages.Clientes
 			if (resp.IsSuccessStatusCode)
 				return new JsonResult(new { ok = true });
 
-			var body = await resp.Content.ReadAsStringAsync();
-			ModelState.AddModelError(string.Empty, $"Error API: {body}");
+			
+			
 			return Partial("_FormularioEditarCliente", cliente);
 		}
 	}

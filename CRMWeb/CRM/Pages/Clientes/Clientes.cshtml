@@ -19,21 +19,22 @@
 
         .page-container {
             display: flex;
-            min-height: 100vh; 
+            min-height: 100vh;
             width: 100%;
         }
 
         .account-sidebar {
             width: 250px;
             min-width: 250px;
-            flex-shrink: 0; 
+            flex-shrink: 0;
         }
 
         .main-content-container {
-            flex-grow: 1; 
-            overflow-y: auto; 
+            flex-grow: 1;
+            overflow-y: auto;
             padding: 2rem;
         }
+
         .account-sidebar .nav-link {
             display: flex;
             align-items: center;
@@ -58,6 +59,7 @@
                 margin-right: 0.75rem;
                 font-size: 1.25rem;
             }
+
         .page-title {
             font-size: 2rem;
             font-weight: 600;
@@ -66,7 +68,7 @@
         }
 
         .main-content-container .table-responsive {
-            max-width: 1400px; 
+            max-width: 1400px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -75,18 +77,18 @@
 
 <body>
 
-   
+
     <div class="modal fade" id="modalEditarCliente" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" id="modalEditarClienteContent">
-             
             </div>
         </div>
     </div>
 
+
     <div class="page-container">
 
-          <aside class="account-sidebar">
+        <aside class="account-sidebar">
             <div class="card-soft">
                 <nav class="nav flex-column">
                     <a class="nav-link active" data-bs-toggle="tab" href="#table-clientes">
@@ -264,10 +266,10 @@
 
             </div>
         </div>
-           
-            
 
-        </div>
+
+
+    </div>
 
     <div class="modal fade" id="agregarClienteModal" tabindex="-1" aria-labelledby="agregarClienteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -345,66 +347,82 @@
 
 
 
-
-
     @section Scripts {
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
         <script>
             $(document).ready(function () {
-                $('#clientesTable').DataTable({
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                    }
-                });
+              // Inicializar DataTables
+              $('#clientesTable').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' }
+              });
+              $('#cuentasTable').DataTable({
+                language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' }
+              });
 
-                
+              
+              $(document).on('click', '.btn-editar', function () {
+                var clienteId = $(this).data('id');
+
+                $.get(
+                  '@Url.Page("/Clientes/Clientes", null, new { handler = "EditarFormulario" })',
+                  { idCliente: clienteId }
+                )
+                .done(function (data) {
+                  $('#modalEditarClienteContent').html(data);
+                  var modal = new bootstrap.Modal(document.getElementById('modalEditarCliente'));
+                  modal.show();
+                })
+                .fail(function (jqXHR) {
+                  alert(
+                    'No se pudo cargar el formulario.\n' +
+                    'Status: ' + jqXHR.status + '\n' +
+                    (jqXHR.responseText || '')
+                  );
+                });
+              });
+
+              
+              $(document).on('submit', '#formCliente', function (e) {
+                e.preventDefault();
+
+                var $form = $(this);
+                var token = $form.find('input[name="__RequestVerificationToken"]').val();
+
+                $.ajax({
+                  type: 'POST',
+                  url: '@Url.Page("/Clientes/Clientes", null, new { handler = "EditarCliente" })',
+                  data: $form.serialize(),
+                  headers: { 'RequestVerificationToken': token }
+                })
+                .done(function (response) {
+                  
+                  if (response && response.ok === true) {
+                    var modalEl = document.getElementById('modalEditarCliente');
+                    var modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                    modal.hide();
+                    location.reload();
+                  } else {
+                   
+                    $('#modalEditarClienteContent').html(response);
+                  }
+                })
+                .fail(function (jqXHR) {
+                  alert(
+                    'Error al procesar la solicitud.\n' +
+                    'Status: ' + jqXHR.status + '\n' +
+                    (jqXHR.responseText || '')
+                  );
+                });
+              });
             });
         </script>
-        <script>
-            $(document).ready(function () {
-                $('#cuentasTable').DataTable({
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
-                    }
-                });
-
-
-            });
-        </script>
-        <script>
-            $(document).ready(function () {
-
-                $('.btn-editar').click(function () {
-                    var clienteId = $(this).data('id');
-                    $.get('/Clientes?handler=EditarFormulario', { idCliente: clienteId }, function (data) {
-                        $('#modalEditarClienteContent').html(data);
-                    });
-                });
-
-             
-                $(document).on('submit', '#formCliente', function (e) {
-                    e.preventDefault();
-                    var form = $(this);
-                    $.ajax({
-                        type: 'POST',
-                        url: '/Clientes?handler=EditarCliente',
-                        data: form.serialize(),
-                        success: function (response) {
-                            if (response.ok) {
-                                $('#modalEditarCliente').modal('hide');
-                                location.reload(); 
-                            } else {
-                            
-                                $('#modalEditarClienteContent').html(response);
-                            }
-                        },
-                        error: function () {
-                            alert('Error al procesar la solicitud.');
-                        }
-                    });
-                });
-            });
-        </script>
-
     }
+
 </body>
+
+
+
+
+
+
+

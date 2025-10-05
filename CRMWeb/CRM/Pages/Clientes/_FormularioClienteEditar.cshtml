@@ -7,7 +7,7 @@
 </div>
 
 <div class="modal-body">
-    <form id="formCliente" method="post">
+    <form id="formCliente" method="post" asp-antiforgery="true">
         @Html.AntiForgeryToken()
 
         <input type="hidden" asp-for="ClienteId" />
@@ -16,7 +16,11 @@
 
         <div class="mb-3">
             <label asp-for="TipoCliente" class="form-label"></label>
-            <input asp-for="TipoCliente" class="form-control" />
+            <select asp-for="TipoCliente" class="form-select" required>
+                <option value="" disabled selected>Seleccione…</option>
+                <option value="Persona Física">Persona Física</option>
+                <option value="Persona Jurídica">Persona Jurídica</option>
+            </select>
             <span asp-validation-for="TipoCliente" class="text-danger"></span>
         </div>
 
@@ -41,7 +45,7 @@
 
         <div class="mb-3">
             <label asp-for="Correo" class="form-label"></label>
-            <input asp-for="Correo" class="form-control" />
+            <input asp-for="Correo" class="form-control" type="email" />
             <span asp-validation-for="Correo" class="text-danger"></span>
         </div>
 
