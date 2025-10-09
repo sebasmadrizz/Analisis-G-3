@@ -6,6 +6,7 @@ BEGIN
   SELECT 
     C.CATEGORIAS_ID AS CategoriasId,
     C.NOMBRE AS Nombre,
+    C.ICONO AS Icono,
     C.PADRE_ID AS PadreId,
     CP.NOMBRE AS NombrePadre,
     C.DESCRIPCION AS Descripcion,

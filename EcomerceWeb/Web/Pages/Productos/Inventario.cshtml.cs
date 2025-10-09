@@ -225,6 +225,42 @@ namespace Web.Pages.Productos
 
 
         }
+        public async Task<IActionResult> OnGetExportExcel()
+        {
+            string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ExportarExcel");
+            using var cliente = new HttpClient();
+            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.User.Claims.Where(c => c.Type == "Token").FirstOrDefault().Value);
+
+            var respuesta = await cliente.GetAsync(endpoint, HttpCompletionOption.ResponseHeadersRead);
+            respuesta.EnsureSuccessStatusCode();
+
+            var stream = await respuesta.Content.ReadAsStreamAsync();
+
+            
+            return File(
+                stream,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Inventario.xlsx"
+            );
+        }
+        public async Task<IActionResult> OnGetExportPDF()
+        {
+            string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ExportarPDF");
+            using var cliente = new HttpClient();
+            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.User.Claims.Where(c => c.Type == "Token").FirstOrDefault().Value);
+
+            var respuesta = await cliente.GetAsync(endpoint, HttpCompletionOption.ResponseHeadersRead);
+            respuesta.EnsureSuccessStatusCode();
+
+            var stream = await respuesta.Content.ReadAsStreamAsync();
+
+
+            return File(
+                stream,
+                "application/pdf",
+                "Inventario.pdf"
+                        );
+        }
 
     }
 }

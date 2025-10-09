@@ -1,8 +1,10 @@
 ﻿using Abstracciones.Interfaces.API;
 using Abstracciones.Interfaces.Flujo;
+using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Modelos;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Reglas;
 
 namespace API.Controllers
 {
@@ -13,11 +15,13 @@ namespace API.Controllers
     {
         private readonly IProductosFlujo _productosFlujo;
         private readonly ILogger<ProductosController> _logger;
+        private readonly IExportarArchivosReglas _exportarArchivosReglas;
 
-        public ProductosController(IProductosFlujo productosFlujo, ILogger<ProductosController> logger)
+        public ProductosController(IExportarArchivosReglas exportarArchivosReglas, IProductosFlujo productosFlujo, ILogger<ProductosController> logger)
         {
             _productosFlujo = productosFlujo;
             _logger = logger;
+            _exportarArchivosReglas = exportarArchivosReglas;
         }
         [Authorize(Roles = "1")]
         [HttpPost]
@@ -84,6 +88,19 @@ namespace API.Controllers
             var resultado = await _productosFlujo.ObtenerProductosXCategoria(idCategoria, pageIndex, pageSize);
             return Ok(resultado);
         }
+        [Authorize(Roles = "1")]
+        [HttpGet("ExportarArchivoExel")]
+
+        public async Task<IActionResult> ExportExel()
+        {
+            var productos = await _productosFlujo.Obtener();
+            var excelBytes = _exportarArchivosReglas.ExportExel(productos);
+            return File(
+            excelBytes,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Inventario.xlsx"
+        );
+        }
 
         private async Task<bool> VerificarProductosExiste(Guid Id)
         {
@@ -92,6 +109,19 @@ namespace API.Controllers
             if (resultadoVehiculoExiste != null)
                 ResultadoValidacion = true;
             return ResultadoValidacion;
+        }
+        [Authorize(Roles = "1")]
+        [HttpGet("ExportarArchivoPDF")]
+
+        public async Task<IActionResult> ExportPdf()
+        {
+            var productos = await _productosFlujo.Obtener();
+            var pdfBytes = _exportarArchivosReglas.ExportPdf(productos);
+            return File(
+        pdfBytes,
+        "application/pdf",   
+        "Inventario.pdf"     
+    );
         }
     }
 }

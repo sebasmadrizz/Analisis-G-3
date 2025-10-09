@@ -2,6 +2,7 @@
 using Abstracciones.Interfaces.DA;
 using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Modelos;
+using Flujo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,6 +57,50 @@ namespace API.Controllers
             if (resultado == null)
                 return BadRequest(new { existeCorreo = true });
             return Ok(resultado);
+        }
+
+        [Authorize(Roles = "2")]
+        [HttpPut("desactivar-user/{idUsuario}")]
+        public async Task<IActionResult> Desactivar(Guid idUsuario)
+        {
+            string idUsuarioStr = HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == "idUsuario")?.Value;
+
+            if (string.IsNullOrEmpty(idUsuarioStr))
+                return Unauthorized("Token inválido.");
+
+            if (!Guid.TryParse(idUsuarioStr, out Guid idUsuarioLogueado))
+                return Unauthorized("Token inválido.");
+
+            if (idUsuario != idUsuarioLogueado)
+                return BadRequest("No puedes desactivar a otro usuario."); 
+
+            if (!await VerificarExistenciaUser(idUsuario))
+                return NotFound("El usuario no está registrado");
+
+            var resultado = await _usuarioFlujo.Desactivar(idUsuario);
+
+            return Ok(resultado);
+        }
+        
+        
+        
+
+        private async Task<bool> VerificarExistenciaUser(Guid idUsuario)
+        {
+            var ResultadoValidacion = false;
+            var resultadoUserExiste = await _usuarioFlujo.DetalleUsuario(idUsuario);
+            if (resultadoUserExiste != null)
+                ResultadoValidacion = true;
+            return ResultadoValidacion;
+          }  
+         
+        [Authorize(Roles = "2")]
+        [HttpPost("CambiarContrasena")]
+
+        public async Task<IActionResult> CambiarContraseña([FromBody] CambiarContraseña data)
+        {
+            return Ok(await _usuarioFlujo.CambiarContraseña(data));//ver si siempre sirve
         }
     }
 }

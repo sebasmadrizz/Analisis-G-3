@@ -35,10 +35,16 @@ namespace Reglas
 
         private async Task<bool> VerficarLoginAsync(Login login)
         {
-            var usuario = await _usuarioDA.ObtenerUsuario(new Usuario { NombreUsuario = login.NombreUsuario, CorreoElectronico = login.CorreoElectronico });
-            if (usuario == null)
+            var usuario = await _usuarioDA.ObtenerUsuario(new Usuario
+            {
+                NombreUsuario = login.NombreUsuario,
+                CorreoElectronico = login.CorreoElectronico
+            });
+
+            if (usuario == null || usuario.IdEstado != 1)
                 return false;
-            return (login != null && login.PasswordHash == usuario.PasswordHash);
+
+            return login.PasswordHash == usuario.PasswordHash;
 
         }
 

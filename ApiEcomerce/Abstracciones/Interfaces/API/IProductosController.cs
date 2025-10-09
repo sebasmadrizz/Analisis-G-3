@@ -21,5 +21,7 @@ namespace Abstracciones.Interfaces.API
 
         Task<IActionResult> Eliminar(Guid IdProducto);
         Task<IActionResult> ListarProductosPaginado(int pageIndex, int pageSize);
+         Task<IActionResult> ExportExel();
+         Task<IActionResult> ExportPdf();
     }
 }

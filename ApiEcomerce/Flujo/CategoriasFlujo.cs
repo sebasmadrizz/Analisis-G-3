@@ -8,6 +8,8 @@ using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Modelos;
 using static Abstracciones.Modelos.Categorias;
+using Servicios;
+
 
 namespace Flujo
 {
@@ -15,17 +17,23 @@ namespace Flujo
 	{
 		private readonly ICategoriasDA _categoriasDA;
         private readonly ICategoriasReglas _categoriaReglas;
+        private readonly LevenshteinService _levService;
 
-        public CategoriasFlujo(ICategoriasDA categoriasDA, ICategoriasReglas categoriasReglas)
-		{
-			_categoriasDA = categoriasDA;
+
+        public CategoriasFlujo(ICategoriasDA categoriasDA, ICategoriasReglas categoriasReglas, LevenshteinService levService)
+        {
+            _categoriasDA = categoriasDA ;
             _categoriaReglas = categoriasReglas;
-
+            _levService = levService;
         }
 
         public async Task<Guid> AgregarHija(CategoriasRequestHija categorias)
         {
             return await _categoriasDA.AgregarHija(categorias);
+        }
+        public async Task<IEnumerable<CategoriasResponse>> Obtener()
+        {
+            return await _categoriasDA.Obtener();
         }
 
         public async Task<Guid> AgregarPadre(CategoriasRequestPadre categorias)
@@ -43,9 +51,9 @@ namespace Flujo
             return await _categoriasDA.Desactivar(IdCategoria);
         }
 
-        public async Task<IEnumerable<CategoriasResponse>> Obtener()
+        public async Task<(IEnumerable<CategoriasResponse> categorias, int total)> ObtenerPaginado(int start, int length)
         {
-            return await _categoriasDA.Obtener();
+            return await _categoriasDA.ObtenerPaginado(start, length);
         }
 
         public async Task<CategoriasResponse> ObtenerPorId(Guid IdCategoria)
@@ -58,11 +66,11 @@ namespace Flujo
             return await _categoriasDA.ObtenerHijas(idPadre);
         }
 
-        public async Task<IEnumerable<CategoriasResponse>> ObtenerHijasRecursivo(Guid idPadre)
+     /*  public async Task<IEnumerable<CategoriasResponse>> ObtenerHijasRecursivo(Guid idPadre)
         {
             var categorias = await _categoriasDA.Obtener();
             return _categoriaReglas.ObtenerHijasRecursivo(categorias, idPadre);
-        }
+        }*/
 
         public async Task<IEnumerable<CategoriasResponse>> ObtenerPadres()
         {
@@ -89,6 +97,31 @@ namespace Flujo
         public async Task<Guid> ActivarHijas(Guid idCategoria)
         {
             return await _categoriasDA.ActivarHijas(idCategoria);
+        }
+
+        public Task<IEnumerable<CategoriasResponse>> ObtenerHijasRecursivo(Guid idPadre)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>
+         ObtenerCategoriasPaginadasAsync(int start, int length, string searchTerm)
+        {
+            var result = await _categoriasDA.ObtenerPaginadoBusquedaAsync(start, length, searchTerm);
+            return result;
+        }
+
+
+
+        public async Task<(IEnumerable<CategoriasResponse> categorias, int total, int filtradas, string sugerencia)>
+    BuscarCategoriasAsync(int start, int length, string searchTerm)
+        {
+            return await _categoriaReglas.ObtenerCategoriasApiAsync(start, length, searchTerm);
+        }
+
+        public async Task<IEnumerable<CategoriaPadreConHijas>> ObtenerCategoriaPadreConHijas()
+        {
+            return await _categoriasDA.ObtenerCategoriaPadreConHijas();
         }
     }
 
