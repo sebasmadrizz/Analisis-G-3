@@ -113,7 +113,7 @@
     <Build Include="dbo\Stored Procedures\DESCONTAR_STOCK.sql" />
     <Build Include="dbo\Stored Procedures\DEVOLVER_STOCK.sql" />
     <Build Include="dbo\Stored Procedures\EDITAR_PROVEEDOR.sql" />
-    <Build Include="dbo\Stored Procedures\BUSCAR_PRODUCTOS.sql" />
+    <Build Include="dbo\Stored Procedures\VER_PRODUCTOS_FTS_OPTIMIZADO.sql" />
     <Build Include="dbo\Stored Procedures\Copia de VER_PRODUCTOS_PAGINADO.sql" />
     <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_PADRES.sql" />
     <Build Include="dbo\Stored Procedures\CONTAR_HIJAS_ACTIVAS.sql" />
