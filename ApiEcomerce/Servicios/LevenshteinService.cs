@@ -114,5 +114,39 @@ namespace Servicios
             if (len <= 4) return 2;
             return Math.Min((int)Math.Ceiling(len * 0.25), 4);
         }
+        public List<T> AplicarRankingMultipleCampos<T>(
+    IEnumerable<T> items,
+    string searchTerm,
+    params Func<T, string>[] campos
+)
+        {
+            if (campos == null || campos.Length == 0)
+                throw new ArgumentException("Debe especificar al menos un campo para aplicar el ranking.");
+
+            var normalizadoTerm = Normalizar(searchTerm);
+            int threshold = CalcularUmbral(normalizadoTerm);
+
+            var ranked = items
+                .Select(item =>
+                {
+                    // Calcula distancia para todos los campos
+                    var distancias = campos.Select(f => CalcularDistancia(Normalizar(f(item)), normalizadoTerm)).ToArray();
+                    var isPrefix = campos.Any(f => Normalizar(f(item)).StartsWith(normalizadoTerm));
+
+                    return new
+                    {
+                        Item = item,
+                        DistanciaMin = distancias.Min(),
+                        IsPrefix = isPrefix
+                    };
+                })
+                .Where(x => x.DistanciaMin <= threshold || x.IsPrefix)
+                .OrderByDescending(x => x.IsPrefix)
+                .ThenBy(x => x.DistanciaMin)
+                .Select(x => x.Item)
+                .ToList();
+
+            return ranked;
+        }
     }
 }

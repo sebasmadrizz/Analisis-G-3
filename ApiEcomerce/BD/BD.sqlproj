@@ -136,6 +136,7 @@
     <Build Include="dbo\Stored Procedures\VER_CATEGORIAS_FTS_API_OPT.sql" />
     <Build Include="dbo\Functions\Levenshtein.sql" />
     <Build Include="dbo\Stored Procedures\VER_PRODUCTOS_INDEX.sql" />
+    <Build Include="dbo\Stored Procedures\OBTENER_PRODUCTOS_X_CATEGORIA.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assemblies\SQLCLRFunc.dll" />

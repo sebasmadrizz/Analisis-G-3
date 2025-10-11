@@ -2,6 +2,8 @@
 using Abstracciones.Modelos;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using System.Data;
+using static Abstracciones.Modelos.Categorias;
 
 namespace DA
 {
@@ -144,6 +146,37 @@ namespace DA
             string query = @"VER_PRODUCTOS_INDEX";
             var resultadoConsulta = await _sqlConnection.QueryAsync<ProductosResponse>(query);
             return resultadoConsulta;
+        }
+
+        public async Task<IEnumerable<ProductosResponse>> ObtenerProductosPorCategoria(Guid categoriaId)
+        {
+            string query = @"OBTENER_PRODUCTOS_X_CATEGORIA";
+            var resultadoConsulta = await _sqlConnection.QueryAsync<ProductosResponse>(query, new { CategoriaId = categoriaId });
+            return resultadoConsulta;
+        }
+
+        public async Task<(Paginacion<ProductosResponse> productos, int total, int filtradas, bool usaFallback)> 
+            ObtenerProductosBuscadosFTS(int PageIndex, int PageSize, string searchTerm)
+        {
+            using var multi = await _sqlConnection.QueryMultipleAsync(
+                "VER_PRODUCTOS_FTS_OPTIMIZADO",
+                new { PageIndex = PageIndex, PageSize = PageSize, SearchTerm = searchTerm },
+                commandType: CommandType.StoredProcedure
+            );
+
+            var metadata = await multi.ReadFirstAsync<dynamic>();
+            var productos = (await multi.ReadAsync<ProductosResponse>()).ToList();
+
+            int total = metadata.TotalRegistros;
+            int filtradas = metadata.RegistrosFiltrados;
+            bool usaFallback = metadata.UsaFallback;
+
+            var totalPages = (int)Math.Ceiling((double)filtradas / PageSize);
+            var productosPaginados = new Paginacion<ProductosResponse>(productos, PageIndex, totalPages);
+
+
+
+            return (productosPaginados, total, filtradas, usaFallback);
         }
     }
 }

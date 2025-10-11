@@ -1,10 +1,17 @@
 ﻿using Abstracciones.Modelos;
+using static Abstracciones.Modelos.Categorias;
 
 namespace Abstracciones.Interfaces.DA
 {
     public interface IProductosDA
     {
         Task<IEnumerable<ProductosResponse>> ObtenerProductosIndex();
+        Task<IEnumerable<ProductosResponse>> ObtenerProductosPorCategoria(Guid categoriaId);
+        Task<(Paginacion<ProductosResponse> productos, int total, int filtradas, bool usaFallback)>
+          ObtenerProductosBuscadosFTS(int PageIndex, int PageSize, string searchTerm);
+
+
+
         Task<IEnumerable<ProductosResponse>> Obtener();
        
         Task<ProductosResponse> ObtenerPorId(Guid IdProducto);

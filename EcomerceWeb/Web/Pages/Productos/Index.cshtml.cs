@@ -40,28 +40,9 @@ namespace Web.Pages.Productos
 
             }
         }
-        /*
-        public async Task OnPost(int PagesIndex = 1, int PageSize = 5)
-        {
-
-
-            string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ObtenerProductosPaginados");
-            var cliente = new HttpClient();
-            var solicitud = new HttpRequestMessage(HttpMethod.Get, string.Format(endpoint, PagesIndex, PageSize));
-
-            var respuesta = await cliente.SendAsync(solicitud);
-            respuesta.EnsureSuccessStatusCode();
-            if (respuesta.StatusCode == HttpStatusCode.OK)
-            {
-                var resultado = await respuesta.Content.ReadAsStringAsync();
-                var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                ProductosPaginados = JsonSerializer.Deserialize<ProductoPaginado>(resultado, opciones);
-
-                productos = ProductosPaginados.Items;
-
-            }
-        }
-        */
+        
+        
+        
         public async Task<IActionResult> OnGetObtenerCategoriasPadres()
         {
             var cliente = new HttpClient();

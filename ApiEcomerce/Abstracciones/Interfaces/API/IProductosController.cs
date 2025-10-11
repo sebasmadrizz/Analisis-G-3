@@ -11,6 +11,9 @@ namespace Abstracciones.Interfaces.API
     public interface IProductosController
     {
         Task<IActionResult> ObtenerProductosIndex();
+        Task<IActionResult> ExportExelPorCategoria(Guid categoriaId);
+        Task<IActionResult> ExportPdfPorCategoria(Guid categoriaId);
+        Task<IActionResult> ObtenerProductosBuscadosFTS(int PageIndex, int PageSize, string searchTerm);
 
         Task<IActionResult> Obtener();
         Task<IActionResult> ObtenerProductosBuscados(string nombre);

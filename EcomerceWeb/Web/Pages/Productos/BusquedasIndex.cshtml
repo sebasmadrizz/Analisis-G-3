@@ -1,0 +1,226 @@
+﻿@page
+@model Web.Pages.Productos.BusquedasIndexModel
+@{
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+<head>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <link href="~/css/tienda.css" rel="stylesheet" />
+
+    <link href="~/css/slider.css" rel="stylesheet" />
+    <link href="~/css/sidebar.css" rel="stylesheet" />
+    <link href="~/css/Filtros.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@6.2.4/dist/simplebar.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/simplebar@6.2.4/dist/simplebar.min.js"></script>
+    
+
+</head>
+
+<body class="bg-light">
+
+  
+
+    <div class="container-fluid " style="margin-top:100px; padding:45px;">
+
+        
+
+            <div class="d-flex justify-content-end align-items-center mb-3">
+                <span class="me-2 fw-bold">Mostrar:</span>
+
+                @foreach (var size in new int[] { 1, 3, 4, 50 })
+                {
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm me-1 @(Model.ProductosPaginados.PageSize == size ? "active" : "")"
+                        onclick="window.location='?PagesIndex=@Model.ProductosPaginados.PageIndex&PageSize=@size@(Request.Query["searchTerm"].ToString() != "" ? "&searchTerm=" + Request.Query["searchTerm"] : "")'">
+                        @size
+                    </button>
+                }
+            </div>
+        <div class="col-md-3 mb-4">
+            <div class="filter-card">
+                <h5 class="filter-title">Filtrar productos</h5>
+
+                @{
+                    var precioMax = string.IsNullOrEmpty(Request.Query["precioMax"])
+                    ? Model.productos.Max(p => p.Precio)
+                    : decimal.Parse(Request.Query["precioMax"]);
+
+                    var marcasSeleccionadas = string.IsNullOrEmpty(Request.Query["marcas"])
+                    ? new string[] { }
+                    : Request.Query["marcas"].ToString().Split(',');
+
+                    var minPrecio = Model.productos.Min(p => p.Precio);
+                    var maxPrecio = Model.productos.Max(p => p.Precio);
+                }
+
+                <form method="get">
+                    <input type="hidden" name="searchTerm" value="@Model.SearchTerm" />
+                    
+                    <input type="hidden" name="PagesIndex" value="@Model.ProductosPaginados.PageIndex" />
+                    <input type="hidden" name="PageSize" value="@Model.ProductosPaginados.PageSize" />
+
+                    <!-- Slider de precio -->
+                    <div class="filter-section">
+                        <label for="precioRange" class="filter-label">
+                            Precio: $<span id="precioValor">@precioMax</span>
+                        </label>
+                        <input type="range"
+                               name="precioMax"
+                               min="@minPrecio"
+                               max="@maxPrecio"
+                               value="@precioMax"
+                               id="precioRange"
+                               class="filter-range"
+                               onchange="this.form.submit()">
+                    </div>
+
+                    <!-- Marcas -->
+                    <div class="filter-section">
+                        <h6 class="filter-subtitle">Marcas</h6>
+                        @foreach (var marca in Model.productos.Select(p => p.Marca).Distinct())
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="marcas"
+                                       value="@marca"
+                                       @(marcasSeleccionadas.Contains(marca) ? "checked" : "")
+                                       onchange="this.form.submit()">
+                                <label class="form-check-label">@marca</label>
+                            </div>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5" id="productos">
+                
+
+
+
+                @if (Model.productos != null && Model.productos.Any())
+                {
+
+                    @foreach (var producto in Model.productos.Where(p => p.Stock > 0
+                                    && p.Estado?.Trim().ToLower() == "activo"
+                                    && p.Precio <= precioMax
+                                    && (marcasSeleccionadas.Length == 0 || marcasSeleccionadas.Contains(p.Marca))))
+                    {
+                    <div class="col-lg-3 rounded-3 producto-item" data-precio="@producto.Precio" data-marca="@producto.Marca">
+                            <div class="card h-100 shadow-sm border-0 position-relative product-card">
+                                <div class="overflow-hidden position-relative">
+                                    <img src="@Html.DisplayFor(p => producto.ImagenUrl)"
+                                         alt="@producto.Nombre"
+                                         class="card-img-top img-fluid product-img"
+                                         onclick="location.href='@Url.Page("./DetalleProducto", new { IdProducto = producto.IdProducto })'"
+                                         style="cursor:pointer; height: 220px; object-fit: cover;" />
+                                </div>
+                                <div class="card-body text-center bg-light rounded-bottom-3">
+                                    <h5 class="card-title text-truncate">@producto.Nombre</h5>
+                                    <p class="card-text text-muted small mb-2">@producto.Categoria</p>
+                                    <p class="card-text fw-bold text-truncate fs-5">$@producto.Precio</p>
+                                    <span class="badge @(producto.Stock > 10 ? "bg-success" : "bg-danger")">
+                                        @(producto.Stock > 10 ? "Disponible" : "¡Últimas unidades!")
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+            }
+            else
+            {
+                <div class="col-12">
+                    <div class="alert alert-warning w-100 text-center" role="alert">
+                        Productos no disponibles
+                    </div>
+                </div>
+            }
+        
+        </div>
+    </div>
+    <div id="btnChat" class="position-fixed bottom-0 end-0 m-4" style="z-index: 1050;">
+        <button class="btn btn-primary rounded-circle shadow-lg" style="width: 60px; height: 60px;">
+            <i class="bi bi-chat-dots fs-3 text-white"></i>
+        </button>
+    </div>
+
+    <div id="chatBox" class="position-fixed bottom-0 end-0 m-4 bg-white rounded shadow" style="width: 350px; height: 450px; display: none; z-index: 1051;">
+
+
+        <div class="bg-primary text-white p-3 d-flex justify-content-between align-items-center rounded-top">
+            <strong>Chat Sumicom</strong>
+            <button class="btn btn-sm btn-light text-primary rounded-circle" onclick="cerrarChat()">&times;</button>
+        </div>
+
+
+        <div id="chatMessages" class="p-3 flex-grow-1 overflow-auto" style="height: 230px;">
+            <div class="bg-light p-3 rounded shadow-sm mb-3">
+                <p class="mb-1">Hola 👋</p>
+                <small>¿En qué podemos ayudarte?</small>
+            </div>
+
+        </div>
+
+
+        <div class="p-3 border-top d-flex gap-2">
+            <input id="chatInput" type="text" class="form-control" placeholder="Escribe tu mensaje..." aria-label="Mensaje">
+            <button id="sendBtn" class="btn btn-primary d-flex align-items-center">
+                Enviar <i class="bi bi-send-fill ms-2"></i>
+            </button>
+        </div>
+
+    </div>
+
+
+
+    <nav aria-label="Paginacion de productos">
+        <ul class="pagination justify-content-center">
+            @if (Model.ProductosPaginados.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?PagesIndex=@(Model.ProductosPaginados.PageIndex - 1)&PageSize=@Model.ProductosPaginados.PageSize&searchTerm=@Model.SearchTerm">Anterior</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">Anterior</span>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.ProductosPaginados.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.ProductosPaginados.PageIndex ? "active" : "")">
+                    <a class="page-link" href="?PagesIndex=@i&PageSize=@Model.ProductosPaginados.PageSize&searchTerm=@Model.SearchTerm">@i</a>
+                </li>
+            }
+
+            @if (Model.ProductosPaginados.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?PagesIndex=@(Model.ProductosPaginados.PageIndex + 1)&PageSize=@Model.ProductosPaginados.PageSize&searchTerm=@Model.SearchTerm">Siguiente</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">Siguiente</span>
+                </li>
+            }
+        </ul>
+    </nav>
+
+
+
+
+</body>
+@section Scripts {
+    <script src="~/js/chatbox.js"></script>
+    <script src="~/js/busquedasindex.js"></script>
+    
+
+
+}

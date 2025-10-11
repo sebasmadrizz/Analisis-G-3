@@ -71,6 +71,7 @@ namespace Abstracciones.Modelos
         public string Estado { get; set; }
         public Guid? IdCategoria { get; set; }
         public Guid? IdProveedor { get; set; }
+        public int Score{ get; set; }
     }
 
     public class ProductoConImagenRequest

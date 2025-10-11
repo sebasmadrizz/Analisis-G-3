@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Net;
 using System.Text.Json;
 
@@ -32,8 +33,16 @@ namespace Web.Pages.Productos
 
         [BindProperty]
         public ProductoPaginado ProductosPaginados { get; set; } = default!;
-        
-        
+        [BindProperty(SupportsGet = false)]
+        public string opcionExportar{ get; set; }
+        [BindProperty(SupportsGet = false)]
+        public Guid categoriaID{ get; set; }
+        [BindProperty]
+        public string SearchTerm { get; set; }
+        [BindProperty]
+        public ProductosBuscados productosBuscados { get; set; } = default!;
+
+
         public InventarioModel(IConfiguracion configuracion, Microsoft.AspNetCore.Hosting.IWebHostEnvironment environment)
         {
             _configuracion = configuracion;
@@ -59,6 +68,34 @@ namespace Web.Pages.Productos
                 await ObtenerProveedoresAsync();
                 await ObtenerCategoriasAsync();
 
+
+            }
+        }
+        public async Task OnPostBuscarProductos(int PagesIndex = 1, int PageSize = 10)
+        {
+            if (SearchTerm != "")
+            {
+                
+                string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "BusquedasIndex");
+                string baseUrl = string.Format(endpoint, PagesIndex, PageSize);
+
+                var finalUrl = QueryHelpers.AddQueryString(baseUrl, "searchTerm", SearchTerm ?? string.Empty);
+
+                var cliente = new HttpClient();
+                var solicitud = new HttpRequestMessage(HttpMethod.Get, finalUrl);
+
+                var respuesta = await cliente.SendAsync(solicitud);
+                respuesta.EnsureSuccessStatusCode();
+                if (respuesta.StatusCode == HttpStatusCode.OK)
+                {
+                    var resultado = await respuesta.Content.ReadAsStringAsync();
+                    var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    productosBuscados = JsonSerializer.Deserialize<ProductosBuscados>(resultado, opciones);
+                    ProductosPaginados = productosBuscados.data;
+                    ProductosPaginados.PageSize = PageSize;
+                    productos = ProductosPaginados.Items;
+
+                }
 
             }
         }
@@ -225,7 +262,7 @@ namespace Web.Pages.Productos
 
 
         }
-        public async Task<IActionResult> OnGetExportExcel()
+        public async Task<IActionResult> ExportExcelIventarioCompleto()
         {
             string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ExportarExcel");
             using var cliente = new HttpClient();
@@ -243,7 +280,7 @@ namespace Web.Pages.Productos
                 "Inventario.xlsx"
             );
         }
-        public async Task<IActionResult> OnGetExportPDF()
+        public async Task<IActionResult> ExportPDFIventarioCompleto()
         {
             string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ExportarPDF");
             using var cliente = new HttpClient();
@@ -260,6 +297,69 @@ namespace Web.Pages.Productos
                 "application/pdf",
                 "Inventario.pdf"
                         );
+        }
+        public async Task<IActionResult> ExportExcelIventarioXCategoria()
+        {
+            string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ExportarExcelXCategoria");
+            endpoint = string.Format(endpoint, categoriaID);
+            using var cliente = new HttpClient();
+            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.User.Claims.Where(c => c.Type == "Token").FirstOrDefault().Value);
+
+            var respuesta = await cliente.GetAsync(endpoint, HttpCompletionOption.ResponseHeadersRead);
+            respuesta.EnsureSuccessStatusCode();
+
+            var stream = await respuesta.Content.ReadAsStreamAsync();
+
+
+            return File(
+                stream,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Inventario.xlsx"
+            );
+        }
+        public async Task<IActionResult> ExportPDFIventarioXCategoria()
+        {
+            string endpoint = _configuracion.ObtenerMetodo("EndPointsProductos", "ExportarPDFXCategoria");
+            using var cliente = new HttpClient();
+            endpoint = string.Format(endpoint, categoriaID);
+            cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", HttpContext.User.Claims.Where(c => c.Type == "Token").FirstOrDefault().Value);
+
+            var respuesta = await cliente.GetAsync(endpoint, HttpCompletionOption.ResponseHeadersRead);
+            respuesta.EnsureSuccessStatusCode();
+
+            var stream = await respuesta.Content.ReadAsStreamAsync();
+
+
+            return File(
+                stream,
+                "application/pdf",
+                "Inventario.pdf"
+                        );
+        }
+        public async Task<IActionResult> OnPostExportExcel()
+        {
+            if (opcionExportar== "todo")
+            {
+                return await ExportExcelIventarioCompleto();
+            }
+            else
+            {
+                return await ExportExcelIventarioXCategoria();
+
+            }
+
+        }
+        public async Task<IActionResult> OnPostExportPDF()
+        {
+            if (opcionExportar == "todo")
+            {
+                return await ExportPDFIventarioCompleto();
+            }
+            else
+            {
+                return await ExportPDFIventarioXCategoria();
+
+            }
         }
 
     }

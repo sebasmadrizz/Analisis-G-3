@@ -1,139 +1,128 @@
-﻿$(function () {
+﻿document.addEventListener("DOMContentLoaded", () => {
+    const buscador = document.getElementById("buscador");
+    const resultados = document.getElementById("resultadosBusqueda");
+
     let debounceTimer;
-    let cache = {};
-    let currentRequest = null;
+    let cache = new Map();
+    let abortController = null;
 
-    $("#buscador").on("input", function () {
+    buscador.addEventListener("input", () => {
         clearTimeout(debounceTimer);
-        const query = $(this).val().trim();
+        const query = buscador.value.trim();
 
-        debounceTimer = setTimeout(function () {
+        debounceTimer = setTimeout(() => {
             buscarProductos(query);
         }, 300);
     });
 
-    function buscarProductos(query) {
-        const $resultados = $("#resultadosBusqueda");
-
+    async function buscarProductos(query) {
         if (query.length < 2) {
-            $resultados.addClass("d-none").empty();
+            resultados.classList.add("d-none");
+            resultados.innerHTML = "";
             return;
         }
 
-
-        if (cache[query]) {
-            renderResultados(cache[query]);
+        // Si ya está cacheado
+        if (cache.has(query)) {
+            renderResultados(cache.get(query));
             return;
         }
 
+        // Cancelar petición anterior si sigue activa
+        if (abortController) abortController.abort();
+        abortController = new AbortController();
 
-        if (currentRequest) {
-            currentRequest.abort();
-        }
+        try {
+            const url = `https://localhost:7266/api/Productos/Busquedas-index/1/10?searchTerm=${encodeURIComponent(query)}`;
+            console.log("Buscando:", url);
 
-        currentRequest = $.ajax({
-            url: `https://localhost:7266/api/Productos/Busqueda/${encodeURIComponent(query)}`,
-            method: "GET",
+            const response = await fetch(url, { signal: abortController.signal });
+            if (!response.ok) throw new Error("Error en la red");
 
-            dataType: "json",
-            success: function (productos) {
-                cache[query] = productos;
-                renderResultados(productos);
-            },
-            error: function (xhr, status) {
-                if (status !== "abort") {
-                    $resultados.html('<div class="p-2 text-danger">Error al buscar productos.</div>').removeClass("d-none");
-                }
+            const data = await response.json();
+            console.log("Respuesta de la API:", data);
+
+            const productos = data?.data?.items || [];
+            const suggestion = data?.suggestion || "";
+
+            // Asegurarse de que hay productos
+            if (!Array.isArray(productos)) {
+                console.warn("⚠️ 'data.items' no es un array:", productos);
+                resultados.innerHTML = `<div class="p-2 text-danger">Respuesta inesperada del servidor.</div>`;
+                resultados.classList.remove("d-none");
+                return;
             }
-        });
+
+            const resultadoFinal = { productos, suggestion };
+            cache.set(query, resultadoFinal);
+            renderResultados(resultadoFinal);
+
+        } catch (error) {
+            if (error.name !== "AbortError") {
+                console.error("❌ Error al buscar:", error);
+                resultados.innerHTML = `<div class="p-2 text-danger">Error al buscar productos.</div>`;
+                resultados.classList.remove("d-none");
+            }
+        }
     }
 
-    function renderResultados(productos) {
-        const $resultados = $("#resultadosBusqueda");
+    function renderResultados({ productos, suggestion }) {
+        resultados.innerHTML = "";
 
-        if (productos.length === 0) {
-
+        if ((!productos || productos.length === 0) && !suggestion) {
+            resultados.classList.add("d-none");
             return;
         }
 
-        const html = productos.slice(0, 5).map(p => `
-            <div class="resultado-item" onclick="window.location='/Productos/DetalleProducto/?IdProducto=${p.idProducto}'">
-                <img src="${p.imagenUrl}" alt="${p.nombre}">
-                <div class="resultado-nombre">${p.nombre}</div>
-                <div class="resultado-precio text-primary">₡${p.precio.toLocaleString()}</div>
-            </div>
-        `).join('') + `
-            <div class="resultado-ver-todos" onclick="window.location='/Productos?busqueda=${encodeURIComponent($('#buscador').val())}'">
+        let html = "";
+
+        // Mostrar sugerencia si existe
+        if (suggestion && suggestion.trim() !== "") {
+            html += `
+                <div class="p-2 text-muted fst-italic small">
+                    ¿Quisiste decir:
+                    <span class="text-primary fw-semibold sugerencia"
+                          style="cursor:pointer"
+                          onclick="document.getElementById('buscador').value='${suggestion}';
+                                   document.getElementById('buscador').dispatchEvent(new Event('input'));">
+                        ${suggestion}
+                    </span>?
+                </div>
+            `;
+        }
+
+        // Mostrar productos
+        if (productos.length > 0) {
+            html += productos.slice(0, 2).map(p => `
+                <div class="resultado-item d-flex align-items-center gap-2 p-2 border-bottom"
+                     style="cursor:pointer"
+                     onclick="window.location='/Productos/DetalleProducto/?IdProducto=${p.idProducto}'">
+                    <img src="${p.imagenUrl}" 
+                         alt="${p.nombre}" 
+                         class="rounded" 
+                         style="width:55px; height:55px; object-fit:cover;">
+                    <div>
+                        <div class="fw-semibold">${p.nombre}</div>
+                        <div class="text-primary">₡${p.precio.toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        html += `
+            <div class="resultado-ver-todos text-center p-2 fw-semibold text-primary"
+                 style="cursor:pointer"
+                 onclick="window.location='/Productos?busqueda=${encodeURIComponent(buscador.value.trim())}'">
                 Ver todos los productos...
             </div>
         `;
 
-
-        $resultados.html(html).removeClass("d-none");
+        resultados.innerHTML = html;
+        resultados.classList.remove("d-none");
     }
 });
 
-$(document).on("submit", "#BusquedaForm", function (e) {
-    e.preventDefault();
-    const $resultados = $("#resultadosBusqueda");
-    $resultados.empty();
 
-    const query = $(this).find("#buscador").val().trim();
-    let $contenedor = $("#productos");
-
-    $.ajax({
-        url: `https://localhost:7266/api/Productos/Busqueda/${encodeURIComponent(query)}`,
-        method: "GET",
-        dataType: "json",
-        success: function (productos) {
-            renderProductosBuscados(productos);
-        },
-        error: function (xhr, status) {
-            $contenedor.html('<div class="p-2 text-danger">Error al buscar productos.</div>');
-        }
-    });
-
-    function renderProductosBuscados(productos) {
-        let $contenedor = $("#productos");
-        $contenedor.empty();
-        $contenedor.innerHTML = "<div class='col-12 text-center'><span>Cargando...</span></div>";
-
-
-
-        if (productos.length === 0) {
-            $contenedor.html(`
-            <div class="col-12">
-                <div class="alert alert-warning w-100 text-center" role="alert">
-                    Productos no disponibles
-                </div>
-            </div>
-        `);
-            return;
-        }
-
-
-
-        $.each(productos, function (i, p) {
-            $contenedor.append(`
-            <div class="col">
-                <div class="card h-100 text-center shadow-sm border-0">
-                    <img src="${p.imagenUrl}" alt="Producto"
-                         onclick="window.location='/Productos/DetalleProducto/?IdProducto=${p.idProducto}'"
-                         style="cursor:pointer;">
-                    <div class="card-body d-flex flex-column">
-                        <h6 class="card-title mb-1">${p.nombre}</h6>
-                        <p class="fw-bold text-primary mb-4">$${p.precio}</p>
-                        <button class="btn btn-outline-dark mt-auto">
-                            <i class="fas fa-cart-plus"></i> Agregar
-                        </button>
-                    </div>
-                </div>
-            </div>
-                    `);
-        });
-
-    }
-});
 $(document).ready(function () {
 
     $(document).on('click', function (event) {

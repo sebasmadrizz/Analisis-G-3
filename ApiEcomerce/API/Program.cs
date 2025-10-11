@@ -86,6 +86,7 @@ builder.Services.AddScoped<IGenerarResetTokenRegla, GenerarResetTokenRegla>();
 builder.Services.AddScoped<IResetPasswordFlujo, ResetPasswordFlujo>();
 builder.Services.AddScoped<IRepositorioResetPassword, RepositorioResetPassword>();
 builder.Services.AddScoped<IResetPasswordDA, ResetPasswordDA>();
+builder.Services.AddScoped<IProductosRegla, ProductosRegla>();
 
 builder.Services.AddTransient<IAutorizacionBW, Autorizacion.BW.AutorizacionBW>();
 builder.Services.AddTransient<Autorizacion.Abstracciones.DA.ISeguridadDA, Autorizacion.DA.SeguridadDA>();

@@ -12,6 +12,16 @@
 
 
     }
+    public class ProductosBuscados
+    {
+        public int recordsTotal { get; set; }
+        public int recordsFiltered { get; set; }
+        public ProductoPaginado data { get; set; }
+
+        public string suggestion { get; set; }
+
+
+    }
 
 
 }

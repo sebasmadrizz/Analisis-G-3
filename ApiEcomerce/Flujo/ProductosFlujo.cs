@@ -2,6 +2,7 @@
 using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Modelos;
+using Servicios;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Flujo
@@ -10,12 +11,16 @@ namespace Flujo
     {
         private readonly IProductosDA _productosDA;
         private readonly IDocumentoRegla _documentoRegla;
+        private readonly IProductosRegla _productosReglas;
+        private readonly LevenshteinService _levService;
 
 
-        public ProductosFlujo(IProductosDA productosDA, IDocumentoRegla documentoRegla)
+        public ProductosFlujo(IProductosRegla productosReglas,LevenshteinService levService,IProductosDA productosDA, IDocumentoRegla documentoRegla)
         {
             _productosDA = productosDA;
             _documentoRegla =documentoRegla;
+            _levService = levService;
+            _productosReglas=productosReglas;
 
         }
         public async Task<Guid> Agregar(ProductosRequest productos, Documento imagen)
@@ -57,14 +62,27 @@ namespace Flujo
             return await _productosDA.ObtenerProductosBuscados(nombre);
         }
 
+        public async Task<(Paginacion<ProductosResponse> productos, int total, int filtradas, string sugerencia)> 
+            ObtenerProductosBuscadosFTS(int PageIndex, int PageSize, string searchTerm)
+        {
+            return await _productosReglas.ObtenerProductosFTSApiAsync(PageIndex, PageSize, searchTerm);
+        }
+
         public async Task<IEnumerable<ProductosResponse>> ObtenerProductosIndex()
         {
             return await _productosDA.ObtenerProductosIndex();
+        }
+
+        public async Task<IEnumerable<ProductosResponse>> ObtenerProductosPorCategoria(Guid categoriaId)
+        {
+            return await _productosDA.ObtenerProductosPorCategoria(categoriaId);
         }
 
         public async Task<Paginacion<ProductosResponse>> ObtenerProductosXCategoria(Guid idCategoria, int pageIndex, int pageSize)
         {
             return await _productosDA.ObtenerProductosXCategoria(idCategoria, pageIndex, pageSize);
         }
+
+        
     }
 }

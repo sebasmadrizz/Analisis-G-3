@@ -10,6 +10,9 @@ namespace Abstracciones.Interfaces.Flujo
     public interface IProductosFlujo
     {
         Task<IEnumerable<ProductosResponse>> ObtenerProductosIndex();
+        Task<IEnumerable<ProductosResponse>> ObtenerProductosPorCategoria(Guid categoriaId);
+        Task<(Paginacion<ProductosResponse> productos, int total, int filtradas, string sugerencia)>
+          ObtenerProductosBuscadosFTS(int PageIndex, int PageSize, string searchTerm);
 
         Task<IEnumerable<ProductosResponse>> Obtener();
         Task<IEnumerable<ProductosResponse>> ObtenerProductosBuscados(string nombre);

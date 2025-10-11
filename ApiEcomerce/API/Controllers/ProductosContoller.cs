@@ -2,8 +2,10 @@
 using Abstracciones.Interfaces.Flujo;
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Modelos;
+using Flujo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Reglas;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -119,10 +121,10 @@ namespace API.Controllers
             var productos = await _productosFlujo.Obtener();
             var pdfBytes = _exportarArchivosReglas.ExportPdf(productos);
             return File(
-        pdfBytes,
-        "application/pdf",   
-        "Inventario.pdf"     
-    );
+            pdfBytes,
+            "application/pdf",   
+            "Inventario.pdf"     
+            );
         }
         [AllowAnonymous]
         [HttpGet("ObtenerProductosIndex")]
@@ -130,6 +132,59 @@ namespace API.Controllers
         {
             var resultado = await _productosFlujo.ObtenerProductosIndex();
             return Ok(resultado);
+        }
+        [Authorize(Roles = "1")]
+        [HttpGet("ExportarArchivoExelXCategoria/{categoriaId}")]
+
+        public async Task<IActionResult> ExportExelPorCategoria([FromRoute] Guid categoriaId)
+        {
+            var productos = await _productosFlujo.ObtenerProductosPorCategoria(categoriaId);
+            var excelBytes = _exportarArchivosReglas.ExportExel(productos);
+            return File(
+            excelBytes,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Inventario.xlsx"
+        );
+        }
+        [Authorize(Roles = "1")]
+        [HttpGet("ExportarArchivoPDFXCategoria/{categoriaId}")]
+
+        public async Task<IActionResult> ExportPdfPorCategoria([FromRoute] Guid categoriaId)
+        {
+            var productos = await _productosFlujo.ObtenerProductosPorCategoria(categoriaId);
+            var pdfBytes = _exportarArchivosReglas.ExportPdf(productos);
+            return File(
+            pdfBytes,
+            "application/pdf",
+            "Inventario.pdf"
+            );
+        }
+        [AllowAnonymous]
+        [HttpGet("Busquedas-index/{PageIndex}/{PageSize}")]
+
+        public async Task<IActionResult> ObtenerProductosBuscadosFTS([FromRoute] int PageIndex,
+            [FromRoute] int PageSize,
+            [FromQuery] string searchTerm)
+        {
+           
+            
+
+            // Llamada al flujo/servicio
+            var (productos, total, filtradas, sugerencia) =
+                await _productosFlujo.ObtenerProductosBuscadosFTS(PageIndex, PageSize, searchTerm);
+
+            if (!productos.Items.Any())
+                return NoContent();
+
+            // Devolvemos resultado compatible con DataTables server-side
+            return Ok(new
+            {
+                
+                recordsTotal = total,          // total de filas en la tabla
+                recordsFiltered = filtradas,   // total filtrado según searchTerm
+                data = productos,
+                suggestion = sugerencia        // opcional: puedes usarlo en la UI
+            });
         }
     }
 }
