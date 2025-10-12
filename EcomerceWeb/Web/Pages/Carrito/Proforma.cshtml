@@ -1,0 +1,322 @@
+﻿@page
+@model Web.Pages.Carrito.ProformaModel
+@{
+    Layout = null;
+}
+
+<head>
+    <title>Cotización Sumicomp</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin: 20px;
+            color: #000;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .nombreCompañia {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .infoCompañia {
+            font-size: 11px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .cotizacion {
+            margin-top: 18px;
+            text-align: center;
+            color: red;
+            font-weight: 450;
+            font-size: 18px;
+        }
+
+        .tabla-cliente {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+            .tabla-cliente td {
+                padding: 3px;
+                vertical-align: top;
+            }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+            .items-table th, .items-table td {
+                border: 1px solid #000;
+                padding: 5px;
+                text-align: left;
+            }
+
+            .items-table th {
+                background-color: #f0f0f0;
+                font-weight: bold;
+            }
+
+        .two-columns {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .left-column {
+            width: 48%;
+        }
+
+        .right-column {
+            width: 48%;
+        }
+
+        .sales-executive {
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .totals {
+            margin-bottom: 15px;
+        }
+
+            .totals div {
+                margin-bottom: 3px;
+            }
+
+        .total-in-words {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 11px;
+        }
+
+        .bank-accounts {
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .signature-note {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .printed-by {
+            margin-top: 15px;
+            font-size: 10px;
+        }
+
+        .download-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+            .download-btn:hover {
+                background: #0056b3;
+            }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        @@media print {
+            .download-btn {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="download-btn" onclick="generarPDF()">Descargar PDF</button>
+
+    <div id="contenido-cotizacion">
+        <div class="header">
+            <div class="nombreCompañia">Representaciones Sumicomp Equipos,S.A.</div>
+            <div class="infoCompañia">
+                <strong>Teléfono:</strong> 40400381 &nbsp;&nbsp;
+                <strong>Correo electrónico:</strong> confirmacionfae@sumicomp.cr &nbsp;&nbsp;
+                <strong>Dirección:</strong> www.sumicomp.net / Agua Caliente, 100 Norte de la Guardia Rural, Cartago Costa Rica
+            </div>
+            <h2 class="cotizacion">
+                Cotización @Model.NumeroProforma
+            </h2>
+        </div>
+
+        <table class="tabla-cliente">
+            <tr>
+                <td><strong>Cliente:</strong> @Model.NombreCliente</td>
+                <td><strong>Atención:</strong> @Model.AtencionCliente</td>
+                <td><strong>Crédito:</strong> 30</td>
+                <td><strong>Fecha:</strong> @DateTime.Now.ToString("dd/MM/yyyy")</td>
+            </tr>
+            <tr>
+                <td><strong>Correo:</strong> @Model.EmailCliente</td>
+                <td><strong>Teléfono:</strong> @Model.TelefonoCliente</td>
+                <td><strong>Moneda:</strong> Colones</td>
+                <td><strong>Proforma:</strong> @Model.NumeroProforma</td>
+            </tr>
+            <tr>
+                <td><strong>Tiempo entrega:</strong> N/A</td>
+                <td><strong>Vigencia:</strong> N/A</td>
+                <td><strong>Garantía:</strong> N/A</td>
+                <td><strong>O.C.:</strong></td>
+            </tr>
+            <tr>
+                <td colspan="4"><strong>Dirección:</strong> @Model.DireccionCliente</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Cantidad</th>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Precio Unitario</th>
+                    <th>Desc.</th>
+                    <th>IVA</th>
+                    <th>Sub total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ProductosConIVA != null && Model.ProductosConIVA.Any())
+                {
+                    var counter = 1;
+                    @foreach (var item in Model.ProductosConIVA)
+                    {
+                        <tr>
+                            <td>@counter</td>
+                            <td>@item.Producto.Cantidad.ToString("N2")</td>
+                            <td>@item.Producto.ProductosId.ToString().Substring(0, 8)</td>
+                            <td>@item.Producto.NombreProducto</td>
+                            <td class="text-right">@item.Producto.PrecioUnitario.ToString("N2")</td>
+                            <td class="text-right">0.00</td>
+                            <td class="text-right">@item.IVA.ToString("N2")</td>
+                            <td class="text-right">@item.Producto.TotalLinea.ToString("N2")</td>
+                        </tr>
+                        counter++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center">No hay productos en el carrito</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (Model.ProductosConIVA != null && Model.ProductosConIVA.Any())
+        {
+            <div><strong>Artículos exentos</strong></div>
+        }
+
+        <br>
+
+        <div class="two-columns">
+            <div class="left-column">
+                <div class="sales-executive">
+                    <strong>Ejecutivo de ventas:</strong> Lucrecia Marrero Solano<br>
+                    <strong>Teléfono:</strong><br>
+                    <strong>Móvil:</strong> 61502755<br>
+                    <strong>Correo:</strong> lmarrero@sumicomp.cr
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="totals">
+                    <div><strong>Sub-Total:</strong> @Model.SubTotal.ToString("N2")</div>
+                    <div><strong>Descuento:</strong> 0.00</div>
+                    <div><strong>I.V.A. (13%):</strong> @Model.TotalIVA.ToString("N2")</div>
+                    <div><strong>Exoneración:</strong> 0.00</div>
+                    <div><strong>Total:</strong> @Model.TotalGeneral.ToString("N2")</div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="footer">
+            <div class="bank-accounts">
+                <strong>Cuentas Bancarias:</strong><br>
+                BNCR COL 100-01-075-007185-2 IBAN CR36015107510010071855 //<br>
+                BNCR DOL 100-02-075-600267-9 IBAN CR56015107510026002678
+            </div>
+
+            <div class="signature-note">
+                LA FIRMA EN ESTE DOCUMENTO CONSTITUYE EL RECIBIDO CONFORME DE LA MERCADERIA POR LO QUE NO SE ACEPTAN RECLAMOS POSTERIORES
+            </div>
+
+            <div class="printed-by">
+                Impreso por: STEVEN GERARDO GRAMADOS SANTANA<br>
+                Desarrollado por sumicomp<br>
+                <span id="fecha-hoy"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generarPDF() {
+            const elemento = document.getElementById('contenido-cotizacion');
+
+            const opciones = {
+                margin: 10,
+                filename: 'Proforma_@Model.NumeroProforma.Replace("/", "_")' + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opciones).from(elemento).save();
+        }
+
+        
+        const fecha = new Date();
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const año = fecha.getFullYear();
+        const horas = String(fecha.getHours()).padStart(2, '0');
+        const minutos = String(fecha.getMinutes()).padStart(2, '0');
+
+        document.getElementById("fecha-hoy").textContent = `${dia}/${mes}/${año} ${horas}:${minutos}`;
+    </script>
+</body>
+
+
+
