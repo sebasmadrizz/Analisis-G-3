@@ -47,6 +47,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<Abstracciones.Interfaces.DA.IRepositorioDapper, RepositorioDapper>();
 builder.Services.AddScoped<IEmpleadoFlujo, EmpleadoFlujo>();
 builder.Services.AddScoped<IEmpleadoDA, EmpleadoDA>();
+builder.Services.AddScoped<IHorasExtrasDA, HorasExtrasDA>();
+builder.Services.AddScoped<IHorasExtrasFlujo, HorasExtrasFlujo>();
+builder.Services.AddScoped<IBonosDA, BonosDA>();
+builder.Services.AddScoped<IBonosFlujo, BonosFlujo>();
+builder.Services.AddScoped<IHorarioDA, HorarioDA>();
+builder.Services.AddScoped<IHorarioFlujo, HorarioFlujo>();
+builder.Services.AddScoped<IPuestosDA, PuestosDA>();
+builder.Services.AddScoped<IPuestosFlujo, PuestosFlujo>();
+builder.Services.AddScoped<IAusenciasDA, AusenciasDA>();
+builder.Services.AddScoped<IAusenciasFlujo, AusenciasFlujo>();
+builder.Services.AddScoped<IIncapacidadesDA, IncapacidadesDA>();
+builder.Services.AddScoped<IIncapacidadesFlujo, IncapacidadesFlujo>();
 
 
 builder.Services.AddTransient<IAutorizacionBW, Autorizacion.BW.AutorizacionBW>();
