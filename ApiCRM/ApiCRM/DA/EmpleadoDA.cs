@@ -15,48 +15,56 @@ namespace DA
             _sqlConnection = _repositorioDapper.ObtenerRepositorio();
         }
 
-        public async Task<Guid> Agregar(Empleado empleado)
+        public async Task<Guid> Agregar(EmpleadoPlanilla empleado)
         {
-            string query = @"AGREGAR_EMPLEADO";
+            string query = @"AGREGAR_EMPLEADOPLANILLA";
             var resultadoConsulta = await _sqlConnection.ExecuteScalarAsync<Guid>(query, new
             {
-                IdEmpleado = Guid.NewGuid(),
+                EmpleadoId = Guid.NewGuid(),
                 Cedula=empleado.Cedula,
-                Nombre = empleado.NombreCompleto,
+                Nombre = empleado.Nombre,
+                Apellido= empleado.Apellido,
                 CorreoElectronico = empleado.CorreoElectronico,
-                Puesto = empleado.Puesto,
-                Padecimientos = empleado.Padecimientos,
-                CuentaBancaria = empleado.CuentaBancaria,
-                TipoContrato = empleado.TipoContrato,
-                Jornada = empleado.Jornada,
                 Telefono = empleado.Telefono,
+                FechaIngreso = empleado.FechaIngreso,
+                Padecimientos = empleado.Padecimientos,
+                PuestoId = empleado.PuestoId,
+                CuentaBancaria = empleado.CuentaBancaria,
+                HorarioId = empleado.HorarioId,
+                Sueldo = empleado.Sueldo,
+                Banco= empleado.banco,
+                tipoCuenta= empleado.tipoCuenta,
                 EstadoId = 1,
-                FechaRegistro = DateTime.Now,
-                FechaIngreso=empleado.FechaIngreso
-
-
             });
             return resultadoConsulta;
         }
 
-        public async Task<Guid> Editar(Guid IdEmpleado, Empleado empleado)
+        public async Task<Guid> Editar(Guid IdEmpleado, EmpleadoPlanilla empleado)
         {
-            await VerificarExistenciaEmpleado(IdEmpleado);
+            //await VerificarExistenciaEmpleado(IdEmpleado);
 
 
-            string query = @"EDITAR_EMPLEADO";
+            string query = @"EDITAR_EMPLEADOPLANILLA";
 
             var resultado = await _sqlConnection.ExecuteScalarAsync<Guid>(query, new
             {
-                IdEmpleado = IdEmpleado,
-                Nombre = empleado.NombreCompleto,
+                EmpleadoId = IdEmpleado,
+                Cedula = empleado.Cedula,
+                Nombre = empleado.Nombre,
+                Apellido = empleado.Apellido,
                 CorreoElectronico = empleado.CorreoElectronico,
-                Puesto = empleado.Puesto,
+                Telefono = empleado.Telefono,
+                FechaIngreso = empleado.FechaIngreso,
                 Padecimientos = empleado.Padecimientos,
+                PuestoId = empleado.PuestoId,
                 CuentaBancaria = empleado.CuentaBancaria,
-                TipoContrato = empleado.TipoContrato,
-                Jornada = empleado.Jornada,
-                Telefono = empleado.Telefono
+                HorarioId = empleado.HorarioId,
+                Sueldo = empleado.Sueldo,
+                Banco = empleado.banco,
+                tipoCuenta = empleado.tipoCuenta,
+
+
+                
             });
 
             return resultado;

@@ -27,7 +27,7 @@ namespace Web.Pages.Planilla
             //aqui tengo pensado llamar 2 funciones aparte que hagan los obtener uno de planilla y otro de empleado y entonce en este onget llama a esas 2 funciones
             string endpoint = _configuracion.ObtenerMetodo("EndPointsEmpleados", "ObtenerEmpleados");
             var cliente = new HttpClient();
-            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiSU5uVHF0RVV5RVNRaEVkVWhjcEdyd2xwdHZIZkhIemZ3bk1LcERZdU1TUkt1eUFaZW94bXZkZyIsInNlcnZpY2lvIjoiM2ZhODVmNjQtNTcxNy00NTYyLWIzZmMtMmM5NjNmNjZhZmE2IiwiaWRVc3VhcmlvIjoiMmZkMTU5OWEtYmJkNy00ZjhmLTkyNTgtOGQ0MTc4MWVmMmViIiwiY29ycmVvRWxlY3Ryb25pY28iOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNzU3OTA5OTY4LCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QifQ.036hcd6OzUWFrIZZQc5VAE_YBCt_hm30n7xc-IzLYAw";
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZVJzb2NmUW9UTFhZemxRbElHSmJaRWd3a2xEV2VKbUhmT1dicldicEpjdXBwSnFWblROREJkRFFnaGJsUEprWiIsInNlcnZpY2lvIjoiM2ZhODVmNjQtNTcxNy00NTYyLWIzZmMtMmM5NjNmNjZhZmE2IiwiaWRVc3VhcmlvIjoiMmZkMTU5OWEtYmJkNy00ZjhmLTkyNTgtOGQ0MTc4MWVmMmViIiwiY29ycmVvRWxlY3Ryb25pY28iOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNzYwNDg0NDUyLCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QifQ.z2WxHKRyLjYVWQ0X-Sf-3Z4oLONwmQNiTJwAJEWk5wM";
             cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var solicitud = new HttpRequestMessage(HttpMethod.Get,endpoint);
 
@@ -49,7 +49,7 @@ namespace Web.Pages.Planilla
             
             string endpoint = _configuracion.ObtenerMetodo("EndPointsEmpleados", "AgregarEmpleados");
             var cliente = new HttpClient();
-            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiSU5uVHF0RVV5RVNRaEVkVWhjcEdyd2xwdHZIZkhIemZ3bk1LcERZdU1TUkt1eUFaZW94bXZkZyIsInNlcnZpY2lvIjoiM2ZhODVmNjQtNTcxNy00NTYyLWIzZmMtMmM5NjNmNjZhZmE2IiwiaWRVc3VhcmlvIjoiMmZkMTU5OWEtYmJkNy00ZjhmLTkyNTgtOGQ0MTc4MWVmMmViIiwiY29ycmVvRWxlY3Ryb25pY28iOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNzU3OTA5OTY4LCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QifQ.036hcd6OzUWFrIZZQc5VAE_YBCt_hm30n7xc-IzLYAw";
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZVJzb2NmUW9UTFhZemxRbElHSmJaRWd3a2xEV2VKbUhmT1dicldicEpjdXBwSnFWblROREJkRFFnaGJsUEprWiIsInNlcnZpY2lvIjoiM2ZhODVmNjQtNTcxNy00NTYyLWIzZmMtMmM5NjNmNjZhZmE2IiwiaWRVc3VhcmlvIjoiMmZkMTU5OWEtYmJkNy00ZjhmLTkyNTgtOGQ0MTc4MWVmMmViIiwiY29ycmVvRWxlY3Ryb25pY28iOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNzYwNDg0NDUyLCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QifQ.z2WxHKRyLjYVWQ0X-Sf-3Z4oLONwmQNiTJwAJEWk5wM";
             cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var solicitud = new HttpRequestMessage(HttpMethod.Post, endpoint);
             var respuesta = await cliente.PostAsJsonAsync(endpoint, empleadoRequest);
@@ -67,7 +67,7 @@ namespace Web.Pages.Planilla
         {
             if (idEmpleado == Guid.Empty)
                 return NotFound();
-            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiSU5uVHF0RVV5RVNRaEVkVWhjcEdyd2xwdHZIZkhIemZ3bk1LcERZdU1TUkt1eUFaZW94bXZkZyIsInNlcnZpY2lvIjoiM2ZhODVmNjQtNTcxNy00NTYyLWIzZmMtMmM5NjNmNjZhZmE2IiwiaWRVc3VhcmlvIjoiMmZkMTU5OWEtYmJkNy00ZjhmLTkyNTgtOGQ0MTc4MWVmMmViIiwiY29ycmVvRWxlY3Ryb25pY28iOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNzU3OTA5OTY4LCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QifQ.036hcd6OzUWFrIZZQc5VAE_YBCt_hm30n7xc-IzLYAw";
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZVJzb2NmUW9UTFhZemxRbElHSmJaRWd3a2xEV2VKbUhmT1dicldicEpjdXBwSnFWblROREJkRFFnaGJsUEprWiIsInNlcnZpY2lvIjoiM2ZhODVmNjQtNTcxNy00NTYyLWIzZmMtMmM5NjNmNjZhZmE2IiwiaWRVc3VhcmlvIjoiMmZkMTU5OWEtYmJkNy00ZjhmLTkyNTgtOGQ0MTc4MWVmMmViIiwiY29ycmVvRWxlY3Ryb25pY28iOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNzYwNDg0NDUyLCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QifQ.z2WxHKRyLjYVWQ0X-Sf-3Z4oLONwmQNiTJwAJEWk5wM";
             string endpoint = _configuracion.ObtenerMetodo("EndPointsEmpleados", "ObtenerEmpleado");
             var cliente = new HttpClient();
             cliente.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
@@ -93,7 +93,7 @@ namespace Web.Pages.Planilla
         }
         public async Task<ActionResult> OnPostEditarEmpleado()
         {
-            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiSU5uVHF0RVV5RVNRaEVkVWhjcEdyd2xwdHZIZkhIemZ3bk1LcERZdU1TUkt1eUFaZW94bXZkZyIsInNlcnZpY2lvIjoiM2ZhODVmNjQtNTcxNy00NTYyLWIzZmMtMmM5NjNmNjZhZmE2IiwiaWRVc3VhcmlvIjoiMmZkMTU5OWEtYmJkNy00ZjhmLTkyNTgtOGQ0MTc4MWVmMmViIiwiY29ycmVvRWxlY3Ryb25pY28iOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNzU3OTA5OTY4LCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QifQ.036hcd6OzUWFrIZZQc5VAE_YBCt_hm30n7xc-IzLYAw";
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiZVJzb2NmUW9UTFhZemxRbElHSmJaRWd3a2xEV2VKbUhmT1dicldicEpjdXBwSnFWblROREJkRFFnaGJsUEprWiIsInNlcnZpY2lvIjoiM2ZhODVmNjQtNTcxNy00NTYyLWIzZmMtMmM5NjNmNjZhZmE2IiwiaWRVc3VhcmlvIjoiMmZkMTU5OWEtYmJkNy00ZjhmLTkyNTgtOGQ0MTc4MWVmMmViIiwiY29ycmVvRWxlY3Ryb25pY28iOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiIxIiwiZXhwIjoxNzYwNDg0NDUyLCJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QifQ.z2WxHKRyLjYVWQ0X-Sf-3Z4oLONwmQNiTJwAJEWk5wM";
 
             string endpoint = _configuracion.ObtenerMetodo("EndPointsEmpleados", "EditarEmpleado");
             var cliente = new HttpClient();

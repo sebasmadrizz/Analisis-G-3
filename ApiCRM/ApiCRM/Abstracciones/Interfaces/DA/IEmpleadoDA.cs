@@ -6,9 +6,9 @@ namespace Abstracciones.Interfaces.DA
     {
         Task<IEnumerable<EmpleadoResponse>> Obtener();
         Task<EmpleadoResponse> ObtenerPorId(Guid IdEmpleado);
-        Task<Guid> Agregar(Empleado empleado);
+        Task<Guid> Agregar(EmpleadoPlanilla empleado);
 
-        Task<Guid> Editar(Guid IdEmpleado, Empleado empleado);
+        Task<Guid> Editar(Guid IdEmpleado, EmpleadoPlanilla empleado);
 
         Task<Guid> Eliminar(Guid IdEmpleado);
     }

@@ -164,11 +164,12 @@
     <Build Include="dbo\Stored Procedures\AGREGAR_CARRITO.sql" />
     <Build Include="dbo\Stored Procedures\ACTIVAR_PADRE_Y_HIJAS.sql" />
     <Build Include="dbo\Stored Procedures\ACTIVAR_HIJA_Y_PADRE.sql" />
-    <Build Include="dbo\Tables\EMPLEADOS.sql" />
+    <Build Include="dbo\Tables\Empleado_Ausencias.sql" />
     <Build Include="dbo\Stored Procedures\AGREGAR_EMPLEADO.sql" />
     <Build Include="dbo\Stored Procedures\EDITAR_EMPLEADO.sql" />
     <Build Include="dbo\Stored Procedures\ESTADO_EMPLEADO.sql" />
     <Build Include="dbo\Stored Procedures\VER_EMPLEADOS.sql" />
     <Build Include="dbo\Stored Procedures\VER_EMPLEADO_POR_ID.sql" />
+    <Build Include="dbo\Tables\Empleado_Incapacidades.sql" />
   </ItemGroup>
 </Project>

@@ -45,13 +45,28 @@ namespace Abstracciones.Modelos.Empleados
         public Guid? IdEmpleado { get; set; }
 
     }
-    public class EmpleadoResponse : Empleado
+    public class EmpleadoResponse : EmpleadoPlanilla
     {
         public Guid IdEmpleado { get; set; }
         public string Estado { get; set; }
         public DateTime FechaRegistro { get; set; }
 
         public int EstadoId { get; set; }
+
+    }
+    public class EmpleadoPlanilla : Empleado
+    {
+        public double Sueldo { get; set; }
+        public int Dias_Vacaciones_Tomados { get; set; }
+        public DateOnly Vacaciones_Fecha_Final { get; set; }
+        public DateOnly Vacaciones_Fecha_Inicio { get; set; }
+        public double deducciones { get; set; }
+        public int horas_extras { get; set; }
+        public int comisiones { get; set; }
+        public int ausencias { get; set; }
+        public int incapacidades { get; set; }
+
+
 
     }
 }

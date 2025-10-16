@@ -12,12 +12,12 @@ namespace Flujo
             _empleadoDA = empleadoDA;
         }
 
-        public async Task<Guid> Agregar(Empleado empleado)
+        public async Task<Guid> Agregar(EmpleadoPlanilla empleado)
         {
             return await _empleadoDA.Agregar(empleado);
         }
 
-        public async Task<Guid> Editar(Guid IdEmpleado, Empleado empleado)
+        public async Task<Guid> Editar(Guid IdEmpleado, EmpleadoPlanilla empleado)
         {
             return await _empleadoDA.Editar(IdEmpleado, empleado);
         }

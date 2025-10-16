@@ -22,7 +22,7 @@ namespace API.Controllers
     {
         private readonly IResetPasswordFlujo _resetPasswordFlujo;
         private readonly IUsuarioFlujo _usuarioFlujo;
-        private readonly ILogger<ProductosController> _logger;
+        private readonly ILogger<ResetPasswordController> _logger;
         private readonly IGenerarResetTokenRegla _generarResetTokenRegla;
         private string _rutaWeb;
         private readonly IRepositorioResetPassword _repositorioResetPassword;
@@ -30,7 +30,7 @@ namespace API.Controllers
 
 
 
-        public ResetPasswordController(ICorreoServicio correoServicio,IRepositorioResetPassword repositorioResetPassword,IUsuarioFlujo usuarioFlujo,IResetPasswordFlujo resetPasswordFlujo, IGenerarResetTokenRegla generarResetTokenRegla, ILogger<ProductosController> logger)
+        public ResetPasswordController(ICorreoServicio correoServicio,IRepositorioResetPassword repositorioResetPassword,IUsuarioFlujo usuarioFlujo,IResetPasswordFlujo resetPasswordFlujo, IGenerarResetTokenRegla generarResetTokenRegla, ILogger<ResetPasswordController> logger)
         {
             _resetPasswordFlujo = resetPasswordFlujo;
             _logger = logger;

@@ -20,9 +20,9 @@ namespace API.Controllers
             _empleadoFlujo = empleadoFlujo;
             _logger = logger;
         }
-        [Authorize(Roles = "1")]
+        [AllowAnonymous]//cambiar a Authorize(Roles="1") para produccion
         [HttpPost]
-        public async Task<IActionResult> Agregar([FromBody] Empleado empleado)
+        public async Task<IActionResult> Agregar([FromBody] EmpleadoPlanilla empleado)
         {
             var resultado = await _empleadoFlujo.Agregar(empleado);
             return CreatedAtAction(nameof(ObtenerPorId), new { IdEmpleado = resultado }, null);
@@ -48,12 +48,12 @@ namespace API.Controllers
             var resultado = await _empleadoFlujo.ObtenerPorId(IdEmpleado);
             return Ok(resultado);
         }
-        [Authorize(Roles = "1")]
+        [AllowAnonymous]//cambiar a Authorize(Roles="1") para produccion
         [HttpPut("{IdEmpleado}")]
-		public async Task<IActionResult> Editar([FromRoute] Guid IdEmpleado, [FromBody] Empleado empleado)
+		public async Task<IActionResult> Editar([FromRoute] Guid IdEmpleado, [FromBody] EmpleadoPlanilla empleado)
 		{
-			if (!await VerificarExistenciaEmpleado(IdEmpleado))
-				return NotFound("El empleado no esta registrado");
+			/*if (!await VerificarExistenciaEmpleado(IdEmpleado))
+				return NotFound("El empleado no esta registrado");*/
 			var resultado = await _empleadoFlujo.Editar(IdEmpleado, empleado);
 			return Ok(resultado);
 		}

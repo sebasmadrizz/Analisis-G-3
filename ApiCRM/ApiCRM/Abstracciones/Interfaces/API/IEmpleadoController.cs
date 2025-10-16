@@ -8,8 +8,8 @@ namespace Abstracciones.Interfaces.API
         Task<IActionResult> Obtener();
         Task<IActionResult> ObtenerPorId(Guid IdEmpleado);
 
-        Task<IActionResult> Agregar(Empleado empleado);
-        Task<IActionResult> Editar(Guid IdEmpleado, Empleado empleado);
+        Task<IActionResult> Agregar(EmpleadoPlanilla empleado);
+        Task<IActionResult> Editar(Guid IdEmpleado, EmpleadoPlanilla empleado);
         Task<IActionResult> Eliminar(Guid IdEmpleado);
     }
 }
